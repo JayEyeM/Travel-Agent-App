@@ -1,6 +1,7 @@
 // navBar.tsx
 
 import { Box, Button, useColorMode, useTheme, useColorModeValue, Heading } from '@chakra-ui/react'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { useBrandColors } from '../generalUtils/theme'
 
 
@@ -31,8 +32,9 @@ function NavBar() {
             boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px;" 
             bg={brand900}  
             color={brand600}
+            aria-label='Toggle Color Mode'
             _hover={{ bg: brand700 }}>
-                Toggle Theme {colorMode === 'light' ? 'Dark' : 'Light'}
+                {colorMode === 'light' ?  <MoonIcon /> : <SunIcon />}
             </Button>
 
            
