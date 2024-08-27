@@ -8,9 +8,10 @@ import Dashboard from './pages/dashboard';
 import About from './pages/about';
 import PagesMenu from './components/generalUtils/PagesMenu';
 import ProjectManagement from './pages/projectManagement';
+import Footer from './components/generalUtils/footer';
 
 function App() {
-  const { brand900 } = useBrandColors();
+  const { primary, background } = useBrandColors();
   const location = useLocation();
 
   const getCurrentPage = () => {
@@ -31,17 +32,17 @@ function App() {
   };
 
   return (
-    <Box bg={brand900} h="auto" w="100vw" p={{ base: 4, md: 8, lg: 12 }}>
+    <Box bg={background} h="auto" w="100vw" p={{ base: 4, md: 8, lg: 12 }}>
 
       <NavBar />
       <Box h="auto" w="100%" p={{ base: 4, md: 8, lg: 12 }} 
-      outline={'2px solid red'}
+      
       display="flex"
       flexDirection={{ base: 'column', md: 'row' }}
       >
         <PagesMenu currentPage={getCurrentPage()} />
-          <Box h="auto" w="100%" p={{ base: 4, md: 8, lg: 12 }}
-          outline={'2px solid blue'}
+          <Box h="auto" w="100%" 
+          
           >
             <Routes>
               <Route path="/" element={<Homepage />} />
@@ -52,7 +53,9 @@ function App() {
               <Route path="/about" element={<About />} />
             </Routes>
         </Box>
+
       </Box>
+      <Footer />
     </Box>
   );
 }

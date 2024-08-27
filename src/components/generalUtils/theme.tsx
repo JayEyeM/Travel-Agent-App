@@ -11,10 +11,11 @@ const config: ThemeConfig = {
 
 export const useBrandColors = () => {
   return {
-    brand900: useColorModeValue('brand.900.light', 'brand.900.dark'),
-    brand800: useColorModeValue('brand.800.light', 'brand.800.dark'),
-    brand700: useColorModeValue('brand.700.light', 'brand.700.dark'),
-    brand600: useColorModeValue('brand.600.light', 'brand.600.dark'),
+    primary: useColorModeValue('brand.Primary.light', 'brand.Primary.dark'),
+    secondary: useColorModeValue('brand.Secondary.light', 'brand.Secondary.dark'),
+    accent: useColorModeValue('brand.Accent.light', 'brand.Accent.dark'),
+    background: useColorModeValue('brand.Background.light', 'brand.Background.dark'),
+    text: useColorModeValue('brand.Text.light', 'brand.Text.dark'),
   }
 }
 
@@ -25,21 +26,25 @@ const theme = extendTheme({
   config,
   colors: {
     brand: {
-      900: {
-        light: '#F5F5F5',
-        dark: '#0F5257',
+      Primary: {
+        light: '#6588A6',
+        dark: '#3A506B ',
       },
-      800: {
-        light: '#0F5257',
-        dark: '#F5F5F5',
+      Secondary: {
+        light: '#F3A712',
+        dark: '#FFB84D',
       },
-      700: {
-        light: '#FFBD00',
-        dark: '#EE7674',
+      Accent: {
+        light: '#468685',
+        dark: '#7EB1B4',
       },
-      600: {
-        light: '#73A580',
-        dark: '#888098',
+      Background: {
+        light: '#F4F6F8',
+        dark: '#1A1C1E',
+      },
+      Text: {
+        light: '#2C3E50',
+        dark: '#E0E3E6',
       },
     },
   },
