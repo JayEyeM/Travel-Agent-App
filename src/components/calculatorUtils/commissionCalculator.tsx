@@ -3,20 +3,20 @@ import CommisionForm from './commissionForm'
 import { useBrandColors } from '../generalUtils/theme'
 
 const CommisionCalculator = () => {
-    const { brand700, brand900, brand800, brand600 } = useBrandColors()
+    const { primary, background, accent, secondary, text } = useBrandColors()
 
   return (
-    <Box p={4} m={2} borderRadius="lg" bg={brand600}>
+    <Box p={0} ml={'auto'} mr={'auto'} w={'90%'} borderRadius="lg" bg={background}>
       <Box
         p={4}
         mt={0}
         outline="2px solid"
         outlineColor="white"
         borderRadius="lg"
-        bg={brand900}
+        bg={background}
       >
         <Heading>Commision Calculator</Heading>
-        <Text fontSize="lg" color={brand800}>
+        <Text fontSize="lg" color={text}>
           Fill in the form to calculate your commission
         </Text>
       </Box>
@@ -27,12 +27,12 @@ const CommisionCalculator = () => {
         outline="2px solid"
         outlineColor="white"
         borderRadius="lg"
-        bg={brand700}
+        bg={background}
       >
-        <Text fontSize="lg" color={brand800}>
+        <Text fontSize="lg" color={accent}>
           Commission ( __ % ):
         </Text>
-        <Text fontSize="lg" color={brand800}>
+        <Text fontSize="lg" color={accent}>
           $0.00
         </Text>
       </Box>

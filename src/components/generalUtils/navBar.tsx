@@ -8,33 +8,21 @@ import { useBrandColors } from '../generalUtils/theme'
 function NavBar() {
     const { colorMode, toggleColorMode } = useColorMode()
 
-    const { brand700, brand900, brand800, brand600 } = useBrandColors()
+    const { background, primary, secondary, accent, text } = useBrandColors()
 
     return (
-        <Box bg={brand900} m={'auto'} h="auto" w={'100%'} p={4} outline={'2px solid'} outlineColor={brand800}
+        <Box bg={background} m={'auto'} h="auto" w={'100%'} p={4}
         display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-            <Heading color={brand600}>TravelAgentApp</Heading>
-
-            <Box
-                bg={brand700}
-                outline="2px solid"
-                outlineColor={brand900}
-                
-                p={4}
-                color="white"
-                borderRadius="lg"
-            >
-                Hello
-            </Box>
+            <Heading color={primary}>TravelAgentApp</Heading>
             
             <Button onClick={toggleColorMode} 
             m={2} 
             boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px;" 
-            bg={brand900}  
-            color={brand600}
+            bg={background}  
+            color={text}
             aria-label='Toggle Color Mode'
-            _hover={{ bg: brand700 }}>
-                {colorMode === 'light' ?  <MoonIcon /> : <SunIcon />}
+            _hover={{ bg: accent }}>
+                {colorMode === 'light' ?  <SunIcon /> : <MoonIcon />}
             </Button>
 
            

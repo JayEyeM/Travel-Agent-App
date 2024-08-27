@@ -8,12 +8,12 @@ interface PagesMenuProps {
 }
 
 const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
-    const { brand900, brand600, brand800, brand700 } = useBrandColors();
+    const { primary, secondary, accent, background, text } = useBrandColors();
 
     return (
         <Box
-            bg={brand900}
-            color={brand600}
+            bg={background}
+            color={primary}
             p={2}
             borderRadius="lg"
             boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px;"
@@ -24,7 +24,7 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
             textAlign={{ base: 'center', md: 'left' }}
             
         >
-            <Text fontSize="lg" fontWeight="bold" mb={4} display={{ base: 'none', md: 'block' }}>
+            <Text color={text} fontSize="lg" fontWeight="bold" mb={4} display={{ base: 'none', md: 'block' }}>
                 Menu
             </Text>
             <SimpleGrid
@@ -40,8 +40,8 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
                     as={Link}
                     to="/"
                     variant="link"
-                    color={currentPage === 'home' ? brand700 : brand800}
-                    _hover={{ color: brand700 }}
+                    color={currentPage === 'home' ? secondary : text}
+                    _hover={{ color: secondary }}
                 >
                     Home
                 </Button>
@@ -49,8 +49,8 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
                     as={Link}
                     to="/calculator"
                     variant="link"
-                    color={currentPage === 'calculator' ? brand700 : brand800}
-                    _hover={{ color: brand700 }}
+                    color={currentPage === 'calculator' ?  secondary : text}
+                    _hover={{ color: secondary }}
                 >
                     Commission Calculator
                 </Button>
@@ -58,8 +58,8 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
                     as={Link}
                     to="/dashboard"
                     variant="link"
-                    color={currentPage === 'dashboard' ? brand700 : brand800}
-                    _hover={{ color: brand700 }}
+                    color={currentPage === 'dashboard' ? secondary : text}
+                    _hover={{ color: secondary }}
                 >
                     Dashboard
                 </Button>
@@ -67,8 +67,8 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
                     as={Link}
                     to="/projectManagement"
                     variant="link"
-                    color={currentPage === 'projectManagement' ? brand700 : brand800}
-                    _hover={{ color: brand700 }}
+                    color={currentPage === 'projectManagement' ? secondary : text}
+                    _hover={{ color: secondary }}
                 >
                     Project Management
                 </Button>
@@ -76,8 +76,8 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
                     as={Link}
                     to="/about"
                     variant="link"
-                    color={currentPage === 'about' ? brand700 : brand800}
-                    _hover={{ color: brand700 }}
+                    color={currentPage === 'about' ? secondary : text}
+                    _hover={{ color: secondary }}
                 >
                     About
                 </Button>
