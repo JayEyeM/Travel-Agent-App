@@ -9,18 +9,31 @@ const Footer = () => {
 
   return (
     <Box
-      p={4}
-      mt={4}
-      boxShadow={'rgba(0, 0, 0, 0.35) 0px 5px 15px;'}
-      borderRadius="lg"
-      bg={primary}
-      w={'100%'}
-      h={'auto'}
-            ml={{ base: 'auto', md: 0 }}
-            mr={{ base: 'auto', md: 0 }}
+    p={4}
+    mt={4}
+    boxShadow={'rgba(0, 0, 0, 0.35) 0px 5px 15px;'}
+    borderRadius="lg"
+    bg={primary}
+    w={'100%'}
+    h={'auto'}
+    ml={{ base: 'auto', md: 0 }}
+    mr={{ base: 'auto', md: 0 }}
+    display={'flex'}
+    flexDirection={{ base: 'column', md: 'row' }}
+    justifyContent={{ base: 'center', md: 'space-between' }}
+    alignItems={{ base: 'center', md: 'flex-start' }}
+        
     >
       <Text fontSize="lg" color={text}>
-        TravelAgentApp
+        Globeeta
+      </Text>
+
+      <Text fontSize="lg" color={text}>
+        Terms & Conditions
+      </Text>
+
+      <Text fontSize="lg" color={text}>
+        Privacy Policy
       </Text>
 
       <Text fontSize="lg" color={text}>

@@ -14,12 +14,27 @@ const Homepage: React.FC = () => {
         Effortlessly manage your commissions, track bookings, and stay organized—all in one place.
       </Text>
 
-      <Tooltip label="Coming Soon" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
-        <Button mt={8} color={secondary} bg={primary} size="lg">
-          Get Started
-        </Button>
-      </Tooltip>
+      <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
+        <Tooltip label="Get Started" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
+          <Button w={'175px'} ml={'auto'} mr={'auto'} mt={0} color={secondary} bg={primary} size="lg">
+            Get Started
+          </Button>
+        </Tooltip>
+
+        <Text fontSize="lg" mt={10} color={text}>
+          Still want to know more? Just click below to read more details and view screenshots.
+        </Text> 
+
+        <Tooltip label="Learn More" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
+          <Button w={'175px'} ml={'auto'} mr={'auto'} mt={8} color={secondary} bg={primary} size="lg">
+            Learn More
+          </Button>
+        </Tooltip>
+
+      </Box>
+      
     </Box>
+    
   );
 };
 
