@@ -35,8 +35,9 @@ function App() {
     <Box bg={background} h="auto" w="100vw" p={{ base: 4, md: 8, lg: 12 }}>
 
       <NavBar />
-      <Box h="auto" w="100%" p={{ base: 4, md: 8, lg: 12 }} 
-      
+      <Box h="auto" minH={'90vh'} w="100%" p={{ base: 4, md: 8, lg: 12 }} 
+      outline={'2px solid'} outlineColor={primary}
+      borderRadius={'lg'}
       display="flex"
       flexDirection={{ base: 'column', md: 'row' }}
       >

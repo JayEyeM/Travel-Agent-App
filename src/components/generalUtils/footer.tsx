@@ -14,6 +14,10 @@ const Footer = () => {
       boxShadow={'rgba(0, 0, 0, 0.35) 0px 5px 15px;'}
       borderRadius="lg"
       bg={primary}
+      w={'100%'}
+      h={'auto'}
+            ml={{ base: 'auto', md: 0 }}
+            mr={{ base: 'auto', md: 0 }}
     >
       <Text fontSize="lg" color={text}>
         TravelAgentApp
