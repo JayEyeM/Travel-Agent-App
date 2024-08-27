@@ -38,11 +38,12 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
             justifyItems={{ base: 'center', md: 'left' }}
             p={2}
           >
-            <MenuLink to="/" texts="Home" isActive={currentPage === 'home'} />
+            
             <MenuLink to="/dashboard" texts="Dashboard" isActive={currentPage === 'dashboard'} />
             <MenuLink to="/calculator" texts="Commission Calculator" isActive={currentPage === 'calculator'} />
+            <MenuLink to="/clientManagement" texts="Client Management" isActive={currentPage === 'clientManagement'} />
             <MenuLink to="/projectManagement" texts="Project Management" isActive={currentPage === 'projectManagement'} />
-            <MenuLink to="/about" texts="About" isActive={currentPage === 'about'} />
+            
           </SimpleGrid>
         </Box>
       );

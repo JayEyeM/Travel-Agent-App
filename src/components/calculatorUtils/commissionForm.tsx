@@ -62,44 +62,44 @@ const commissionForm = () => {
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
           <FormControl color={accent}>
             <FormLabel htmlFor='clientName'>Client Name</FormLabel>
-            <Input id='clientName' type='text' value={formData.clientName} onChange={handleChange} />
+            <Input id='clientName' color={text} type='text' value={formData.clientName} onChange={handleChange} />
           </FormControl>
 
           <FormControl color={accent}>
             <FormLabel htmlFor='supplier'>Supplier</FormLabel>
-            <Input id='supplier' type='text' value={formData.supplier} onChange={handleChange} />
+            <Input id='supplier' color={text} type='text' value={formData.supplier} onChange={handleChange} />
           </FormControl>
 
           <FormControl color={accent}>
             <FormLabel htmlFor='bookingNumber'>Booking Number</FormLabel>
             <NumberInput defaultValue={0} precision={0}>
-              <NumberInputField id='bookingNumber' value={formData.bookingNumber} onChange={handleChange} />
+              <NumberInputField id='bookingNumber' color={text} value={formData.bookingNumber} onChange={handleChange} />
             </NumberInput>
           </FormControl>
 
           <FormControl color={accent}>
             <FormLabel htmlFor='finalPaymentDate'>Final Payment Date</FormLabel>
-            <Input id='finalPaymentDate' type='date' value={formData.finalPaymentDate} onChange={handleChange} />
+            <Input id='finalPaymentDate' color={text} type='date' value={formData.finalPaymentDate} onChange={handleChange} />
           </FormControl>
 
           <FormControl color={accent}>
             <FormLabel htmlFor='rate'>Commission Rate Percentage: %</FormLabel>
             <NumberInput defaultValue={0} precision={2}>
-              <NumberInputField id='rate' value={formData.rate} onChange={handleChange} />
+              <NumberInputField id='rate' color={text} value={formData.rate} onChange={handleChange} />
             </NumberInput>
           </FormControl>
 
           <FormControl color={accent}>
           <FormLabel htmlFor='commission'>Total Commission Amount: $</FormLabel>
           <NumberInput defaultValue={0} precision={2}>
-            <NumberInputField id='commission' value={formData.commission} onChange={handleChange} />
+            <NumberInputField id='commission' color={text} value={formData.commission} onChange={handleChange} />
           </NumberInput>
           </FormControl>
 
           <FormControl color={accent}>
             <FormLabel htmlFor='commissionRateAmount'>Commission Rate Amount</FormLabel>
             <NumberInput defaultValue={0} precision={2}>
-              <NumberInputField id='commissionRateAmount' value={formData.commissionRateAmount} onChange={handleChange} />
+              <NumberInputField id='commissionRateAmount' color={text} value={formData.commissionRateAmount} onChange={handleChange} />
             </NumberInput>
           </FormControl>
 
@@ -115,13 +115,13 @@ const commissionForm = () => {
 
           <FormControl color={accent}>
             <FormLabel htmlFor='paymentDate'>Payment Date</FormLabel>
-            <Input id='paymentDate' type='date' value={formData.paymentDate} onChange={handleChange} />
+            <Input id='paymentDate' color={text} type='date' value={formData.paymentDate} onChange={handleChange} />
           </FormControl>
           
          
         </SimpleGrid>
 
-        <Button mt={4} bg={background} color={accent} type='submit'>
+        <Button mt={4} bg={primary} color={secondary} type='submit'>
           Submit
         </Button>
       </form>

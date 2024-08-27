@@ -9,6 +9,7 @@ import About from './pages/about';
 import PagesMenu from './components/generalUtils/PagesMenu';
 import ProjectManagement from './pages/projectManagement';
 import Footer from './components/generalUtils/footer';
+import ClientManagement from './pages/ClientManagment';
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -16,16 +17,16 @@ function App() {
 
   const getCurrentPage = () => {
     switch (location.pathname) {
-      case '/':
-        return 'home';
+      
       case '/calculator':
         return 'calculator';
       case '/dashboard':
         return 'dashboard';
+      case '/clientManagement':
+        return 'clientManagement';
       case '/projectManagement':
         return 'projectManagement';
-      case '/about':
-        return 'about';
+      
       default:
         return '';
     }
@@ -49,6 +50,7 @@ function App() {
               <Route path="/" element={<Homepage />} />
               <Route path="/calculator" element={<CommisionCalculator />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/clientManagement" element={<ClientManagement />} />
               <Route path="/projectManagement" element={<ProjectManagement />} />
 
               <Route path="/about" element={<About />} />
