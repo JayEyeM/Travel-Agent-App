@@ -29,7 +29,11 @@ const NavbarMenu: React.FC<NavbarMenuProps> = ({ currentPage }) => {
                     p={2}
                 >
                     <MenuLink to="/" texts="Home" isActive={currentPage === 'home'} />
+                    <MenuLink to="/learnMore" texts="Learn More" isActive={currentPage === 'learnMore'} />
                     <MenuLink to="/about" texts="About" isActive={currentPage === 'about'} />
+                    <MenuLink to="/signin" texts="Sign In" isActive={currentPage === 'signin'} />
+                    <MenuLink to="/signout" texts="Sign Out" isActive={currentPage === 'signout'} />
+
                 </SimpleGrid>
             </MenuList>
         </Menu>

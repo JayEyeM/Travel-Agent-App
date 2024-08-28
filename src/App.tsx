@@ -10,6 +10,10 @@ import PagesMenu from './components/generalUtils/PagesMenu';
 import ProjectManagement from './pages/projectManagement';
 import Footer from './components/generalUtils/footer';
 import ClientManagement from './pages/ClientManagment';
+import Signin from './pages/signin';
+import Signout from './pages/signout';
+import Signup from './pages/signup';
+import LearnMore from './pages/learnMore';
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -52,7 +56,10 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/clientManagement" element={<ClientManagement />} />
               <Route path="/projectManagement" element={<ProjectManagement />} />
-
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/signout" element={<Signout />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/learnMore" element={<LearnMore />} />
               <Route path="/about" element={<About />} />
             </Routes>
         </Box>
