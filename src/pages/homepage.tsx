@@ -2,6 +2,7 @@
 import React from 'react';
 import { Box, Heading, Text, Tooltip, Button } from '@chakra-ui/react';
 import { useBrandColors } from '../components/generalUtils/theme';
+import { Link } from 'react-router-dom';
 
 const Homepage: React.FC = () => {
   const { primary, background, accent, secondary, text } = useBrandColors()
@@ -16,7 +17,7 @@ const Homepage: React.FC = () => {
 
       <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
         <Tooltip label="Get Started" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
-          <Button w={'175px'} ml={'auto'} mr={'auto'} mt={0} color={secondary} bg={primary} size="lg">
+          <Button as={Link} to="/signup" w={'175px'} ml={'auto'} mr={'auto'} mt={0} color={secondary} bg={primary} size="lg">
             Get Started
           </Button>
         </Tooltip>

@@ -18,6 +18,10 @@ function NavBar() {
             return 'home';
           case '/about':
             return 'about';
+          case '/signin':
+            return 'signin';
+          case '/signout':
+            return 'signout';
           default:
             return '';
         }

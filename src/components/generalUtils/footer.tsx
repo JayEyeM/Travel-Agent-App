@@ -29,6 +29,10 @@ const Footer = () => {
       </Text>
 
       <Text fontSize="lg" color={text}>
+        All rights reserved &copy; 2023 
+      </Text>
+
+      <Text fontSize="lg" color={text}>
         Terms & Conditions
       </Text>
 
@@ -36,9 +40,7 @@ const Footer = () => {
         Privacy Policy
       </Text>
 
-      <Text fontSize="lg" color={text}>
-        All rights reserved &copy; 2023 
-      </Text>
+      
     </Box>
   )
 }
