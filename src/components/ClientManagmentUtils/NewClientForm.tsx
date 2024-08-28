@@ -1,9 +1,11 @@
 // NewClientForm.tsx
 import React from 'react';
-import { Box, Text, Heading, FormControl, FormLabel, Input, Textarea, Button, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
+import { Box, Text, Heading, FormControl, FormLabel, Input, Textarea, Button, SimpleGrid, NumberInput, NumberInputField, Checkbox, useColorModeValue } from '@chakra-ui/react';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { newClientFormData } from '../generalUtils/interfaces';
+import useClientData from './UseClientDataHook';
 
 // Interface for the new client form data
 //id: string
@@ -15,22 +17,6 @@ import { useState } from 'react';
 //finalPaymentDate: string
 //paid: boolean
 //paymentDate: string
-
-interface newClientFormData {
-    id: number
-    clientName: string
-    supplier: string
-    bookingNumber: number
-    notes: string
-    invoiced: boolean
-    finalPaymentDate: string
-    paid: boolean
-    paymentDate: string
-    dateCreated: string
-}
-
-
-
 
 
 const newClientForm = () => {
@@ -48,8 +34,10 @@ const newClientForm = () => {
         paid: false,
         paymentDate: '',
         //the current date
-        dateCreated: dayjs().format('YYYY-MM-DD'), 
+        dateCreated: dayjs().format('YYYY-MM-DD'),
     });
+
+    const { updateClientData } = useClientData();
 
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -72,12 +60,38 @@ const newClientForm = () => {
 
     // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        // Save data to local storage
-        localStorage.setItem('newClientFormData', JSON.stringify(formData))
+        e.preventDefault();
+    
+        // Retrieve existing clients from local storage, or initialize as an empty array if not present
+        const existingClients = JSON.parse(localStorage.getItem('ClientList') || '[]');
+    
+        // Check if existingClients is an array
+        const updatedClients = Array.isArray(existingClients) ? [...existingClients, formData] : [formData];
+    
+        // Save the updated list to local storage
+        localStorage.setItem('ClientList', JSON.stringify(updatedClients));
+    
         // Process or validate formData here
-        console.log('Form Data Submitted:', formData)
-    }
+        console.log('Form Data Submitted:', formData);
+
+        updateClientData(updatedClients);
+
+        //clear form data
+        setFormData({
+            id: 0,
+            clientName: '',
+            supplier: '',
+            bookingNumber: 0,
+            notes: '',
+            invoiced: false,
+            finalPaymentDate: '',
+            paid: false,
+            paymentDate: '',
+            dateCreated: dayjs().format('YYYY-MM-DD'),
+        });
+    };
+    
+    
 
     return (
         <Box
@@ -136,12 +150,12 @@ const newClientForm = () => {
                     </FormControl>
                     <FormControl id="invoiced">
                         <FormLabel>Invoiced</FormLabel>
-                        <Input
-                            type="checkbox"
+                        <Checkbox
                             id="invoiced"
                             checked={formData.invoiced}
                             onChange={handleChange}
                         />
+                        
                     </FormControl>
                     <FormControl id="finalPaymentDate">
                         <FormLabel>Final Payment Date</FormLabel>
@@ -154,8 +168,7 @@ const newClientForm = () => {
                     </FormControl>
                     <FormControl id="paid">
                         <FormLabel>Paid</FormLabel>
-                        <Input
-                            type="checkbox"
+                        <Checkbox
                             id="paid"
                             checked={formData.paid}
                             onChange={handleChange}
