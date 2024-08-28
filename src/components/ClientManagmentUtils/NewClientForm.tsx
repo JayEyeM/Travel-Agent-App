@@ -4,6 +4,8 @@ import { Box, Text, Heading, FormControl, FormLabel, Input, Textarea, Button, Si
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { newClientFormData } from '../generalUtils/interfaces';
+import useClientData from './UseClientDataHook';
 
 // Interface for the new client form data
 //id: string
@@ -15,22 +17,6 @@ import { useState } from 'react';
 //finalPaymentDate: string
 //paid: boolean
 //paymentDate: string
-
-interface newClientFormData {
-    id: number
-    clientName: string
-    supplier: string
-    bookingNumber: number
-    notes: string
-    invoiced: boolean
-    finalPaymentDate: string
-    paid: boolean
-    paymentDate: string
-    dateCreated: string
-}
-
-
-
 
 
 const newClientForm = () => {
@@ -50,6 +36,8 @@ const newClientForm = () => {
         //the current date
         dateCreated: dayjs().format('YYYY-MM-DD'),
     });
+
+    const { updateClientData } = useClientData();
 
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -85,6 +73,22 @@ const newClientForm = () => {
     
         // Process or validate formData here
         console.log('Form Data Submitted:', formData);
+
+        updateClientData(updatedClients);
+
+        //clear form data
+        setFormData({
+            id: 0,
+            clientName: '',
+            supplier: '',
+            bookingNumber: 0,
+            notes: '',
+            invoiced: false,
+            finalPaymentDate: '',
+            paid: false,
+            paymentDate: '',
+            dateCreated: dayjs().format('YYYY-MM-DD'),
+        });
     };
     
     

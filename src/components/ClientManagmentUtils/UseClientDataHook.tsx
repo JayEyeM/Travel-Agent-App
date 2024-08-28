@@ -1,18 +1,29 @@
-// UseClientDataHook.tsx
+import { useState, useEffect } from 'react'; 
+import { newClientFormData } from '../generalUtils/interfaces';
 
-import React, { useState, useEffect } from 'react'; 
-
-
-//Custom hook to use ClientList data from local storage
-
+// UseClientDataHook.ts
 const useClientData = () => {
-    const [clientData, setClientData] = useState([]);
-    useEffect(() => {
-        const storedData = localStorage.getItem('ClientList');
-        if (storedData) {
-            setClientData(JSON.parse(storedData));
+    const [clientData, setClientData] = useState<newClientFormData[]>([]);
+
+    // Function to update client data
+    const updateClientData = (updatedClients?: newClientFormData[]) => {
+        if (updatedClients) {
+            setClientData(updatedClients);
+        } else {
+            const storedData = localStorage.getItem('ClientList');
+            if (storedData) {
+                setClientData(JSON.parse(storedData));
+            }
         }
-    }, []);
-    return clientData;
+    };
+
+    // Load client data on initial render
+    useEffect(() => {
+        updateClientData();
+    }, [clientData]);
+
+    return { clientData, updateClientData };
 };
-export default useClientData
+
+export default useClientData;
+
