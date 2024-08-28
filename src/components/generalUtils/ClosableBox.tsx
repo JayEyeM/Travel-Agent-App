@@ -6,7 +6,7 @@ import { CloseIcon, AddIcon } from '@chakra-ui/icons';
 interface ClosableBoxProps {
     title: string;
     buttonText: string;
-    icon: React.ReactNode;
+    icon?: React.ReactNode;
     children: React.ReactNode;
     onClose: () => void;
     onOpen: () => void;

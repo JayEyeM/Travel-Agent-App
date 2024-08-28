@@ -1,6 +1,6 @@
 // NewClientForm.tsx
 import React from 'react';
-import { Box, Text, Heading, FormControl, FormLabel, Input, Textarea, Button, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
+import { Box, Text, Heading, FormControl, FormLabel, Input, Textarea, Button, SimpleGrid, NumberInput, NumberInputField, Checkbox, useColorModeValue } from '@chakra-ui/react';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -48,7 +48,7 @@ const newClientForm = () => {
         paid: false,
         paymentDate: '',
         //the current date
-        dateCreated: dayjs().format('YYYY-MM-DD'), 
+        dateCreated: dayjs().format('YYYY-MM-DD'),
     });
 
     // Handle input changes
@@ -72,12 +72,22 @@ const newClientForm = () => {
 
     // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        // Save data to local storage
-        localStorage.setItem('newClientFormData', JSON.stringify(formData))
+        e.preventDefault();
+    
+        // Retrieve existing clients from local storage, or initialize as an empty array if not present
+        const existingClients = JSON.parse(localStorage.getItem('ClientList') || '[]');
+    
+        // Check if existingClients is an array
+        const updatedClients = Array.isArray(existingClients) ? [...existingClients, formData] : [formData];
+    
+        // Save the updated list to local storage
+        localStorage.setItem('ClientList', JSON.stringify(updatedClients));
+    
         // Process or validate formData here
-        console.log('Form Data Submitted:', formData)
-    }
+        console.log('Form Data Submitted:', formData);
+    };
+    
+    
 
     return (
         <Box
@@ -136,12 +146,12 @@ const newClientForm = () => {
                     </FormControl>
                     <FormControl id="invoiced">
                         <FormLabel>Invoiced</FormLabel>
-                        <Input
-                            type="checkbox"
+                        <Checkbox
                             id="invoiced"
                             checked={formData.invoiced}
                             onChange={handleChange}
                         />
+                        
                     </FormControl>
                     <FormControl id="finalPaymentDate">
                         <FormLabel>Final Payment Date</FormLabel>
@@ -154,8 +164,7 @@ const newClientForm = () => {
                     </FormControl>
                     <FormControl id="paid">
                         <FormLabel>Paid</FormLabel>
-                        <Input
-                            type="checkbox"
+                        <Checkbox
                             id="paid"
                             checked={formData.paid}
                             onChange={handleChange}
