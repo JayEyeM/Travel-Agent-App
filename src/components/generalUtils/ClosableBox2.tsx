@@ -56,6 +56,10 @@ const ClosableBox2: React.FC<ClosableBox2Props> = ({ title, buttonText, icon, ch
                 position="relative"
                 mb={2}
                 w={'100%'}
+                h={'auto'}
+                p={2}
+                display={'flex'}
+                flexDirection={{ base: 'column', md: 'row' }}
             >
                   <Box flex="1" textAlign="left">
                     {buttonTextParts[0]}
@@ -75,7 +79,8 @@ const ClosableBox2: React.FC<ClosableBox2Props> = ({ title, buttonText, icon, ch
                 w={'100%'}
                 p={4}
                 mt={{ base: 4, md: 0 }}
-                ml={2}
+                ml={'auto'}
+                mr={'auto'}
                 outline={"2px solid"}
                 outlineColor={secondary}
                 style={{ display: isVisible ? 'block' : 'none' }} 
