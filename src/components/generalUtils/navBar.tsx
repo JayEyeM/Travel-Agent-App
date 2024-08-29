@@ -31,7 +31,7 @@ function NavBar() {
         <Box bg={background} m={'auto'} h="auto" w={'100%'} p={4}
         display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
 
-            <Logo width='auto' height='75' />
+            <Logo width='auto' height='75' boxShadow="rgba(0, 0, 0, 0.35) 0px 0px 10px 10px;" />
             <Heading as={'h1'} fontSize={'6xl'} fontFamily={['Raleway Heavy', 'sans-serif']}   color={accent}>Globeeta</Heading>
 
             <Box display={'flex'} alignItems={'center'}>

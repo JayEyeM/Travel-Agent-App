@@ -2,6 +2,7 @@
 import React from 'react';
 import { Box, Text, Heading, useColorModeValue } from '@chakra-ui/react'
 import { useBrandColors } from '../generalUtils/theme'
+import Logo from './Logo';
 
 const Footer = () => {
 
@@ -31,6 +32,8 @@ const Footer = () => {
       <Text fontSize="lg" color={text}>
         All rights reserved &copy; 2023 
       </Text>
+
+      <Logo width={"auto"} height={"75px"} boxShadow="rgba(0, 0, 0, 0.35) 0px 0px 10px 10px;" />
 
       <Text fontSize="lg" color={text}>
         Terms & Conditions

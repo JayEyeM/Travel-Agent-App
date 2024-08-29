@@ -14,6 +14,8 @@ import Signin from './pages/signin';
 import Signout from './pages/signout';
 import Signup from './pages/signup';
 import LearnMore from './pages/learnMore';
+import Resources from './pages/Resources';
+import ToDoNotes from './components/generalUtils/ToDoNotes';
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -24,10 +26,14 @@ function App() {
       
       case '/calculator':
         return 'calculator';
+      case '/todoNotes':
+        return 'todoNotes';
       case '/dashboard':
         return 'dashboard';
       case '/clientManagement':
         return 'clientManagement';
+        case '/resources':
+        return 'resources';
       case '/projectManagement':
         return 'projectManagement';
       
@@ -53,8 +59,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/calculator" element={<CommisionCalculator />} />
+              <Route path="/todoNotes" element={<ToDoNotes />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/clientManagement" element={<ClientManagement />} />
+              <Route path="/resources" element={<Resources />} />
               <Route path="/projectManagement" element={<ProjectManagement />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signout" element={<Signout />} />
