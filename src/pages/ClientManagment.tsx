@@ -18,8 +18,9 @@ const ClientManagement: React.FC = () => {
       <Text fontSize="lg">
         This is the Client Management of your application.
       </Text>
-      <ClosableBox title="New Client Form" buttonText="Add New" icon={<AddIcon />}  children={NewClientForm()} onOpen={() => {}} onClose={() => {}} />
-      <ClosableBox title="View Clients" buttonText="View Clients " icon={<Avatar bg={primary} outline={"1px solid white"} size="sm" />} children={<ViewClients />} onOpen={() => {}} onClose={() => {}} />
+      <ClosableBox title="New Client Form" buttonText="Add New" icon={<AddIcon />} children={<NewClientForm />} onOpen={() => {}} onClose={() => {}} />
+
+      <ClosableBox title="View Clients" buttonText="View Clients " icon={<Avatar bg={primary} color={secondary} variant={'roundedSquare'} outline={"1px solid"} outlineColor={secondary} size="xs" />} children={<ViewClients />} onOpen={() => {}} onClose={() => {}} />
     </Box>
   );
 };

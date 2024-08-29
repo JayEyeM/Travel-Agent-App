@@ -28,6 +28,13 @@ const SearchClients: React.FC<SearchClientsProps> = ({ clientData, onSearch }) =
         onSearch(searchTerm, filtered);
     };
 
+    //view all clients button/function
+    const handleViewAll = () => {
+        onSearch(searchTerm, clientData);
+        setSearchTerm('');
+        console.log('View all button clicked');
+    }
+
     return (
         <Box>
             <form onSubmit={handleSearchSubmit}>
@@ -42,17 +49,40 @@ const SearchClients: React.FC<SearchClientsProps> = ({ clientData, onSearch }) =
                         _placeholder={{ color: accent }}
                     />
                 </FormControl>
-                <Button
-                    type="submit"
-                    bg={secondary}
-                    color={primary}
-                    boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px;"}
-                    _hover={{ bg: primary, color: secondary }}
-                    _active={{ bg: secondary }}
+                <Box
+                    display="flex"
+                    flexDirection={{ base: 'column', md: 'row' }}
+                    justifyContent={{ base: 'center', md: 'center' }}
+                    alignItems={{ base: 'center', md: 'flex-start' }}
                     mt={4}
                 >
-                    Search
-                </Button>
+                    <Button
+                        type="submit"
+                        bg={secondary}
+                        color={primary}
+                        boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px;"}
+                        _hover={{ bg: primary, color: secondary }}
+                        _active={{ bg: secondary }}
+                        mt={4}
+                        mr={{ base: 0, md: 2 }}
+                    >
+                        Search
+                    </Button>
+                    <Button
+                        type="submit"
+                        bg={secondary}
+                        color={primary}
+                        boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px;"}
+                        _hover={{ bg: primary, color: secondary }}
+                        _active={{ bg: secondary }}
+                        mt={4}
+                        ml={{ base: 0, md: 2 }}
+                        onClick={handleViewAll}
+
+                    >
+                        View All
+                    </Button>
+                </Box>
             </form>
         </Box>
     );
