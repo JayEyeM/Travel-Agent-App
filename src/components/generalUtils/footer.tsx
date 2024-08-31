@@ -33,7 +33,7 @@ const Footer = () => {
         All rights reserved &copy; 2023 
       </Text>
 
-      <Logo width={"auto"} height={"75px"} boxShadow="rgba(0, 0, 0, 0.35) 0px 0px 10px 10px;" />
+      <Logo width={"auto"} height={"75px"} />
 
       <Text fontSize="lg" color={text}>
         Terms & Conditions

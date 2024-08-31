@@ -14,7 +14,7 @@ import useClientData from './UseClientDataHook';
 //     id: number
 //     clientName: string
 //     clientEmail: string
-//     clientPhone: number
+//     clientPhone: string
 //     clientPostalCode: string
 //     clientStreetAddress: string 
 //     clientCity: string
@@ -54,7 +54,7 @@ const newClientForm = () => {
         id: generateUniqueId(),
         clientName: '',
         clientEmail: '',
-        clientPhone: 0,
+        clientPhone: '',
         clientPostalCode: '',
         clientStreetAddress: '',
         clientCity: '',
@@ -117,7 +117,7 @@ const newClientForm = () => {
             id: generateUniqueId(),
         clientName: '',
         clientEmail: '',
-        clientPhone: 0,
+        clientPhone: '',
         clientPostalCode: '',
         clientStreetAddress: '',
         clientCity: '',
@@ -173,7 +173,12 @@ const newClientForm = () => {
                             <InputLeftElement pointerEvents='none'>
                             <PhoneIcon color={secondary} />
                             </InputLeftElement>
-                            <Input type='tel' placeholder='Phone number' />
+                            <Input 
+                            type='tel'
+                            id="clientPhone"
+                            value={formData.clientPhone}
+                            onChange={handleChange}
+                            placeholder='1-234-567-890' />
                         </InputGroup>
                     </FormControl>
 
@@ -239,15 +244,7 @@ const newClientForm = () => {
                     </FormControl>
 
                     
-                    <FormControl id="invoiced">
-                        <FormLabel>Invoiced?</FormLabel>
-                        <Checkbox
-                            id="invoiced"
-                            checked={formData.invoiced}
-                            onChange={handleChange}
-                        />
-                        
-                    </FormControl>
+                    
 
                     <FormControl id="finalPaymentDate">
                         <FormLabel>Final Payment Date</FormLabel>
@@ -259,14 +256,6 @@ const newClientForm = () => {
                         />
                     </FormControl>
                    
-                    <FormControl id="paid">
-                        <FormLabel>Paid?</FormLabel>
-                        <Checkbox
-                            id="paid"
-                            checked={formData.paid}
-                            onChange={handleChange}
-                        />
-                    </FormControl>
                     
                     <FormControl id="paymentDate">
                         <FormLabel>Payment Date</FormLabel>

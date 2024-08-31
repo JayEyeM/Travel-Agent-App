@@ -5,7 +5,7 @@ export interface newClientFormData {
     id: number
     clientName: string
     clientEmail: string
-    clientPhone: number
+    clientPhone: string
     clientPostalCode: string
     clientStreetAddress: string 
     clientCity: string
