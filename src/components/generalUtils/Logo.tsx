@@ -9,13 +9,13 @@ import logo from '../../assets/FillerLogo.svg';
 interface LogoProps {
     width?: string;
     height?: string;
-    boxShadow?: string;
+    
 }
 
-const Logo: React.FC<LogoProps> = ({ width, height, boxShadow }) => {
+const Logo: React.FC<LogoProps> = ({ width, height }) => {
   return (
     <Box>
-      <Image src={logo} alt="Logo" width={width} height={height} boxShadow={boxShadow} />
+      <Image src={logo} alt="Logo" width={width} height={height} boxShadow={{ base: "none", md: "rgba(0, 0, 0, 0.35) 0px 0px 15px 5px;" }} />
     </Box>
   );
 };
