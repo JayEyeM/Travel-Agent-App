@@ -7,6 +7,7 @@ import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import SearchClients from './SearchClients';
 import { newClientFormData } from '../generalUtils/interfaces';
 import EditClientForm from './EditClientForm';
+import CheckboxComponent from '../generalUtils/Checkboxes';
 
 const ViewClients: React.FC = () => {
     const { primary, background, secondary, accent } = useBrandColors();
@@ -59,21 +60,46 @@ const ViewClients: React.FC = () => {
         }
     };
 
+    const handleInvoicedChange = (id: number, isChecked: boolean) => {
+        const updatedClients = clientData.map(client =>
+            client.id === id ? { ...client, invoiced: isChecked } : client
+        );
+        localStorage.setItem('ClientList', JSON.stringify(updatedClients));
+        updateClientData(updatedClients);
+    };
+
+    const handlePaidChange = (id: number, isChecked: boolean) => {
+        const updatedClients = clientData.map(client =>
+            client.id === id ? { ...client, paid: isChecked } : client
+        );
+        localStorage.setItem('ClientList', JSON.stringify(updatedClients));
+        updateClientData(updatedClients);
+    };
+
     const clientsToDisplay = searchTerm ? filteredClients : clientData;
+    const reversedClientsToDisplay = [...clientsToDisplay].reverse();
 
     return (
         <Box>
             <SearchClients clientData={clientData} onSearch={handleSearch} />
 
-            {clientsToDisplay.map((client) => (
+            {reversedClientsToDisplay.map((client) => (
                 <ClosableBox3
                     key={client.id}
                     title={client.clientName + "'s details"}
-                    buttonText={` ${client.clientName} | id: ${client.id} | Creation Date: ${client.dateCreated}`}
+                    buttonText={` ${client.clientName}  | ${client.clientEmail} | ID: ${client.id} | Added on ${client.dateCreated}`}
                     onClose={() => console.log('Close button clicked')}
                     onOpen={() => console.log('Open button clicked')}
-                    checkboxLabel='Invoiced?'
-                    checkboxLabel2='Paid?'
+                    checkboxes={
+                        <CheckboxComponent
+                            id={client.id}
+                            invoicedChecked={client.invoiced}
+                            paidChecked={client.paid}
+                            onInvoicedChange={handleInvoicedChange}
+                            onPaidChange={handlePaidChange}
+                            
+                        />
+                    }
                 >
                     <Card
                         bg={background}
@@ -101,11 +127,33 @@ const ViewClients: React.FC = () => {
                             justifyContent={{ base: 'center', md: 'left' }}
                             alignItems={{ base: 'center', md: 'flex-start' }}
                         >
-                            <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
-                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Client:</Text> {client.clientName}
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Name:</Text> {client.clientName}
+                            </Text>
+
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Email:</Text> {client.clientEmail}
+                            </Text>
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Phone #:</Text> {client.clientPhone}
+                            </Text>
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Postal Code:</Text> {client.clientPostalCode}
+                            </Text>
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Street Address:</Text> {client.clientStreetAddress}
+                            </Text>
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>City:</Text> {client.clientCity}
+                            </Text>
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Province:</Text> {client.clientProvince}
+                            </Text>
+                            <Text fontSize={"xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Country:</Text> {client.clientCountry}
                             </Text>
                             
-                            <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
+                            <Text fontSize={"2xl"} color={'blue.300'} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
                                 <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Notes:</Text> {client.notes}
                             </Text>
                             <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>

@@ -15,7 +15,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ width, height }) => {
   return (
     <Box>
-      <Image src={logo} alt="Logo" width={width} height={height} boxShadow={{ base: "none", md: "rgba(0, 0, 0, 0.35) 0px 0px 15px 5px;" }} />
+      <Image src={logo} alt="Logo" width={width} height={height} boxShadow="rgba(0, 0, 0, 0.35) 0px 0px 15px 5px;" />
     </Box>
   );
 };

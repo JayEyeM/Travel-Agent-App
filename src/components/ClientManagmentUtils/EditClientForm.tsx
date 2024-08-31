@@ -22,24 +22,78 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                         onChange={onChange}
                     />
                 </FormControl>
-                <FormControl id="supplier">
-                    <FormLabel>Supplier</FormLabel>
+                
+                <FormControl id="clientEmail">
+                    <FormLabel>Client Email</FormLabel>
+                    <Input
+                        type="email"
+                        id="clientEmail"
+                        value={client.clientEmail}
+                        onChange={onChange}
+                    />
+                </FormControl>
+
+                <FormControl id="clientPhone">
+                    <FormLabel>Client Phone</FormLabel>
+                    <Input
+                        type="tel"
+                        id="clientPhone"
+                        value={client.clientPhone}
+                        onChange={onChange}
+                    />
+                </FormControl>
+
+                <FormControl id="clientPostalCode">
+                    <FormLabel>Client Postal Code</FormLabel>
                     <Input
                         type="text"
-                        id="supplier"
-                        value={client.supplier}
+                        id="clientPostalCode"
+                        value={client.clientPostalCode}
                         onChange={onChange}
                     />
                 </FormControl>
-                <FormControl id="bookingNumber">
-                    <FormLabel>Booking Number</FormLabel>
+
+                <FormControl id="clientStreetAddress">
+                    <FormLabel>Client Street Address</FormLabel>
                     <Input
-                        type="number"
-                        id="bookingNumber"
-                        value={client.bookingNumber}
+                        type="text"
+                        id="clientStreetAddress"
+                        value={client.clientStreetAddress}
                         onChange={onChange}
                     />
                 </FormControl>
+
+                <FormControl id="clientCity">
+                    <FormLabel>Client City</FormLabel>
+                    <Input
+                        type="text"
+                        id="clientCity"
+                        value={client.clientCity}
+                        onChange={onChange}
+                    />
+                </FormControl>
+
+                <FormControl id="clientProvince">
+                    <FormLabel>Client Province</FormLabel>
+                    <Input
+                        type="text"
+                        id="clientProvince"
+                        value={client.clientProvince}
+                        onChange={onChange}
+                    />
+                </FormControl>
+
+                <FormControl id="clientCountry">
+                    <FormLabel>Client Country</FormLabel>
+                    <Input
+                        type="text"
+                        id="clientCountry"
+                        value={client.clientCountry}
+                        onChange={onChange}
+                    />
+                </FormControl>
+
+                
                 <FormControl id="notes">
                     <FormLabel>Notes</FormLabel>
                     <Textarea
@@ -48,15 +102,7 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                         onChange={onChange}
                     />
                 </FormControl>
-                <FormControl id="invoiced">
-                    <Checkbox
-                        id="invoiced"
-                        isChecked={client.invoiced}
-                        onChange={onChange}
-                    >
-                        Invoiced?
-                    </Checkbox>
-                </FormControl>
+                
                 <FormControl id="finalPaymentDate">
                     <FormLabel>Final Payment Date</FormLabel>
                     <Input
@@ -66,15 +112,7 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                         onChange={onChange}
                     />
                 </FormControl>
-                <FormControl id="paid">
-                    <Checkbox
-                        id="paid"
-                        isChecked={client.paid}
-                        onChange={onChange}
-                    >
-                        Paid?
-                    </Checkbox>
-                </FormControl>
+                
                 <FormControl id="paymentDate">
                     <FormLabel>Payment Date</FormLabel>
                     <Input

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Checkbox, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
 import { useBrandColors } from '../generalUtils/theme';
 import { CloseIcon, AddIcon } from '@chakra-ui/icons';
+import CheckboxComponent from './Checkboxes';
 
 interface ClosableBox3Props {
     title: string;
@@ -10,16 +11,11 @@ interface ClosableBox3Props {
     children: React.ReactNode;
     onClose: () => void;
     onOpen: () => void;
-    checkboxLabel?: string;
-    checkboxLabel2?: string;
-    checkboxValue2?: boolean;
-    checkboxValue?: boolean;
-    onCheckboxValueChange?: (isChecked: boolean) => void;
-
+    checkboxes?: React.ReactNode;
 
 }
 
-const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, children, onClose, onOpen, checkboxLabel, checkboxValue, checkboxValue2, checkboxLabel2, onCheckboxValueChange }) => {
+const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, children, onClose, onOpen, checkboxes }) => {
     const { primary, background, secondary, accent, text } = useBrandColors();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -34,57 +30,7 @@ const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, ch
 
     const buttonTextParts = buttonText.split(' | ');
 
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (onCheckboxValueChange) {
-            onCheckboxValueChange(event.target.checked);
-        }
-    };
-
-    const renderCheckbox = () => {
-        if (checkboxLabel) {
-            return (
-                <FormControl display="flex" alignItems="center">
-                    <FormLabel htmlFor="checkbox" mb="0">
-                        {checkboxLabel}
-                    </FormLabel>
-                    <Checkbox
-                        id="checkbox"
-                        isChecked={checkboxValue}
-                        onChange={handleCheckboxChange}
-                        size="lg"
-                        borderColor={background}
-                        borderRadius={'full'}
-                        colorScheme={'green'}
-                        bg={'red'}
-                    />
-                </FormControl>
-            );
-        }
-        return null;
-    };
     
-    const renderCheckbox2 = () => {
-        if (checkboxLabel2) {
-            return (
-                <FormControl display="flex" alignItems="center">
-                    <FormLabel htmlFor="checkbox2" mb="0">
-                        {checkboxLabel2}
-                    </FormLabel>
-                    <Checkbox
-                        id="checkbox2"
-                        isChecked={checkboxValue2}
-                        onChange={handleCheckboxChange}
-                        size="lg"
-                        borderColor={background}
-                        borderRadius={'full'}
-                        colorScheme={'green'}
-                        bg={'red'}
-                    />
-                </FormControl>
-            );
-        }
-        return null;
-    };
 
     return (
         <Box
@@ -125,7 +71,7 @@ const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, ch
                 _active={{ bg: accent }}
                 position="relative"
                 mb={2}
-                w={'80%'}
+                w={'100%'}
                 h={'auto'}
                 p={2}
                 display={'flex'}
@@ -134,11 +80,14 @@ const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, ch
                   <Box flex="1" textAlign="left" fontSize={'2xl'} as='b'>
                     {buttonTextParts[0]}
                 </Box>
-                <Box flex="1" textAlign="center">
+                <Box flex="1" textAlign="center" ml={2} >
                     {buttonTextParts[1]}
                 </Box>
-                <Box flex="1" textAlign="right">
+                <Box flex="1" textAlign="right" fontSize={'xs'} >
                     {buttonTextParts[2]} {icon}
+                </Box>
+                <Box flex="1" textAlign="right" ml={2} fontSize={'xs'}>
+                    {buttonTextParts[3]} {icon}
                 </Box>
 
             </Button>
@@ -150,8 +99,7 @@ const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, ch
              
             >
 
-                {renderCheckbox()}
-                {renderCheckbox2()}
+                {checkboxes}
 
                
                 
