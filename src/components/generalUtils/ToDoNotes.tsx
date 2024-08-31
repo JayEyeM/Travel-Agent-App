@@ -160,37 +160,41 @@ const ToDoNotes: React.FC = () => {
             p={4}
             borderWidth="1px"
             borderRadius="lg"
-            boxShadow="sm"
-            bg="gray.50"
+            boxShadow={"rgba(0, 0, 0, 0.35) 0px 0px 15px 5px;"}
+            bg={background}
             outline={"2px solid"}
             outlineColor={secondary}
-            _dark={{ bg: 'gray.700' }}
+            
           >
-            <HStack justifyContent="space-between">
+            <HStack justifyContent="space-between" bg={background}>
               <Text>{note.text}</Text>
               <HStack spacing={3}>
                 <Button
+                 outline={"1px solid"} outlineColor={accent} color={accent}
                   size="sm"
                   onClick={() => handleEditNote(note.id, note.text)}
                   leftIcon={<EditIcon />}
                 >
                   Edit
                 </Button>
-                <Button size="sm" colorScheme="red" onClick={() => handleDeleteNote(note.id)}>
+                <Button size="sm" outline={"1px solid"} outlineColor={"red.300"} color={"red.300"} onClick={() => handleDeleteNote(note.id)}>
                   <DeleteIcon />
                 </Button>
               </HStack>
             </HStack>
-            <ClosableBox2 title='Alerts' onClose={() => console.log('Close button clicked')}
-                    onOpen={() => console.log('Open button clicked')} buttonText='Alerts' icon={<WarningTwoIcon />}>
+            <ClosableBox2 title='Set Alerts' onClose={() => console.log('Close button clicked')}
+                    onOpen={() => console.log('Open button clicked')} buttonText='Set Reminder Alerts' icon={<WarningTwoIcon />}>
             <Box mt={4}>
-              <Text>Reminder 1</Text>
+              <Text color={secondary} >Reminder 1</Text>
               <Switch
+               borderRadius={"full"}
+               bg={'red.300'}
+               colorScheme={'green'}
                 isChecked={!!note.reminder1}
                 onChange={() => handleReminderToggle(note.id, 1)}
               />
               {note.reminder1 && (
-                <HStack mt={2}>
+                <HStack mt={2} display={"flex"} flexDirection={{ base: 'column', md: 'row' }} >
                   <ReactDatePicker
                     selected={new Date(note.reminder1.date)}
                     onChange={(date: Date | null) => {
@@ -208,13 +212,16 @@ const ToDoNotes: React.FC = () => {
               )}
             </Box>
             <Box mt={4}>
-              <Text>Reminder 2</Text>
+              <Text color={secondary} >Reminder 2</Text>
               <Switch
+                borderRadius={"full"}
+                bg={'red.300'}
+                colorScheme={'green'}
                 isChecked={!!note.reminder2}
                 onChange={() => handleReminderToggle(note.id, 2)}
               />
               {note.reminder2 && (
-                <HStack mt={2}>
+                <HStack mt={2} display={"flex"} flexDirection={{ base: 'column', md: 'row' }}>
                   <ReactDatePicker
                     selected={new Date(note.reminder2.date)}
                     onChange={(date: Date | null) => {

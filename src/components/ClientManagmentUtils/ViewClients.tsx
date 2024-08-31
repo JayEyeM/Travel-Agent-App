@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Heading, Text, Card, CardBody, CardFooter, CardHeader } from '@chakra-ui/react';
 import useClientData from './UseClientDataHook';
 import { useBrandColors } from '../generalUtils/theme';
-import ClosableBox2 from '../generalUtils/ClosableBox2';
+import ClosableBox3 from '../generalUtils/ClosableBox3';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import SearchClients from './SearchClients';
 import { newClientFormData } from '../generalUtils/interfaces';
@@ -66,12 +66,14 @@ const ViewClients: React.FC = () => {
             <SearchClients clientData={clientData} onSearch={handleSearch} />
 
             {clientsToDisplay.map((client) => (
-                <ClosableBox2
+                <ClosableBox3
                     key={client.id}
                     title={client.clientName + "'s details"}
-                    buttonText={`${client.clientName} | Booking #: ${client.bookingNumber} | Date Created: ${client.dateCreated}`}
+                    buttonText={` ${client.clientName} | id: ${client.id} | Creation Date: ${client.dateCreated}`}
                     onClose={() => console.log('Close button clicked')}
                     onOpen={() => console.log('Open button clicked')}
+                    checkboxLabel='Invoiced?'
+                    checkboxLabel2='Paid?'
                 >
                     <Card
                         bg={background}
@@ -102,12 +104,7 @@ const ViewClients: React.FC = () => {
                             <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
                                 <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Client:</Text> {client.clientName}
                             </Text>
-                            <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
-                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Supplier:</Text> {client.supplier}
-                            </Text>
-                            <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
-                                <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Booking #:</Text> {client.bookingNumber}
-                            </Text>
+                            
                             <Text fontSize={"2xl"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }}>
                                 <Text as={"span"} overflowWrap={"break-word"} wordBreak={"break-word"} display={{ base: 'block', md: 'inline' }} fontSize={"lg"} color={secondary}>Notes:</Text> {client.notes}
                             </Text>
@@ -138,7 +135,7 @@ const ViewClients: React.FC = () => {
                                 />
                             )}
                         </CardBody>
-                        <CardFooter w={"100%"} p={4}>
+                        <CardFooter w={"100%"} p={4} display={"flex"} flexDirection={{ base: "column", md: "row" }} justifyContent={{ base: "center", md: "left" }} alignItems={{ base: "center", md: "flex-start" }} gap={{ base: 4, md: 0 }}>
                             <Box
                                 display={"flex"}
                                 flexDirection={{ base: "column", md: "row" }}
@@ -162,7 +159,7 @@ const ViewClients: React.FC = () => {
                                 flexDirection={{ base: "column", md: "row" }}
                                 justifyContent={"space-between"}
                                 alignItems={"center"}
-                                gap={{ base: 2, md: 4 }}
+                                gap={{ base: 4, md: 4 }}
                                 
                                 
                             >
@@ -187,7 +184,7 @@ const ViewClients: React.FC = () => {
                             </Box>
                         </CardFooter>
                     </Card>
-                </ClosableBox2>
+                </ClosableBox3>
             ))}
         </Box>
     );

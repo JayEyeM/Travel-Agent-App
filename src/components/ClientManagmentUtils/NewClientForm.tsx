@@ -1,6 +1,8 @@
 // NewClientForm.tsx
 import React from 'react';
-import { Box, Text, Heading, FormControl, FormLabel, Input, Textarea, Button, SimpleGrid, NumberInput, NumberInputField, Checkbox, useColorModeValue } from '@chakra-ui/react';
+import { Box, Divider, AbsoluteCenter, Text, Heading, FormControl, FormLabel, Input, Textarea,
+     Button, SimpleGrid, NumberInput, NumberInputField, Checkbox, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { PhoneIcon } from '@chakra-ui/icons';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -8,15 +10,40 @@ import { newClientFormData } from '../generalUtils/interfaces';
 import useClientData from './UseClientDataHook';
 
 // Interface for the new client form data
-//id: string
-//clientName: string
-//supplier: string
-//bookingNumber: number
-//notes: string
-//invoiced: boolean
-//finalPaymentDate: string
-//paid: boolean
-//paymentDate: string
+// export interface newClientFormData {
+//     id: number
+//     clientName: string
+//     clientEmail: string
+//     clientPhone: number
+//     clientPostalCode: string
+//     clientStreetAddress: string 
+//     clientCity: string
+//     clientProvince: string
+//     clientCountry: string
+//     notes: string
+//     invoiced: boolean
+//     paid: boolean
+//     paymentDate: string
+//     finalPaymentDate: string
+//     dateCreated: string
+// }
+
+
+// Generate unique ID
+const generateUniqueId = () => {
+    const clientList = localStorage.getItem('ClientList');
+    if (clientList === null || clientList === '') {
+      return 1; 
+    } else {
+      const clients = JSON.parse(clientList);
+      if (clients.length === 0) {
+        return 1; 
+      } else {
+        const highestId = Math.max(...clients.map((client: newClientFormData) => client.id));
+        return highestId + 1;
+      }
+    }
+  }
 
 
 const newClientForm = () => {
@@ -24,39 +51,48 @@ const newClientForm = () => {
 
     // Initialize state with the newClientFormData interface
     const [formData, setFormData] = useState<newClientFormData>({
-        id: 0,
+        id: generateUniqueId(),
         clientName: '',
-        supplier: '',
-        bookingNumber: 0,
+        clientEmail: '',
+        clientPhone: 0,
+        clientPostalCode: '',
+        clientStreetAddress: '',
+        clientCity: '',
+        clientProvince: '',
+        clientCountry: '',
         notes: '',
         invoiced: false,
-        finalPaymentDate: '',
         paid: false,
         paymentDate: '',
+        finalPaymentDate: '',
         //the current date
         dateCreated: dayjs().format('YYYY-MM-DD'),
     });
 
     const { updateClientData } = useClientData();
 
+    
+
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const target = e.target as HTMLInputElement | HTMLTextAreaElement;
         const { id, value, type } = target;
         const checked = 'checked' in target ? (target as HTMLInputElement).checked : undefined;
-        if (id === 'bookingNumber') {
+        if (formData.id === undefined) {
+            const newId = generateUniqueId();
             setFormData({
-                ...formData,
-                id: parseInt(value), 
-                bookingNumber: parseInt(value)
+              ...formData,
+              id: newId,
+              [id]: type === 'checkbox' ? checked : value
             })
-        } else {
+          } else {
             setFormData({
-                ...formData,
-                [id]: type === 'checkbox' ? checked : value
+              ...formData,
+              [id]: type === 'checkbox' ? checked : value
             })
         }
     }
+    
 
     // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
@@ -78,16 +114,22 @@ const newClientForm = () => {
 
         //clear form data
         setFormData({
-            id: 0,
-            clientName: '',
-            supplier: '',
-            bookingNumber: 0,
-            notes: '',
-            invoiced: false,
-            finalPaymentDate: '',
-            paid: false,
-            paymentDate: '',
-            dateCreated: dayjs().format('YYYY-MM-DD'),
+            id: generateUniqueId(),
+        clientName: '',
+        clientEmail: '',
+        clientPhone: 0,
+        clientPostalCode: '',
+        clientStreetAddress: '',
+        clientCity: '',
+        clientProvince: '',
+        clientCountry: '',
+        notes: '',
+        invoiced: false,
+        paid: false,
+        paymentDate: '',
+        finalPaymentDate: '',
+        //the current date
+        dateCreated: dayjs().format('YYYY-MM-DD'),
         });
     };
     
@@ -104,15 +146,7 @@ const newClientForm = () => {
         >
             <form onSubmit={handleSubmit}>
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                    <FormControl id="id">
-                        <FormLabel>ID</FormLabel>
-                        <Input
-                            type="number"
-                            id="id"
-                            value={formData.id}
-                            onChange={handleChange}
-                        />
-                    </FormControl>
+                    
                     <FormControl id="clientName">
                         <FormLabel>Client Name</FormLabel>
                         <Input
@@ -122,24 +156,79 @@ const newClientForm = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
-                    <FormControl id="supplier">
-                        <FormLabel>Supplier</FormLabel>
+
+                    <FormControl id="clientEmail">
+                        <FormLabel>Client Email</FormLabel>
+                        <Input
+                            type="email"
+                            id="clientEmail"
+                            value={formData.clientEmail}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+
+                    <FormControl id="clientPhone">
+                        <FormLabel>Client Phone</FormLabel>
+                        <InputGroup>
+                            <InputLeftElement pointerEvents='none'>
+                            <PhoneIcon color={secondary} />
+                            </InputLeftElement>
+                            <Input type='tel' placeholder='Phone number' />
+                        </InputGroup>
+                    </FormControl>
+
+                    <FormControl id="clientPostalCode">
+                        <FormLabel>Client Postal Code</FormLabel>
                         <Input
                             type="text"
-                            id="supplier"
-                            value={formData.supplier}
+                            id="clientPostalCode"
+                            value={formData.clientPostalCode}
                             onChange={handleChange}
                         />
                     </FormControl>
-                    <FormControl id="bookingNumber">
-                        <FormLabel>Booking Number</FormLabel>
+
+                    <FormControl id="clientStreetAddress">
+                        <FormLabel>Client Street Address</FormLabel>
                         <Input
-                            type="number"
-                            id="bookingNumber"
-                            value={formData.bookingNumber}
+                            type="text"
+                            id="clientStreetAddress"
+                            value={formData.clientStreetAddress}
                             onChange={handleChange}
                         />
                     </FormControl>
+
+                    <FormControl id="clientCity">
+                        <FormLabel>Client City</FormLabel>
+                        <Input
+                            type="text"
+                            id="clientCity"
+                            value={formData.clientCity}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+
+                    <FormControl id="clientProvince">
+                        <FormLabel>Client Province</FormLabel>
+                        <Input
+                            type="text"
+                            id="clientProvince"
+                            value={formData.clientProvince}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+
+                    <FormControl id="clientCountry">
+                        <FormLabel>Client Country</FormLabel>
+                        <Input
+                            type="text"
+                            id="clientCountry"
+                            value={formData.clientCountry}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+
+                    <Box></Box>
+                    
                     <FormControl id="notes">
                         <FormLabel>Notes</FormLabel>
                         <Textarea
@@ -148,8 +237,10 @@ const newClientForm = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
+
+                    
                     <FormControl id="invoiced">
-                        <FormLabel>Invoiced</FormLabel>
+                        <FormLabel>Invoiced?</FormLabel>
                         <Checkbox
                             id="invoiced"
                             checked={formData.invoiced}
@@ -157,6 +248,7 @@ const newClientForm = () => {
                         />
                         
                     </FormControl>
+
                     <FormControl id="finalPaymentDate">
                         <FormLabel>Final Payment Date</FormLabel>
                         <Input
@@ -166,14 +258,16 @@ const newClientForm = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
+                   
                     <FormControl id="paid">
-                        <FormLabel>Paid</FormLabel>
+                        <FormLabel>Paid?</FormLabel>
                         <Checkbox
                             id="paid"
                             checked={formData.paid}
                             onChange={handleChange}
                         />
                     </FormControl>
+                    
                     <FormControl id="paymentDate">
                         <FormLabel>Payment Date</FormLabel>
                         <Input
@@ -183,16 +277,45 @@ const newClientForm = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
+
+                    
+
+                    </SimpleGrid>
+
+                    <Box position='relative' padding='10' mt={8}>
+                        <Divider />
+                        <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
+                        mt={{ base: 4, md: 0 }} >
+                            <Text color={secondary} fontSize={{ base: 'sm', md: 'md' }}>
+                                The fields below for Client Creation Date and ID are automatically generated.
+                            </Text>
+                        </AbsoluteCenter>
+                    </Box>
+
+                    <Box mt={{ base: 12, md: 0 }} mb={4} p={4} display={"flex"} flexDirection={{ base: 'column', md: 'row' }} gap={4} >
                     <FormControl id="dateCreated">
                         <FormLabel>Date Created</FormLabel>
                         <Input
+                            isReadOnly
                             type="date"
                             id="dateCreated"
                             value={formData.dateCreated}
                             onChange={handleChange}
                         />
                     </FormControl>
-                </SimpleGrid>
+
+                    <FormControl id="id">
+                        <FormLabel>ID</FormLabel>
+                        <Input
+                            isReadOnly
+                            type="number"
+                            id="id"
+                            value={formData.id}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+
+                </Box>
                 <Button
                     mt={4}
                     bg={primary}

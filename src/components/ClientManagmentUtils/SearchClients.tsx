@@ -21,7 +21,7 @@ const SearchClients: React.FC<SearchClientsProps> = ({ clientData, onSearch }) =
         const filtered = clientData.filter((client) => {
             return (
                 client.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                client.bookingNumber.toString().includes(searchTerm) ||
+                
                 client.dateCreated.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
@@ -34,6 +34,7 @@ const SearchClients: React.FC<SearchClientsProps> = ({ clientData, onSearch }) =
         setSearchTerm('');
         console.log('View all button clicked');
     }
+    
 
     return (
         <Box>
@@ -45,7 +46,7 @@ const SearchClients: React.FC<SearchClientsProps> = ({ clientData, onSearch }) =
                         type="text"
                         value={searchTerm}
                         onChange={handleSearch}
-                        placeholder="Search by name, booking number, or creation date"
+                        placeholder='Search by name, or by the Client Creation Date'
                         _placeholder={{ color: accent }}
                     />
                 </FormControl>

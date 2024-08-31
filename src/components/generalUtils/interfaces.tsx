@@ -4,12 +4,23 @@
 export interface newClientFormData {
     id: number
     clientName: string
-    supplier: string
-    bookingNumber: number
+    clientEmail: string
+    clientPhone: number
+    clientPostalCode: string
+    clientStreetAddress: string 
+    clientCity: string
+    clientProvince: string
+    clientCountry: string
     notes: string
     invoiced: boolean
-    finalPaymentDate: string
     paid: boolean
     paymentDate: string
+    finalPaymentDate: string
     dateCreated: string
+}
+
+// TripManagementTool interface
+export interface TripManagmentTool{
+    id: number
+    
 }
