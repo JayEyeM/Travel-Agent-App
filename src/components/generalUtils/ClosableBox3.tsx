@@ -43,7 +43,8 @@ const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, ch
             minW={'200px'}
             maxW={'100%'}
             w={'auto'}
-
+            outline={'1px solid'}
+            outlineColor={secondary}
             ml={{ base: 'auto', md: 0 }}
             mr={{ base: 'auto', md: 0 }}
             display={'flex'}

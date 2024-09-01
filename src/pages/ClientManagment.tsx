@@ -13,14 +13,15 @@ const ClientManagement: React.FC = () => {
   return (
     <Box textAlign="center" py={10} px={6}>
       <Heading as="h1" size="xl" mb={4}>
-        Welcome to the Client Management page
+       Client Management
       </Heading>
       <Text fontSize="lg">
-        This is the Client Management of your application.
+        Add new clients and keep track of them below. Click on a client in the Client List to view more 
+        details and use handy tools, such as the Trip Planner and Commission Calculator.
       </Text>
       <ClosableBox title="New Client Form" buttonText="Add New" icon={<AddIcon />} children={<NewClientForm />} onOpen={() => {}} onClose={() => {}} />
 
-      <ClosableBox title="View Clients" buttonText="View Clients " icon={<Avatar bg={primary} color={secondary} variant={'roundedSquare'} outline={"1px solid"} outlineColor={secondary} size="xs" />} children={<ViewClients />} onOpen={() => {}} onClose={() => {}} />
+      <ClosableBox title="Client List" buttonText="Client List " icon={<Avatar bg={primary} color={secondary} variant={'roundedSquare'} outline={"1px solid"} outlineColor={secondary} size="xs" />} children={<ViewClients />} onOpen={() => {}} onClose={() => {}} />
     </Box>
   );
 };

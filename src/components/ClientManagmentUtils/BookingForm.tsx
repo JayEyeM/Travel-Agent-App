@@ -1,0 +1,282 @@
+import React, { useState } from 'react';
+import { Box, Input, FormControl, FormLabel, Button, IconButton, useToast } from '@chakra-ui/react';
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import ClosableBox2 from '../generalUtils/ClosableBox2';
+import useClientData from './UseClientDataHook';
+import { newClientFormData, bookingFormData } from '../generalUtils/interfaces';
+
+interface BookingFormProps {
+  clientId: number;
+}
+
+
+
+const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
+  const [formData, setFormData] = useState<bookingFormData>({
+    travelDate: '',
+    clientFinalPaymentDate: '',
+    supplierFinalPaymentDate: '',
+    bookingDate: '',
+    invoicedDate: '',
+    confirmationNumbers: [''],
+    namesDateOfBirths: [{ name: '', dateOfBirth: '' }],
+    mailingAddress: '',
+    phoneNumbers: [''],
+    emailAddresses: [''],
+    significantDates: [''],
+  });
+
+  const { clientData: clients } = useClientData();
+  const toast = useToast();
+
+  const handleAddBooking = () => {
+    const newBooking = { ...formData };
+    const updatedClients = clients.map((client: newClientFormData) => {
+      if (client.id === clientId) {
+        return {
+          ...client,
+          bookings: [...client.bookings, newBooking],
+        };
+      }
+      return client;
+    });
+
+    localStorage.setItem('clients', JSON.stringify(updatedClients));
+    toast({
+      title: 'Booking added to client.',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    });
+
+    // Reset form data
+    setFormData({
+      travelDate: '',
+      clientFinalPaymentDate: '',
+      supplierFinalPaymentDate: '',
+      bookingDate: '',
+      invoicedDate: '',
+      confirmationNumbers: [''],
+      namesDateOfBirths: [{ name: '', dateOfBirth: '' }],
+      mailingAddress: '',
+      phoneNumbers: [''],
+      emailAddresses: [''],
+      significantDates: [''],
+    });
+  };
+
+  const handleArrayChange = (field: keyof bookingFormData, index: number, value: string, subField?: string) => {
+    const updatedArray = [...(formData[field] as any)];
+    if (subField) {
+      updatedArray[index][subField] = value;
+    } else {
+      updatedArray[index] = value;
+    }
+    setFormData({ ...formData, [field]: updatedArray });
+  };
+
+  const handleAddField = (field: keyof bookingFormData, defaultValue: any) => {
+    const updatedArray = [...(formData[field] as any), defaultValue];
+    setFormData({ ...formData, [field]: updatedArray });
+  };
+
+  const handleRemoveField = (field: keyof bookingFormData, index: number) => {
+    const updatedArray = [...(formData[field] as any)];
+    updatedArray.splice(index, 1);
+    setFormData({ ...formData, [field]: updatedArray });
+  };
+
+  return (
+    <ClosableBox2
+      title="Booking Form"
+      buttonText="Add Booking"
+      icon={<AddIcon />}
+      children={
+        <Box>
+          {/* Static form fields */}
+          <FormControl>
+            <FormLabel>Travel Date</FormLabel>
+            <Input
+              type="date"
+              placeholder="Travel Date"
+              value={formData.travelDate}
+              onChange={(e) => setFormData({ ...formData, travelDate: e.target.value })}
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Client Final Payment Date</FormLabel>
+            <Input
+              type="date"
+              placeholder="Client Final Payment Date"
+              value={formData.clientFinalPaymentDate}
+              onChange={(e) => setFormData({ ...formData, clientFinalPaymentDate: e.target.value })}
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Supplier Final Payment Date</FormLabel>
+            <Input
+              type="date"
+              placeholder="Supplier Final Payment Date"
+              value={formData.supplierFinalPaymentDate}
+              onChange={(e) => setFormData({ ...formData, supplierFinalPaymentDate: e.target.value })}
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Booking Date</FormLabel>
+            <Input
+              type="date"
+              placeholder="Booking Date"
+              value={formData.bookingDate}
+              onChange={(e) => setFormData({ ...formData, bookingDate: e.target.value })}
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Invoiced Date</FormLabel>
+            <Input
+              type="date"
+              placeholder="Invoiced Date"
+              value={formData.invoicedDate}
+              onChange={(e) => setFormData({ ...formData, invoicedDate: e.target.value })}
+            />
+          </FormControl>
+
+          {/* Dynamic form fields */}
+          <FormControl>
+            <FormLabel>Confirmation Numbers</FormLabel>
+            {formData.confirmationNumbers.map((number, index) => (
+              <Box key={index} mb={2}>
+                <Input
+                  type="text"
+                  placeholder="Confirmation Number"
+                  value={number}
+                  onChange={(e) => handleArrayChange('confirmationNumbers', index, e.target.value)}
+                />
+                <IconButton
+                  icon={<DeleteIcon />}
+                  aria-label='Remove Confirmation Number'
+                  onClick={() => handleRemoveField('confirmationNumbers', index)}
+                  ml={2}
+                />
+              </Box>
+            ))}
+            <Button onClick={() => handleAddField('confirmationNumbers', '')} leftIcon={<AddIcon />}>
+              Add Confirmation Number
+            </Button>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Names and Date of Births</FormLabel>
+            {formData.namesDateOfBirths.map((entry, index) => (
+              <Box key={index} mb={2}>
+                <Input
+                  type="text"
+                  placeholder="Name"
+                  value={entry.name}
+                  onChange={(e) => handleArrayChange('namesDateOfBirths', index, e.target.value, 'name')}
+                  mb={1}
+                />
+                <Input
+                  type="date"
+                  placeholder="Date of Birth"
+                  value={entry.dateOfBirth}
+                  onChange={(e) => handleArrayChange('namesDateOfBirths', index, e.target.value, 'dateOfBirth')}
+                />
+                <IconButton
+                  icon={<DeleteIcon />}
+                  aria-label='Remove Name and Date of Birth'
+                  onClick={() => handleRemoveField('namesDateOfBirths', index)}
+                  ml={2}
+                  mt={1}
+                />
+              </Box>
+            ))}
+            <Button onClick={() => handleAddField('namesDateOfBirths', { name: '', dateOfBirth: '' })} leftIcon={<AddIcon />}>
+              Add Name and Date of Birth
+            </Button>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Phone Numbers</FormLabel>
+            {formData.phoneNumbers.map((phone, index) => (
+              <Box key={index} mb={2}>
+                <Input
+                  type="text"
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChange={(e) => handleArrayChange('phoneNumbers', index, e.target.value)}
+                />
+                <IconButton
+                  icon={<DeleteIcon />}
+                  aria-label='Remove Phone Number'
+                  onClick={() => handleRemoveField('phoneNumbers', index)}
+                  ml={2}
+                />
+              </Box>
+            ))}
+            <Button onClick={() => handleAddField('phoneNumbers', '')} leftIcon={<AddIcon />}>
+              Add Phone Number
+            </Button>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Email Addresses</FormLabel>
+            {formData.emailAddresses.map((email, index) => (
+              <Box key={index} mb={2}>
+                <Input
+                  type="email"
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={(e) => handleArrayChange('emailAddresses', index, e.target.value)}
+                />
+                <IconButton
+                  icon={<DeleteIcon />}
+                  aria-label='Remove Email Address'
+                  onClick={() => handleRemoveField('emailAddresses', index)}
+                  ml={2}
+                />
+              </Box>
+            ))}
+            <Button onClick={() => handleAddField('emailAddresses', '')} leftIcon={<AddIcon />}>
+              Add Email Address
+            </Button>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Significant Dates</FormLabel>
+            {formData.significantDates.map((date, index) => (
+              <Box key={index} mb={2}>
+                <Input
+                  type="date"
+                  placeholder="Significant Date"
+                  value={date}
+                  onChange={(e) => handleArrayChange('significantDates', index, e.target.value)}
+                />
+                <IconButton
+                  icon={<DeleteIcon />}
+                  aria-label='Remove Significant Dates'
+                  onClick={() => handleRemoveField('significantDates', index)}
+                  ml={2}
+                />
+              </Box>
+            ))}
+            <Button onClick={() => handleAddField('significantDates', '')} leftIcon={<AddIcon />}>
+              Add Significant Date
+            </Button>
+          </FormControl>
+
+          <Button onClick={handleAddBooking} mt={4} colorScheme="teal">
+            Save Booking
+          </Button>
+        </Box>
+      }
+      onClose={() => {/* Handle close */}}
+      onOpen={() => {/* Handle open */}}
+    />
+  );
+};
+
+export default BookingForm;
