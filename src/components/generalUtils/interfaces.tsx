@@ -1,4 +1,19 @@
 
+// BookingForm interface
+export interface bookingFormData {
+    travelDate: string;
+    clientFinalPaymentDate: string;
+    supplierFinalPaymentDate: string;
+    bookingDate: string;
+    invoicedDate: string;
+    confirmationNumbers: string[];
+    namesDateOfBirths: { name: string; dateOfBirth: string }[];
+    mailingAddress: string;
+    phoneNumbers: string[];
+    emailAddresses: string[];
+    significantDates: string[];
+  }
+
 // NewClientFormData interface
 
 export interface newClientFormData {
@@ -17,6 +32,7 @@ export interface newClientFormData {
     paymentDate: string
     finalPaymentDate: string
     dateCreated: string
+    bookings: bookingFormData[];
 }
 
 // TripManagementTool interface
