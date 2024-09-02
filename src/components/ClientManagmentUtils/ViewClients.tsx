@@ -11,6 +11,7 @@ import { newClientFormData } from '../generalUtils/interfaces';
 import EditClientForm from './EditClientForm';
 import CheckboxComponent from '../generalUtils/Checkboxes';
 import BookingForm from './BookingForm';
+import ClientBookings from '../bookingFormUtils/displayBookingsData';
 
 const ViewClients: React.FC = () => {
     const { primary, background, secondary, accent } = useBrandColors();
@@ -131,6 +132,8 @@ const ViewClients: React.FC = () => {
                             alignItems={{ base: 'center', md: 'flex-start' }}
                         >
                             <BookingForm clientId={client.id} />
+                            <ClientBookings clientId={client.id} />
+
                             <ClosableBox
                                 title={client.clientName + "'s details"}
                                 onClose={() => console.log('Close button clicked')}

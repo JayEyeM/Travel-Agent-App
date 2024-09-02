@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { Box, Input, FormControl, FormLabel, Button, IconButton, useToast } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import ClosableBox2 from '../generalUtils/ClosableBox2';
-import useClientData from './UseClientDataHook';
-import { newClientFormData, bookingFormData } from '../generalUtils/interfaces';
+import { bookingFormData } from '../generalUtils/interfaces';
+import useBookingsData from '../bookingFormUtils/useBookingsData';
 
 interface BookingFormProps {
   clientId: number;
 }
 
-
-
 const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
   const [formData, setFormData] = useState<bookingFormData>({
+    id: clientId,
     travelDate: '',
     clientFinalPaymentDate: '',
     supplierFinalPaymentDate: '',
@@ -26,22 +25,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
     significantDates: [''],
   });
 
-  const { clientData: clients } = useClientData();
   const toast = useToast();
+  const { saveBooking } = useBookingsData();
 
+  // This function handles adding a new booking
   const handleAddBooking = () => {
-    const newBooking = { ...formData };
-    const updatedClients = clients.map((client: newClientFormData) => {
-      if (client.id === clientId) {
-        return {
-          ...client,
-          bookings: [...client.bookings, newBooking],
-        };
-      }
-      return client;
-    });
-
-    localStorage.setItem('clients', JSON.stringify(updatedClients));
+    const newBooking = { ...formData, bookingId: new Date().toISOString() };
+    saveBooking(clientId, newBooking);
+    
     toast({
       title: 'Booking added to client.',
       status: 'success',
@@ -51,6 +42,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
 
     // Reset form data
     setFormData({
+      id: clientId,
       travelDate: '',
       clientFinalPaymentDate: '',
       supplierFinalPaymentDate: '',
@@ -65,6 +57,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
     });
   };
 
+  // Handle changes in form fields
   const handleArrayChange = (field: keyof bookingFormData, index: number, value: string, subField?: string) => {
     const updatedArray = [...(formData[field] as any)];
     if (subField) {
@@ -91,6 +84,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
       title="Booking Form"
       buttonText="Add Booking"
       icon={<AddIcon />}
+      onOpen={() => {}}
+      onClose={() => {}}
       children={
         <Box>
           {/* Static form fields */}
@@ -268,13 +263,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
             </Button>
           </FormControl>
 
-          <Button onClick={handleAddBooking} mt={4} colorScheme="teal">
+          <Button mt={4} colorScheme="teal" onClick={handleAddBooking}>
             Save Booking
           </Button>
         </Box>
       }
-      onClose={() => {/* Handle close */}}
-      onOpen={() => {/* Handle open */}}
     />
   );
 };

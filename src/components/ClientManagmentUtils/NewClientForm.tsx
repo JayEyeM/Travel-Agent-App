@@ -1,33 +1,11 @@
-// NewClientForm.tsx
-import React from 'react';
-import { Box, Divider, AbsoluteCenter, Text, Heading, FormControl, FormLabel, Input, Textarea,
-     Button, SimpleGrid, NumberInput, NumberInputField, Checkbox, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Divider, AbsoluteCenter, Text, FormControl, FormLabel, Input, Textarea,
+     Button, SimpleGrid, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { PhoneIcon } from '@chakra-ui/icons';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
-import { useState } from 'react';
-import { newClientFormData } from '../generalUtils/interfaces';
+import { newClientFormData, bookingFormData } from '../generalUtils/interfaces';
 import useClientData from './UseClientDataHook';
-
-// Interface for the new client form data
-// export interface newClientFormData {
-//     id: number
-//     clientName: string
-//     clientEmail: string
-//     clientPhone: string
-//     clientPostalCode: string
-//     clientStreetAddress: string 
-//     clientCity: string
-//     clientProvince: string
-//     clientCountry: string
-//     notes: string
-//     invoiced: boolean
-//     paid: boolean
-//     paymentDate: string
-//     finalPaymentDate: string
-//     dateCreated: string
-// }
-
 
 // Generate unique ID
 const generateUniqueId = () => {
@@ -45,9 +23,8 @@ const generateUniqueId = () => {
     }
   }
 
-
-const newClientForm = () => {
-    const { primary, background, secondary, accent, text } = useBrandColors();
+const NewClientForm: React.FC = () => {
+    const { primary, background, secondary } = useBrandColors();
 
     // Initialize state with the newClientFormData interface
     const [formData, setFormData] = useState<newClientFormData>({
@@ -65,34 +42,22 @@ const newClientForm = () => {
         paid: false,
         paymentDate: '',
         finalPaymentDate: '',
-        //the current date
         dateCreated: dayjs().format('YYYY-MM-DD'),
+        bookings: [], 
     });
 
     const { updateClientData } = useClientData();
-
-    
 
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const target = e.target as HTMLInputElement | HTMLTextAreaElement;
         const { id, value, type } = target;
         const checked = 'checked' in target ? (target as HTMLInputElement).checked : undefined;
-        if (formData.id === undefined) {
-            const newId = generateUniqueId();
-            setFormData({
-              ...formData,
-              id: newId,
-              [id]: type === 'checkbox' ? checked : value
-            })
-          } else {
-            setFormData({
-              ...formData,
-              [id]: type === 'checkbox' ? checked : value
-            })
-        }
+        setFormData({
+            ...formData,
+            [id]: type === 'checkbox' ? checked : value
+        });
     }
-    
 
     // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
@@ -112,28 +77,26 @@ const newClientForm = () => {
 
         updateClientData(updatedClients);
 
-        //clear form data
+        // Clear form data
         setFormData({
             id: generateUniqueId(),
-        clientName: '',
-        clientEmail: '',
-        clientPhone: '',
-        clientPostalCode: '',
-        clientStreetAddress: '',
-        clientCity: '',
-        clientProvince: '',
-        clientCountry: '',
-        notes: '',
-        invoiced: false,
-        paid: false,
-        paymentDate: '',
-        finalPaymentDate: '',
-        //the current date
-        dateCreated: dayjs().format('YYYY-MM-DD'),
+            clientName: '',
+            clientEmail: '',
+            clientPhone: '',
+            clientPostalCode: '',
+            clientStreetAddress: '',
+            clientCity: '',
+            clientProvince: '',
+            clientCountry: '',
+            notes: '',
+            invoiced: false,
+            paid: false,
+            paymentDate: '',
+            finalPaymentDate: '',
+            dateCreated: dayjs().format('YYYY-MM-DD'),
+            bookings: [], 
         });
     };
-    
-    
 
     return (
         <Box
@@ -146,7 +109,6 @@ const newClientForm = () => {
         >
             <form onSubmit={handleSubmit}>
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                    
                     <FormControl id="clientName">
                         <FormLabel>Client Name</FormLabel>
                         <Input
@@ -171,7 +133,7 @@ const newClientForm = () => {
                         <FormLabel>Client Phone</FormLabel>
                         <InputGroup>
                             <InputLeftElement pointerEvents='none'>
-                            <PhoneIcon color={secondary} />
+                                <PhoneIcon color={secondary} />
                             </InputLeftElement>
                             <Input 
                             type='tel'
@@ -232,8 +194,6 @@ const newClientForm = () => {
                         />
                     </FormControl>
 
-                    <Box></Box>
-                    
                     <FormControl id="notes">
                         <FormLabel>Notes</FormLabel>
                         <Textarea
@@ -242,9 +202,6 @@ const newClientForm = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
-
-                    
-                    
 
                     <FormControl id="finalPaymentDate">
                         <FormLabel>Final Payment Date</FormLabel>
@@ -256,7 +213,6 @@ const newClientForm = () => {
                         />
                     </FormControl>
                    
-                    
                     <FormControl id="paymentDate">
                         <FormLabel>Payment Date</FormLabel>
                         <Input
@@ -267,21 +223,19 @@ const newClientForm = () => {
                         />
                     </FormControl>
 
-                    
+                </SimpleGrid>
 
-                    </SimpleGrid>
+                <Box mt={8}>
+                    <Divider />
+                    <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
+                    mt={{ base: 4, md: 0 }} >
+                        <Text color={secondary} fontSize={{ base: 'sm', md: 'md' }}>
+                            The fields below for Client Creation Date and ID are automatically generated.
+                        </Text>
+                    </AbsoluteCenter>
+                </Box>
 
-                    <Box position='relative' padding='10' mt={8}>
-                        <Divider />
-                        <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
-                        mt={{ base: 4, md: 0 }} >
-                            <Text color={secondary} fontSize={{ base: 'sm', md: 'md' }}>
-                                The fields below for Client Creation Date and ID are automatically generated.
-                            </Text>
-                        </AbsoluteCenter>
-                    </Box>
-
-                    <Box mt={{ base: 12, md: 0 }} mb={4} p={4} display={"flex"} flexDirection={{ base: 'column', md: 'row' }} gap={4} >
+                <Box mt={{ base: 12, md: 0 }} mb={4} p={4} display={"flex"} flexDirection={{ base: 'column', md: 'row' }} gap={4} >
                     <FormControl id="dateCreated">
                         <FormLabel>Date Created</FormLabel>
                         <Input
@@ -318,4 +272,4 @@ const newClientForm = () => {
     )
 }
 
-export default newClientForm
+export default NewClientForm;

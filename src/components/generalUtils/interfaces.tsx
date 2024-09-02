@@ -1,6 +1,7 @@
 
 // BookingForm interface
 export interface bookingFormData {
+    id: number;
     travelDate: string;
     clientFinalPaymentDate: string;
     supplierFinalPaymentDate: string;
@@ -12,6 +13,7 @@ export interface bookingFormData {
     phoneNumbers: string[];
     emailAddresses: string[];
     significantDates: string[];
+    bookingId?: string;
   }
 
 // NewClientFormData interface
