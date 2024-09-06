@@ -23,6 +23,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
     phoneNumbers: [''],
     emailAddresses: [''],
     significantDates: [''],
+    bookingId: '',
+
   });
 
   const toast = useToast();
@@ -54,6 +56,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
       phoneNumbers: [''],
       emailAddresses: [''],
       significantDates: [''],
+      bookingId: '',
+
     });
   };
 

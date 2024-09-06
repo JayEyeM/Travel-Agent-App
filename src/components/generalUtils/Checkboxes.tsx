@@ -13,7 +13,7 @@ interface CheckboxProps {
 }
 
 const CheckboxComponent: React.FC<CheckboxProps> = ({ id, invoicedChecked, paidChecked, onInvoicedChange, onPaidChange }) => {
-    const { primary, background, secondary, accent, text } = useBrandColors();
+    const { background, secondary } = useBrandColors();
 
     return (
         <Box

@@ -3,7 +3,6 @@ import { Box, Button, Heading, Text, Card, CardBody, CardFooter, CardHeader, Sim
 import useClientData from './UseClientDataHook';
 import { useBrandColors } from '../generalUtils/theme';
 import ClosableBox3 from '../generalUtils/ClosableBox3';
-import ClosableBox2 from '../generalUtils/ClosableBox2';
 import ClosableBox from '../generalUtils/ClosableBox';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import SearchClients from './SearchClients';
@@ -35,10 +34,13 @@ const ViewClients: React.FC = () => {
     };
 
     const handleDeleteClick = (client: newClientFormData) => {
+    if (window.confirm(`Are you sure you want to delete ${client.clientName}?`)) {
         const updatedClients = clientData.filter((c) => c.id !== client.id);
         localStorage.setItem('ClientList', JSON.stringify(updatedClients));
         updateClientData(updatedClients);
-    };
+    }
+};
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (editingClient) {
@@ -207,6 +209,7 @@ const ViewClients: React.FC = () => {
                                     outlineColor={accent}
                                     onClick={() => handleEditClick(client)}
                                     leftIcon={<EditIcon />}
+                                    m={2}
                                 >
                                     Edit
                                 </Button>
@@ -216,6 +219,7 @@ const ViewClients: React.FC = () => {
                                     outlineColor={"red.400"}
                                     onClick={() => handleDeleteClick(client)}
                                     leftIcon={<DeleteIcon />}
+                                    m={2}
                                 >
                                     Delete Client
                                 </Button>

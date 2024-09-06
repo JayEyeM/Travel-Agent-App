@@ -81,6 +81,7 @@ const ClosableBox: React.FC<ClosableBoxProps> = ({ title, buttonText, icon, chil
                         _hover={{ bg: accent, color: primary }}
                         _active={{ bg: accent }}
                         position="relative"
+                        m={2}
                     >
                         <CloseIcon />
                     </Button>

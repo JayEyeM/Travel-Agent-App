@@ -4,7 +4,7 @@ import { Box, Divider, AbsoluteCenter, Text, FormControl, FormLabel, Input, Text
 import { PhoneIcon } from '@chakra-ui/icons';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
-import { newClientFormData, bookingFormData } from '../generalUtils/interfaces';
+import { newClientFormData } from '../generalUtils/interfaces';
 import useClientData from './UseClientDataHook';
 
 // Generate unique ID

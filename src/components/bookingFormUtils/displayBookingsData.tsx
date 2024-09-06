@@ -5,6 +5,7 @@ import { bookingFormData } from '../generalUtils/interfaces';
 import ClosableBox2 from '../generalUtils/ClosableBox2';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useBrandColors } from '../generalUtils/theme';
+import BookingChecklist from './BookingChecklist';
 
 interface ClientBookingsProps {
   clientId: number;
@@ -14,44 +15,54 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
   const { getBookingsByClientId } = useBookingsData();
   const [bookings, setBookings] = useState<bookingFormData[]>([]);
   const [clientName, setClientName] = useState<string>('');
-
-  const { primary, background, secondary, accent, text } = useBrandColors();
+  const { background, accent } = useBrandColors();
 
   useEffect(() => {
-    // Fetch bookings from local storage when component mounts or clientId changes
     const fetchBookings = () => {
-      const clientBookings = getBookingsByClientId(clientId);
-      setBookings(clientBookings);
+      try {
+        const clientBookings = getBookingsByClientId(clientId);
+        console.log('Fetched bookings:', clientBookings); // Debug log
+        setBookings(clientBookings);
+      } catch (error) {
+        console.error('Failed to fetch bookings:', error);
+      }
     };
-    // Fetch client name and bookings
+
     const fetchClientData = () => {
+      try {
         const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
+        console.log('Fetched clients:', clients); // Debug log
         const client = clients.find((c: any) => c.id === clientId);
         if (client) {
-          setClientName(client.clientName || ''); // Update clientName state
+          setClientName(client.clientName || '');
         }
-      };
-  
-      fetchClientData();
-      fetchBookings();
-    }, [clientId, getBookingsByClientId]);
+      } catch (error) {
+        console.error('Failed to fetch client data:', error);
+      }
+    };
 
-  // Function to delete a booking specific to the delete button on each booking
+    fetchBookings();
+    fetchClientData();
+  }, [clientId, getBookingsByClientId]);
+
   const handleDeleteClick = (bookingId: string) => {
     const updatedBookings = bookings.filter((b) => b.bookingId !== bookingId);
+    console.log('Updated bookings after delete:', updatedBookings); // Debug log
     setBookings(updatedBookings);
-  
-    // Update local storage to remove the deleted booking
-    const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
-    const client = clients.find((c: any) => c.id === clientId);
-    if (client) {
-      client.bookings = updatedBookings;
-      localStorage.setItem('ClientList', JSON.stringify(clients));
+
+    try {
+      const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
+      const client = clients.find((c: any) => c.id === clientId);
+      if (client) {
+        client.bookings = updatedBookings;
+        console.log('Updating client data in local storage:', clients); // Debug log
+        localStorage.setItem('ClientList', JSON.stringify(clients));
+      }
+    } catch (error) {
+      console.error('Failed to update client data in local storage:', error);
     }
   };
-  
-  
-  
+
   return (
     <ClosableBox2
       title={`${bookings.length > 0 ? "View Bookings for " : "No Bookings for "} ${clientName}`}
@@ -59,58 +70,100 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
       onOpen={() => {}}
       onClose={() => {}}
       children={
-        <Box w={{ base: '60vw', md: 'auto' }} borderRadius={"lg"}  >
-        {bookings.length > 0 ? (
-          bookings.map((booking, index) => (
-            <Box key={index} 
-            display={"flex"} 
-            flexDirection="column"
-            justifyContent={{ base: 'center', md: 'flex-start' }} 
-            alignItems={{ base: 'center', md: 'flex-start' }}
-            border="1px" borderColor="gray.200" p={4} mt={4} mb={6}
-            borderRadius={"lg"} w={"100%"} bg={background} boxShadow=" 0px 0px 10px 5px gray " >
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'} >Travel Date:</Text> {booking.travelDate}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Client Final Payment Date:</Text> {booking.clientFinalPaymentDate}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Supplier Final Payment Date:</Text> {booking.supplierFinalPaymentDate}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Booking Date:</Text> {booking.bookingDate}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Invoiced Date:</Text> {booking.invoicedDate}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Confirmation Numbers:</Text> {booking.confirmationNumbers.join(', ')}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Names and Date of Births:</Text> {booking.namesDateOfBirths.map((entry, i) => (
-                <span key={i}>{entry.name} (DOB: {entry.dateOfBirth}){i < booking.namesDateOfBirths.length - 1 ? ', ' : ''}</span>
-              ))}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Mailing Address:</Text> {booking.mailingAddress}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Phone Numbers:</Text> {booking.phoneNumbers.join(', ')}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Email Addresses:</Text> {booking.emailAddresses.join(', ')}</Text>
-              <Text fontSize={'lg'}><Text as={'b'} color={accent} fontSize={'sm'}>Significant Dates:</Text> {booking.significantDates.join(', ')}</Text>
-              <Box display="flex" 
-              flexDirection="row"
-              w={"100%"}
-              justifyContent="right"
-              alignItems="center"
-              mt={4}
+        <Box w={{ base: '60vw', md: 'auto' }} borderRadius={"lg"}>
+          {bookings.length > 0 ? (
+            bookings.map((booking, index) => (
+              <Box
+                key={index}
+                display={"flex"}
+                flexDirection="column"
+                justifyContent={{ base: 'center', md: 'flex-start' }}
+                alignItems={{ base: 'center', md: 'flex-start' }}
+                border="1px"
+                borderColor="gray.200"
+                p={4}
+                mt={4}
+                mb={6}
+                borderRadius={"lg"}
+                w={"100%"}
+                bg={background}
+                boxShadow="0px 0px 10px 5px gray"
               >
-                <IconButton
-                  aria-label="Delete"
-                  icon={<DeleteIcon />}
-                  variant="outline"
-                  colorScheme='red'
-                  m={4}
-                  onClick={() => handleDeleteClick(booking.bookingId ?? '')}
-                />
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Travel Date:</Text> {booking.travelDate}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Client Final Payment Date:</Text> {booking.clientFinalPaymentDate}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Supplier Final Payment Date:</Text> {booking.supplierFinalPaymentDate}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Booking Date:</Text> {booking.bookingDate}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Invoiced Date:</Text> {booking.invoicedDate}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Confirmation Numbers:</Text> {booking.confirmationNumbers.join(', ')}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Names and Date of Births:</Text> {booking.namesDateOfBirths.map((entry, i) => (
+                    <span key={i}>{entry.name} (DOB: {entry.dateOfBirth}){i < booking.namesDateOfBirths.length - 1 ? ', ' : ''}</span>
+                  ))}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Mailing Address:</Text> {booking.mailingAddress}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Phone Numbers:</Text> {booking.phoneNumbers.join(', ')}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Email Addresses:</Text> {booking.emailAddresses.join(', ')}
+                </Text>
+                <Text fontSize={'lg'}>
+                  <Text as={'b'} color={accent} fontSize={'sm'}>Significant Dates:</Text> {booking.significantDates.join(', ')}
+                </Text>
+
+                <BookingChecklist clientId={clientId} bookingId={booking.bookingId ?? ''} />
+
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  w={"100%"}
+                  justifyContent="right"
+                  alignItems="center"
+                  mt={4}
+                >
+                  <IconButton
+                    aria-label="Delete"
+                    icon={<DeleteIcon />}
+                    variant="outline"
+                    colorScheme='red'
+                    m={4}
+                    onClick={() => handleDeleteClick(booking.bookingId ?? '')}
+                  />
+                </Box>
               </Box>
-            </Box>
-          ))
-        ) : (
-          <Text boxShadow={" 0px 0px 10px 5px rgba(200, 0, 0, 0.5) "} p={4} fontWeight={'bold'} color={'red.500'} bg={'black'} borderRadius={"lg"} mt={8} fontSize={'lg'}>Click the "Add Booking" button above
-            and fill out the booking form to populate this section.</Text>
-        )}
-      </Box>
+            ))
+          ) : (
+            <Text
+              boxShadow={"0px 0px 10px 5px rgba(200, 0, 0, 0.5)"}
+              p={4}
+              fontWeight={'bold'}
+              color={'red.500'}
+              bg={'black'}
+              borderRadius={"lg"}
+              mt={8}
+              fontSize={'lg'}
+            >
+              Click the "Add Booking" button above and fill out the booking form to populate this section.
+            </Text>
+          )}
+        </Box>
       }
     />
-      
-    
   );
 };
-
 
 export default ClientBookings;
