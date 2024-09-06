@@ -14,7 +14,7 @@ export interface bookingFormData {
   significantDates: string[];
   bookingId?: string;
   checklists?: {
-    [key: string]: boolean; // Assuming checklists are stored as key-value pairs
+    [key: string]: boolean;
   };
 }
 
