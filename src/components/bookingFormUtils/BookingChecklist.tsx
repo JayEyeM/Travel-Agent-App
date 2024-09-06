@@ -17,49 +17,57 @@ interface BookingChecklistProps {
 }
 
 const BookingChecklist: React.FC<BookingChecklistProps> = ({ clientId, bookingId }) => {
-  const [filesChecklist, setFilesChecklist] = useState<ChecklistItem[]>(filesChecklistData);
-  const [marketingChecklist, setMarketingChecklist] = useState<ChecklistItem[]>(marketingChecklistData);
+  const [filesChecklist, setFilesChecklist] = useState<ChecklistItem[]>([]);
+  const [marketingChecklist, setMarketingChecklist] = useState<ChecklistItem[]>([]);
 
-  const { background, accent, secondary } = useBrandColors();
+  const { accent } = useBrandColors();
 
-  // Load checklist data from local storage
+  // Load checklist data from local storage when the component mounts
   useEffect(() => {
     const loadChecklistData = () => {
       const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
       const client = clients.find((c: any) => c.id === clientId);
       if (client) {
-        const currentBooking = client.bookings.find((booking: bookingFormData) => booking.bookingId === bookingId);
+        const currentBooking = client.bookings.find(
+          (booking: bookingFormData) => booking.bookingId === bookingId
+        );
         if (currentBooking) {
+          // If checklist exists in storage, load it, else use default checklists
           setFilesChecklist(currentBooking.filesChecklist || filesChecklistData);
           setMarketingChecklist(currentBooking.marketingChecklist || marketingChecklistData);
+        } else {
+          // If booking does not exist, use defaults
+          setFilesChecklist(filesChecklistData);
+          setMarketingChecklist(marketingChecklistData);
         }
       }
-      console.log('Checklist data loaded:', { filesChecklist, marketingChecklist });
     };
 
-    loadChecklistData();
+    loadChecklistData(); // Load checklist when the component mounts
   }, [clientId, bookingId]);
 
-  // Save checklist state to local storage
+  // Save checklist state to local storage whenever checklists change
   useEffect(() => {
     const saveChecklistData = () => {
       const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
       const clientIndex = clients.findIndex((c: any) => c.id === clientId);
-      if (clientIndex !== -1) {
-        const updatedBookings = clients[clientIndex].bookings.map((booking: bookingFormData) =>
-          booking.bookingId === bookingId
-            ? { ...booking, filesChecklist, marketingChecklist }
-            : booking
-        );
 
+      if (clientIndex !== -1) {
+        const updatedBookings = clients[clientIndex].bookings.map(
+          (booking: bookingFormData) =>
+            booking.bookingId === bookingId
+              ? { ...booking, filesChecklist, marketingChecklist }
+              : booking
+        );
         clients[clientIndex].bookings = updatedBookings;
-        localStorage.setItem('ClientList', JSON.stringify(clients));
-        console.log('Checklist data saved:', { filesChecklist, marketingChecklist });
+        localStorage.setItem('ClientList', JSON.stringify(clients)); // Save updated clients to local storage
       }
     };
 
-    saveChecklistData();
-  }, [clientId, bookingId, filesChecklist, marketingChecklist]);
+    if (filesChecklist.length > 0 && marketingChecklist.length > 0) {
+      saveChecklistData(); // Save checklists only if data is loaded
+    }
+  }, [filesChecklist, marketingChecklist, clientId, bookingId]);
 
   // Toggle checklist item
   const toggleItem = (list: 'files' | 'marketing', id: number) => {
