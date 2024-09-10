@@ -6,17 +6,15 @@ export interface bookingFormData {
   supplierFinalPaymentDate: string;
   bookingDate: string;
   invoicedDate: string;
-  confirmationNumbers: string[];
+  confirmationNumbers: { confirmationNumber: string; supplier: string }[];
   namesDateOfBirths: { name: string; dateOfBirth: string }[];
   mailingAddress: string;
   phoneNumbers: string[];
   emailAddresses: string[];
   significantDates: string[];
-  bookingId?: string;
-  checklists?: {
-    [key: string]: boolean;
-  };
+  bookingId: string;
 }
+
 
 // NewClientFormData interface
 export interface newClientFormData {

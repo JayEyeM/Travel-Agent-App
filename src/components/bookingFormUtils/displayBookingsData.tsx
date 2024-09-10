@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, IconButton } from '@chakra-ui/react';
+import dayjs from 'dayjs'; 
 import useBookingsData from './useBookingsData';
 import { bookingFormData } from '../generalUtils/interfaces';
 import ClosableBox2 from '../generalUtils/ClosableBox2';
@@ -21,7 +22,7 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
     const fetchBookings = () => {
       try {
         const clientBookings = getBookingsByClientId(clientId);
-        console.log('Fetched bookings:', clientBookings); // Debug log
+        console.log('Fetched bookings:', clientBookings); 
         setBookings(clientBookings);
       } catch (error) {
         console.error('Failed to fetch bookings:', error);
@@ -31,7 +32,7 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
     const fetchClientData = () => {
       try {
         const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
-        console.log('Fetched clients:', clients); // Debug log
+        console.log('Fetched clients:', clients);
         const client = clients.find((c: any) => c.id === clientId);
         if (client) {
           setClientName(client.clientName || '');
@@ -47,15 +48,27 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
 
   const handleDeleteClick = (bookingId: string) => {
     const updatedBookings = bookings.filter((b) => b.bookingId !== bookingId);
-    console.log('Updated bookings after delete:', updatedBookings); // Debug log
+    console.log('Updated bookings after delete:', updatedBookings);
     setBookings(updatedBookings);
+    handleSave(updatedBookings); // Save updated bookings
+  };
+
+  const handleSave = (updatedBookings: bookingFormData[]) => {
+    const formattedBookings = updatedBookings.map((booking) => ({
+      ...booking,
+      travelDate: dayjs(booking.travelDate).format('YYYY-MM-DD'),
+      clientFinalPaymentDate: dayjs(booking.clientFinalPaymentDate).format('YYYY-MM-DD'),
+      supplierFinalPaymentDate: dayjs(booking.supplierFinalPaymentDate).format('YYYY-MM-DD'),
+      bookingDate: dayjs(booking.bookingDate).format('YYYY-MM-DD'),
+      invoicedDate: dayjs(booking.invoicedDate).format('YYYY-MM-DD'),
+    }));
 
     try {
       const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
       const client = clients.find((c: any) => c.id === clientId);
       if (client) {
-        client.bookings = updatedBookings;
-        console.log('Updating client data in local storage:', clients); // Debug log
+        client.bookings = formattedBookings;
+        console.log('Updating client data in local storage:', clients);
         localStorage.setItem('ClientList', JSON.stringify(clients));
       }
     } catch (error) {
@@ -73,52 +86,56 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
         <Box w={{ base: '60vw', md: 'auto' }} borderRadius={"lg"}>
           {bookings.length > 0 ? (
             bookings.map((booking, index) => (
-              
-              <Box key={index}
-              bg={background}
-                  boxShadow="0px 0px 10px 5px gray"
-                  border="1px"
-                  borderColor="gray.200"
-                  borderRadius={"lg"}
-                  mt={4}
-                  mb={4}
+              <Box
+                key={index}
+                bg={background}
+                boxShadow="0px 0px 10px 5px gray"
+                border="1px"
+                borderColor="gray.200"
+                borderRadius={"lg"}
+                mt={4}
+                mb={4}
               >
                 <Box
                   display={"flex"}
                   flexDirection={{ base: 'column', md: 'row' }}
                   bg={background}
-                  
                   p={2}
                   mt={4}
                   mb={6}
                   borderRadius={"lg"}
                   w={"100%"}
-                  >
+                >
                   <Box
-                  
-                  display={"flex"}
-                  flexDirection="column"
-                  justifyContent={{ base: 'center', md: 'flex-start' }}
-                  alignItems={{ base: 'center', md: 'flex-start' }}
-                  w={"100%"}
+                    display={"flex"}
+                    flexDirection="column"
+                    justifyContent={{ base: 'center', md: 'flex-start' }}
+                    alignItems={{ base: 'center', md: 'flex-start' }}
+                    w={"100%"}
                   >
                     <Text fontSize={'lg'}>
-                      <Text as={'b'} color={accent} fontSize={'sm'}>Travel Date:</Text> {booking.travelDate}
+                      <Text as={'b'} color={accent} fontSize={'sm'}>Travel Date:</Text> {dayjs(booking.travelDate).format('YYYY-MM-DD')}
                     </Text>
                     <Text fontSize={'lg'}>
-                      <Text as={'b'} color={accent} fontSize={'sm'}>Client Final Payment Date:</Text> {booking.clientFinalPaymentDate}
+                      <Text as={'b'} color={accent} fontSize={'sm'}>Client Final Payment Date:</Text> {dayjs(booking.clientFinalPaymentDate).format('YYYY-MM-DD')}
                     </Text>
                     <Text fontSize={'lg'}>
-                      <Text as={'b'} color={accent} fontSize={'sm'}>Supplier Final Payment Date:</Text> {booking.supplierFinalPaymentDate}
+                      <Text as={'b'} color={accent} fontSize={'sm'}>Supplier Final Payment Date:</Text> {dayjs(booking.supplierFinalPaymentDate).format('YYYY-MM-DD')}
                     </Text>
                     <Text fontSize={'lg'}>
-                      <Text as={'b'} color={accent} fontSize={'sm'}>Booking Date:</Text> {booking.bookingDate}
+                      <Text as={'b'} color={accent} fontSize={'sm'}>Booking Date:</Text> {dayjs(booking.bookingDate).format('YYYY-MM-DD')}
                     </Text>
                     <Text fontSize={'lg'}>
-                      <Text as={'b'} color={accent} fontSize={'sm'}>Invoiced Date:</Text> {booking.invoicedDate}
+                      <Text as={'b'} color={accent} fontSize={'sm'}>Invoiced Date:</Text> {dayjs(booking.invoicedDate).format('YYYY-MM-DD')}
                     </Text>
                     <Text fontSize={'lg'}>
-                      <Text as={'b'} color={accent} fontSize={'sm'}>Confirmation Numbers:</Text> {booking.confirmationNumbers.join(', ')}
+                      <Text as={'b'} color={accent} fontSize={'sm'}>Confirmation Numbers/Suppliers:</Text> 
+                      {booking.confirmationNumbers.map((entry, i) => (
+                        <span key={i}>
+                          | {entry.confirmationNumber} : {entry.supplier} |
+                          {i < booking.confirmationNumbers.length - 1 ? ', ' : ''}
+                        </span>
+                      ))}
                     </Text>
                     <Text fontSize={'lg'}>
                       <Text as={'b'} color={accent} fontSize={'sm'}>Names and Date of Births:</Text> {booking.namesDateOfBirths.map((entry, i) => (
@@ -137,16 +154,11 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
                     <Text fontSize={'lg'}>
                       <Text as={'b'} color={accent} fontSize={'sm'}>Significant Dates:</Text> {booking.significantDates.join(', ')}
                     </Text>
-                  
-                    
                   </Box>
                   <Box>
                     <BookingChecklist clientId={clientId} bookingId={booking.bookingId ?? ''} />
                   </Box>
                 </Box>
-                  
-                
-                  
                 <Box
                   display="flex"
                   flexDirection="row"
