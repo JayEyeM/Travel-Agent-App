@@ -8,6 +8,7 @@ import useClientData from '../ClientManagmentUtils/UseClientDataHook'
 interface CommissionFormData {
   clientName: string
   supplier: string
+  confirmationNumber: string
   bookingNumber: number
   finalPaymentDate: string
   rate: number
@@ -21,7 +22,8 @@ interface CommissionFormData {
 const CommissionForm = () => {
   const { primary, background, secondary, accent, text } = useBrandColors()
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null) 
-  const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null) 
+  const [selectedBookingTravelDate, setSelectedBookingTravelDate] = useState<string | number | null>(null) 
+  const [selectedConfirmationNumber, setSelectedConfirmationNumber] = useState<string | null>(null)
   const [bookings, setBookings] = useState<any[]>([])
 
   const { getBookingsByClientId } = useBookingsData()
@@ -31,6 +33,7 @@ const CommissionForm = () => {
   const [formData, setFormData] = useState<CommissionFormData>({
     clientName: '',
     supplier: '',
+    confirmationNumber: '',
     bookingNumber: 0,
     finalPaymentDate: '',
     rate: 0,
@@ -53,6 +56,18 @@ const CommissionForm = () => {
       setBookings([]) // Reset bookings if no client is selected
     }
   }, [selectedClientId, getBookingsByClientId])
+
+  // Fetch the booking's confirmation numbers whenever a booking travel date is selected
+useEffect(() => {
+  if (selectedBookingTravelDate !== null) {
+    const booking = bookings.find((b: any) => b.travelDate === selectedBookingTravelDate)
+    if (booking) {
+      setSelectedConfirmationNumber('') // Reset to the placeholder value when a new booking is selected
+    }
+  } else {
+    setSelectedConfirmationNumber(null)
+  }
+}, [selectedBookingTravelDate, bookings])
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,45 +96,79 @@ const CommissionForm = () => {
       <form onSubmit={handleSubmit}>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
           {/* Client Selection */}
-          <FormControl color={accent}>
+          <FormControl color={accent}
+          >
             <FormLabel htmlFor='clientName'>Client Name</FormLabel>
             <Select
+            
+                boxShadow="0px 0px 5px 1px"
+            
+             outline={'1px solid'}
+              outlineColor={accent}
               id='clientName'
               color={text}
               value={selectedClientId !== null ? selectedClientId : ''}  
               onChange={(e) => setSelectedClientId(Number(e.target.value))}
             >
-              <option value="">Select Client</option>
+              <option
+              
+              value=""
+              >Select Client</option>
               {clientData.map((client) => (
-                <option key={client.id} value={client.id}>{client.clientName}</option> 
+                <option  key={client.id} value={client.id}>{client.clientName}</option> 
               ))}
             </Select>
           </FormControl>
 
 
-          {/* Booking Selection - Show only if a client is selected */}
+         {/* Booking Selection - Show only if a client is selected */}
           {selectedClientId && (
             <FormControl color={accent}>
               <FormLabel htmlFor='booking'>Booking</FormLabel>
               <Select
+              outline={'1px solid'}
+              outlineColor={accent}
                 id='booking'
                 color={text}
-                value={selectedBookingId !== null ? selectedBookingId : ''}
-                onChange={(e) => setSelectedBookingId(Number(e.target.value))}  
+                boxShadow="0px 0px 5px 1px"
+                value={selectedBookingTravelDate !== null ? selectedBookingTravelDate : ''}  // Use the selected booking travel date
+                onChange={(e) => setSelectedBookingTravelDate(e.target.value)}  // Store the raw value directly
               >
                 <option value="">Select Booking</option>
                 {bookings.map((booking) => (
-                  <option key={booking.travelDate} value={booking.travelDate}>Travel Date: {booking.travelDate}</option>
+                  <option key={booking.travelDate} value={booking.travelDate}>Travel Date: {new Date(booking.travelDate).toLocaleDateString()}</option> // Format the date properly
                 ))}
               </Select>
             </FormControl>
           )}
 
-          {/* Supplier Input */}
-          <FormControl color={accent}>
-            <FormLabel htmlFor='supplier'>Supplier</FormLabel>
-            <Input id='supplier' color={text} type='text' value={formData.supplier} onChange={handleChange} />
-          </FormControl>
+          {/* Confirmation Number selection - show only if a booking travel date is selected */}
+          {selectedBookingTravelDate && (
+            <FormControl color={accent}>
+              <FormLabel htmlFor='confirmationNumber'>Confirmation Number</FormLabel>
+              <Select
+                outline={'1px solid'}
+                outlineColor={accent}
+                id='confirmationNumber'
+                color={text}
+                boxShadow="0px 0px 5px 1px"
+                value={selectedConfirmationNumber !== null ? selectedConfirmationNumber : ''}  // Keep placeholder when no selection is made
+                onChange={(e) => setSelectedConfirmationNumber(e.target.value)}  // Update the value when selected
+              >
+                <option value="">Select Confirmation Number</option>
+                {bookings
+                  .find((b: any) => b.travelDate === selectedBookingTravelDate)?.confirmationNumbers?.map((confirmationNumber: string) => (
+                    <option key={confirmationNumber} value={confirmationNumber}>
+                      {confirmationNumber}
+                    </option>
+                  ))}
+              </Select>
+            </FormControl>
+          )}
+
+
+
+         
 
           {/* Booking Number Input */}
           <FormControl color={accent}>
@@ -127,6 +176,12 @@ const CommissionForm = () => {
             <NumberInput defaultValue={0} precision={0}>
               <NumberInputField id='bookingNumber' color={text} value={formData.bookingNumber} onChange={handleChange} />
             </NumberInput>
+          </FormControl>
+
+           {/* Supplier Input */}
+          <FormControl color={accent}>
+            <FormLabel htmlFor='supplier'>Supplier</FormLabel>
+            <Input id='supplier' color={text} type='text' value={formData.supplier} onChange={handleChange} />
           </FormControl>
 
           {/* Final Payment Date */}
