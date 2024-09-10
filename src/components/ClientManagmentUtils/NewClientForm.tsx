@@ -225,7 +225,7 @@ const NewClientForm: React.FC = () => {
 
                 </SimpleGrid>
 
-                <Box mt={8}>
+                <Box mt={{ base: 8, md: 10 }} position={"relative"} >
                     <Divider />
                     <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
                     mt={{ base: 4, md: 0 }} >

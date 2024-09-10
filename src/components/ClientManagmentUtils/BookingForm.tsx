@@ -145,7 +145,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
 
           {/* Dynamic form fields */}
           <FormControl>
-            <FormLabel>Confirmation Numbers</FormLabel>
+            <FormLabel>Confirmation Numbers : Supplier (eg: 1242341 : Ramada Hotel)</FormLabel>
             {formData.confirmationNumbers.map((number, index) => (
               <Box key={index} mb={2}>
                 <Input

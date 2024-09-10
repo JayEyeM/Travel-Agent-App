@@ -20,7 +20,7 @@ const BookingChecklist: React.FC<BookingChecklistProps> = ({ clientId, bookingId
   const [filesChecklist, setFilesChecklist] = useState<ChecklistItem[]>([]);
   const [marketingChecklist, setMarketingChecklist] = useState<ChecklistItem[]>([]);
 
-  const { accent } = useBrandColors();
+  const { accent, secondary } = useBrandColors();
 
   // Load checklist data from local storage when the component mounts
   useEffect(() => {
@@ -91,8 +91,14 @@ const BookingChecklist: React.FC<BookingChecklistProps> = ({ clientId, bookingId
         </Heading>
         <VStack spacing={3} align="stretch" width="100%">
           {filesChecklist.map(item => (
-            <Flex key={item.id} justify="space-between" align="center">
-              <Text>{item.title}</Text>
+            <Flex key={item.id} justify="space-between" align="center"
+            outline={"1px solid "} 
+            outlineColor={secondary}
+            p={2}
+            borderRadius={"lg"}
+            bg={item.isChecked ? accent : "none" }
+            >
+              <Text textAlign={"left"} >{item.id}. {item.title}</Text>
               <Checkbox
                 isChecked={item.isChecked}
                 onChange={() => toggleItem('files', item.id)}
@@ -107,8 +113,14 @@ const BookingChecklist: React.FC<BookingChecklistProps> = ({ clientId, bookingId
         </Heading>
         <VStack spacing={3} align="stretch" width="100%">
           {marketingChecklist.map(item => (
-            <Flex key={item.id} justify="space-between" align="center">
-              <Text>{item.title}</Text>
+            <Flex key={item.id} justify="space-between" align="center" 
+            outline={"1px solid "} 
+            outlineColor={secondary}
+            p={2}
+            borderRadius={"lg"}
+            bg={item.isChecked ? accent : "none" }
+            >
+              <Text textAlign={"left"} >{item.id}. {item.title}</Text>
               <Checkbox
                 isChecked={item.isChecked}
                 onChange={() => toggleItem('marketing', item.id)}
