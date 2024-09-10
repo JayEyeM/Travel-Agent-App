@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Box, FormControl, FormLabel, Input, Checkbox, Button, SimpleGrid, NumberInput, NumberInputField, Select } from '@chakra-ui/react'
+import { Box, FormControl, FormLabel, Input, Checkbox, Button, SimpleGrid, NumberInput, NumberInputField, Select,
+  Divider, AbsoluteCenter, Text
+ } from '@chakra-ui/react'
 import { useBrandColors } from '../generalUtils/theme'
 import useBookingsData from '../bookingFormUtils/useBookingsData'
 import useClientData from '../ClientManagmentUtils/UseClientDataHook'
@@ -144,6 +146,7 @@ const CommissionForm = () => {
 
           {/* Confirmation Number selection - show only if a booking travel date is selected */}
           {selectedBookingTravelDate && (
+            <Box>
             <FormControl color={accent}>
               <FormLabel htmlFor='confirmationNumber'>Confirmation Number : Supplier</FormLabel>
               <Select
@@ -168,6 +171,18 @@ const CommissionForm = () => {
                   })}
               </Select>
             </FormControl>
+
+            
+            </Box>
+          )}
+
+          {selectedBookingTravelDate && (
+            <FormControl color={accent}>
+            <FormLabel htmlFor='finalPaymentDate'>Supplier's Final Payment Date</FormLabel>
+            <Input id='finalPaymentDate' color={text} type='date' 
+                  value={bookings.find((b: any) => b.travelDate === selectedBookingTravelDate)?.supplierFinalPaymentDate} 
+                  onChange={handleChange} />
+            </FormControl>
           )}
 
           {/* Booking Number Input */}
@@ -184,11 +199,20 @@ const CommissionForm = () => {
             <Input id='supplier' color={text} type='text' value={formData.supplier} onChange={handleChange} />
           </FormControl> */}
 
-          {/* Final Payment Date */}
-          <FormControl color={accent}>
-            <FormLabel htmlFor='finalPaymentDate'>Final Payment Date</FormLabel>
-            <Input id='finalPaymentDate' color={text} type='date' value={formData.finalPaymentDate} onChange={handleChange} />
-          </FormControl>
+        <Box mt={{ base: 8, md: 10 }} position={"relative"} >
+                    <Divider />
+                    <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
+                    mt={{ base: 4, md: 0 }} >
+                       
+                    </AbsoluteCenter>
+                </Box>
+         <Box mt={{ base: 8, md: 10 }} position={"relative"} >
+                    <Divider />
+                    <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
+                    mt={{ base: 4, md: 0 }} >
+                       
+                    </AbsoluteCenter>
+                </Box>
 
           {/* Commission Rate */}
           <FormControl color={accent}>
