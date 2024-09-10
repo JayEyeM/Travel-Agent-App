@@ -17,24 +17,23 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
     supplierFinalPaymentDate: '',
     bookingDate: '',
     invoicedDate: '',
-    confirmationNumbers: [''],
+    confirmationNumbers: [{ confirmationNumber: '', supplier: '' }],
     namesDateOfBirths: [{ name: '', dateOfBirth: '' }],
     mailingAddress: '',
     phoneNumbers: [''],
     emailAddresses: [''],
     significantDates: [''],
     bookingId: '',
-
   });
 
   const toast = useToast();
   const { saveBooking } = useBookingsData();
 
-  // This function handles adding a new booking
+  // Function to handle adding a new booking
   const handleAddBooking = () => {
     const newBooking = { ...formData, bookingId: new Date().toISOString() };
     saveBooking(clientId, newBooking);
-    
+
     toast({
       title: 'Booking added to client.',
       status: 'success',
@@ -50,27 +49,32 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
       supplierFinalPaymentDate: '',
       bookingDate: '',
       invoicedDate: '',
-      confirmationNumbers: [''],
+      confirmationNumbers: [{ confirmationNumber: '', supplier: '' }],
       namesDateOfBirths: [{ name: '', dateOfBirth: '' }],
       mailingAddress: '',
       phoneNumbers: [''],
       emailAddresses: [''],
       significantDates: [''],
       bookingId: '',
-
     });
   };
 
   // Handle changes in form fields
-  const handleArrayChange = (field: keyof bookingFormData, index: number, value: string, subField?: string) => {
+  const handleArrayChange = (
+    field: keyof bookingFormData,
+    index: number,
+    value: string,
+    subField?: string
+  ) => {
     const updatedArray = [...(formData[field] as any)];
     if (subField) {
-      updatedArray[index][subField] = value;
+      (updatedArray[index] as any)[subField] = value;
     } else {
       updatedArray[index] = value;
     }
     setFormData({ ...formData, [field]: updatedArray });
   };
+  
 
   const handleAddField = (field: keyof bookingFormData, defaultValue: any) => {
     const updatedArray = [...(formData[field] as any), defaultValue];
@@ -145,25 +149,32 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
 
           {/* Dynamic form fields */}
           <FormControl>
-            <FormLabel>Confirmation Numbers : Supplier (eg: 1242341 : Ramada Hotel)</FormLabel>
-            {formData.confirmationNumbers.map((number, index) => (
+            <FormLabel>Confirmation Number/Supplier</FormLabel>
+            {formData.confirmationNumbers.map((entry, index) => (
               <Box key={index} mb={2}>
                 <Input
                   type="text"
                   placeholder="Confirmation Number"
-                  value={number}
-                  onChange={(e) => handleArrayChange('confirmationNumbers', index, e.target.value)}
+                  value={entry.confirmationNumber}
+                  onChange={(e) => handleArrayChange('confirmationNumbers', index, e.target.value, 'confirmationNumber')}
+                />
+                <Input
+                  type="text"
+                  placeholder="Supplier"
+                  value={entry.supplier}
+                  onChange={(e) => handleArrayChange('confirmationNumbers', index, e.target.value, 'supplier')}
+                  mb={1}
                 />
                 <IconButton
                   icon={<DeleteIcon />}
-                  aria-label='Remove Confirmation Number'
+                  aria-label="Remove Confirmation Number"
                   onClick={() => handleRemoveField('confirmationNumbers', index)}
                   ml={2}
                 />
               </Box>
             ))}
-            <Button onClick={() => handleAddField('confirmationNumbers', '')} leftIcon={<AddIcon />}>
-              Add Confirmation Number
+            <Button onClick={() => handleAddField('confirmationNumbers', { confirmationNumber: '', supplier: '' })} leftIcon={<AddIcon />}>
+              Add Confirmation Number/Supplier
             </Button>
           </FormControl>
 
@@ -186,7 +197,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
                 />
                 <IconButton
                   icon={<DeleteIcon />}
-                  aria-label='Remove Name and Date of Birth'
+                  aria-label="Remove Name and Date of Birth"
                   onClick={() => handleRemoveField('namesDateOfBirths', index)}
                   ml={2}
                   mt={1}
@@ -210,7 +221,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
                 />
                 <IconButton
                   icon={<DeleteIcon />}
-                  aria-label='Remove Phone Number'
+                  aria-label="Remove Phone Number"
                   onClick={() => handleRemoveField('phoneNumbers', index)}
                   ml={2}
                 />
@@ -233,7 +244,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
                 />
                 <IconButton
                   icon={<DeleteIcon />}
-                  aria-label='Remove Email Address'
+                  aria-label="Remove Email Address"
                   onClick={() => handleRemoveField('emailAddresses', index)}
                   ml={2}
                 />
@@ -256,7 +267,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
                 />
                 <IconButton
                   icon={<DeleteIcon />}
-                  aria-label='Remove Significant Dates'
+                  aria-label="Remove Significant Dates"
                   onClick={() => handleRemoveField('significantDates', index)}
                   ml={2}
                 />
