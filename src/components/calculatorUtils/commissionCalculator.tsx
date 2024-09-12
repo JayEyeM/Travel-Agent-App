@@ -1,7 +1,7 @@
 import { Box, Text, Heading, useColorModeValue } from '@chakra-ui/react'
 import CommisionForm from './commissionForm'
 import { useBrandColors } from '../generalUtils/theme'
-
+import DisplayCommissions from './displayCommissions';
 
 const CommisionCalculator = () => {
     const { primary, background, accent, secondary, text } = useBrandColors()
@@ -22,6 +22,7 @@ const CommisionCalculator = () => {
         </Text>
       </Box>
       <CommisionForm />
+      <DisplayCommissions />
       <Box
         p={4}
         mt={4}
