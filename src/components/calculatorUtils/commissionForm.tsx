@@ -97,22 +97,31 @@ const CommissionForm = () => {
   
 
   // Handle form submission - save to local storage
-  const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
-  
-  // Ensure finalPaymentDate is correctly included in formData
+
+  // Retrieve existing form data from local storage (if any)
+  const storedData = JSON.parse(localStorage.getItem('CommissionFormData') || '[]');
+
+  // Set the commissionId as the length of the stored data array plus one
   const updatedFormData = {
     ...formData,
+    commissionId: storedData.length + 1, // Set unique commission ID
     bookingTravelDate: selectedBookingTravelDate ?? dayjs().format('YYYY-MM-DD'),
-    finalPaymentDate: selectedBookingTravelDate ? bookings.find((b: any) => b.travelDate === selectedBookingTravelDate)?.supplierFinalPaymentDate ?? '' : ''
+    finalPaymentDate: selectedBookingTravelDate 
+      ? bookings.find((b: any) => b.travelDate === selectedBookingTravelDate)?.supplierFinalPaymentDate ?? '' 
+      : ''
   };
-  
+
   // Debugging: Check form data before saving
   console.log('Form Data Submitted:', updatedFormData);
-  
-  // Save to local storage
-  localStorage.setItem('CommissionFormData', JSON.stringify(updatedFormData));
-  
+
+  // Append the new form data to the existing data array
+  const updatedData = [...storedData, updatedFormData];
+
+  // Save the updated array back to local storage
+  localStorage.setItem('CommissionFormData', JSON.stringify(updatedData)); 
+
   // Reset form data and selected values
   setFormData({
     commissionId: 0,
@@ -128,10 +137,12 @@ const CommissionForm = () => {
     paid: false,
     paymentDate: ''
   });
-  
+
   setSelectedClientId(null);
   setSelectedBookingTravelDate(null);
   setSelectedConfirmationNumber(null);
+
+  console.log('Updated Data in Storage:', updatedData);  // For debugging purposes
 };
 
   
@@ -302,11 +313,11 @@ const CommissionForm = () => {
           {/* Commission Rate */}
           <FormControl color={accent}>
             <FormLabel htmlFor='rate'>Commission Rate Percentage (%)</FormLabel>
-            <NumberInput defaultValue={0} precision={2} step={0.01}
-            outline={'2px solid'}
+            <NumberInput value={formData.rate}  precision={2} step={0.01}
+            outline={'1px solid'}
             outlineColor={accent}
             borderRadius={'lg'}
-            boxShadow="0px 0px 5px 1px gray"
+            boxShadow="0px 0px 5px 2px gray"
             >
               <NumberInputField id='rate' color={text} value={formData.rate} onChange={handleChange} />
             </NumberInput>
@@ -315,11 +326,11 @@ const CommissionForm = () => {
           {/* Commission Amount */}
           <FormControl color={accent}>
             <FormLabel htmlFor='commission'>Commission Amount ($00.00)</FormLabel>
-            <NumberInput defaultValue={0} precision={2} step={0.01}
-             outline={'2px solid'}
+            <NumberInput value={formData.commission} precision={2} step={0.01}
+             outline={'1px solid'}
              outlineColor={accent}
              borderRadius={'lg'}
-             boxShadow="0px 0px 5px 1px gray"
+             boxShadow="0px 0px 5px 2px gray"
             >
               <NumberInputField id='commission' color={text} value={formData.commission} onChange={handleChange} />
             </NumberInput>
