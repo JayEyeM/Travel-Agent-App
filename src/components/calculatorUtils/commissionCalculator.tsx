@@ -1,10 +1,23 @@
 import { Box, Text, Heading, useColorModeValue } from '@chakra-ui/react'
+import { useState, useEffect } from 'react';
 import CommisionForm from './commissionForm'
 import { useBrandColors } from '../generalUtils/theme'
 import DisplayCommissions from './displayCommissions';
+import useCommissionsData from './useCommissionsDataHook';
 
 const CommisionCalculator = () => {
     const { primary, background, accent, secondary, text } = useBrandColors()
+    const { commissions } = useCommissionsData();
+    const [totalCommissionRateAmount, setTotalCommissionRateAmount] = useState(0);
+    
+    useEffect(() => {
+      const total = commissions.reduce((acc, commission) => acc + commission.commissionRateAmount, 0);
+      setTotalCommissionRateAmount(total);
+    }, [commissions]);
+    
+    
+    
+    
 
   return (
     <Box p={0} ml={'auto'} mr={'auto'} w={'90%'} borderRadius="lg" bg={background}>
@@ -32,11 +45,10 @@ const CommisionCalculator = () => {
         bg={background}
       >
         <Text fontSize="lg" color={accent}>
-          Commission ( __ % ):
+        Total Commission Rate Amount: <Text as="b" fontSize={"xl"} color={secondary}>${totalCommissionRateAmount.toFixed(2)}</Text>
         </Text>
-        <Text fontSize="lg" color={accent}>
-          $0.00
-        </Text>
+        
+       
       </Box>
 
       

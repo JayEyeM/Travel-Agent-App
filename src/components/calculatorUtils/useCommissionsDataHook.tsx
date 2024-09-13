@@ -54,7 +54,13 @@ const useCommissionsData = () => {
     localStorage.setItem('CommissionFormData', JSON.stringify(updatedCommissions));
   };
 
-  return { commissions, addCommission, getCommissionById, updateCommission, deleteCommission };
+  // Refetch commissions data from local storage
+  const refetch = () => {
+    const storedData = JSON.parse(localStorage.getItem('CommissionFormData') || '[]');
+    setCommissions(storedData);
+  };
+
+  return { commissions, addCommission, getCommissionById, updateCommission, deleteCommission, refetch };
 };
 
 export default useCommissionsData;

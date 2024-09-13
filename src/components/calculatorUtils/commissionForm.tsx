@@ -162,10 +162,6 @@ const handleSubmit = (e: React.FormEvent) => {
     }));
   };
   
-  
-  
-  
-  
 
   // Effect to calculate commissionRateAmount
   useEffect(() => {
