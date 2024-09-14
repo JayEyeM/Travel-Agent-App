@@ -341,15 +341,31 @@ const handleSubmit = (e: React.FormEvent) => {
           </FormControl>
 
           {/* Invoice Checkbox */}
-          <FormControl color={accent}>
+          <FormControl color={accent} 
+          display={"flex"} flexDirection={"row"} justifyContent={"left"}
+          alignItems={"center"}
+          >
             <FormLabel htmlFor='invoiced'>Invoiced</FormLabel>
-            <Checkbox id='invoiced' isChecked={formData.invoiced} onChange={handleChange} />
+            <Checkbox id='invoiced' isChecked={formData.invoiced} onChange={handleChange} 
+             outline={'1px solid'}
+             outlineColor={accent}
+             borderRadius={'lg'}
+             boxShadow="0px 0px 5px 2px gray"
+            />
           </FormControl>
 
           {/* Paid Checkbox */}
-          <FormControl color={accent}>
+          <FormControl color={accent}
+          display={"flex"} flexDirection={"row"} justifyContent={"left"}
+          alignItems={"center"}
+          >
             <FormLabel htmlFor='paid'>Paid</FormLabel>
-            <Checkbox id='paid' isChecked={formData.paid} onChange={handleChange} />
+            <Checkbox id='paid' isChecked={formData.paid} onChange={handleChange}
+             outline={'1px solid'}
+             outlineColor={accent}
+             borderRadius={'lg'}
+             boxShadow="0px 0px 5px 2px gray"
+            />
           </FormControl>
 
           {/* Payment Date */}

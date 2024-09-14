@@ -251,13 +251,7 @@ const ViewClients: React.FC = () => {
                                 
                                 
 
-                                <Button
-                                    bg={secondary}
-                                    color={primary}
-                                    _hover={{ bg: primary, color: accent}}
-                                >
-                                    Commission Calculator
-                                </Button>
+                               
                             </Box>
                             
                         </CardFooter>

@@ -27,7 +27,7 @@ const theme = extendTheme({
   colors: {
     brand: {
       Primary: {
-        light: '#6588A6',
+        light: '#1E2A34',
         dark: '#3A506B ',
       },
       Secondary: {
@@ -35,7 +35,7 @@ const theme = extendTheme({
         dark: '#FFB84D',
       },
       Accent: {
-        light: '#468685',
+        light: '#507091',
         dark: '#7EB1B4',
       },
       Background: {
