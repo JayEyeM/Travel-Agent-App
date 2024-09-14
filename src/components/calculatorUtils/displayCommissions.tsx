@@ -2,6 +2,7 @@ import { Box, Button, Text, SimpleGrid, useToast, Card, CardHeader, CardBody, Ca
 import { useState } from 'react';
 import useCommissionsData from './useCommissionsDataHook';
 import { useBrandColors } from '../generalUtils/theme';
+import ClosableBox from '../generalUtils/ClosableBox';
 
 interface EditedData {
     rate: number;
@@ -91,7 +92,7 @@ const DisplayCommissions = () => {
 
   return (
     <Box p={5}>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={5}>
         {commissions.length > 0 ? (
           commissions.map((commission) => (
             <Card key={commission.commissionId} boxShadow="0px 0px 5px 1px"
@@ -103,7 +104,14 @@ const DisplayCommissions = () => {
                 </Text>
                 <Text color="gray.500">Commission ID: {commission.commissionId}</Text>
               </CardHeader>
-              <CardBody bg={background}>
+              <CardBody bg={background}
+              display={"flex"}
+              flexDirection={"column"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              >
+                <ClosableBox children={
+                  <Box textAlign={"left"}>
                 <Text color={accent}>Supplier: <Text as="span" color={text}>{commission.supplier}</Text></Text>
                 <Text color={accent}>Booking Travel Date: <Text as="span" color={text}>{commission.bookingTravelDate}</Text></Text>
                 <Text color={accent}>Confirmation Number: <Text as="span" color={text}>{commission.confirmationNumber}</Text></Text>
@@ -113,7 +121,14 @@ const DisplayCommissions = () => {
                 <Text color={accent}>Invoiced: <Text as="span" color={text}>{commission.invoiced ? 'Yes' : 'No'}</Text></Text>
                 <Text color={accent}>Paid: <Text as="span" color={text}>{commission.paid ? 'Yes' : 'No'}</Text></Text>
                 <Text color={accent}>Payment Date: <Text as="span" color={text}>{commission.paymentDate}</Text></Text>
-              </CardBody>
+                </Box>
+                } 
+                title={"Commission Details"}
+                buttonText='Commission Details'
+                onOpen={() => console.log('open')}
+                onClose={() => console.log('close')} 
+                />
+                </CardBody>
               <CardFooter bg={background} 
               display={"flex"}
               justifyContent={"space-between"}
