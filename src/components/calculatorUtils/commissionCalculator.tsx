@@ -4,7 +4,7 @@ import CommisionForm from './commissionForm'
 import { useBrandColors } from '../generalUtils/theme'
 import DisplayCommissions from './displayCommissions';
 import useCommissionsData from './useCommissionsDataHook';
-import DataDisplay from '../generalUtils/DataDisplay';
+import CommissionRateAmountDataDisplay from '../generalUtils/CommissionRateAmountDataDisplay';
 import ClosableBox from '../generalUtils/ClosableBox';
 
 const CommisionCalculator = () => {
@@ -47,7 +47,7 @@ const CommisionCalculator = () => {
         mt={4}
         
       >
-        <DataDisplay />
+        <CommissionRateAmountDataDisplay />
         
         
        

@@ -102,6 +102,8 @@ const DisplayCommissions = () => {
                 <Text color={accent} fontSize="xl" fontWeight="bold">
                   {commission.clientName}
                 </Text>
+                <Text color={accent}>Booking Travel Date: <Text as="b" color={secondary}>{commission.bookingTravelDate}</Text></Text>
+                <Text color={accent}>Commission Rate Amount: <Text as="b" color={secondary}>$ {commission.commissionRateAmount.toFixed(2) }</Text></Text>
                 <Text color="gray.500">Commission ID: {commission.commissionId}</Text>
               </CardHeader>
               <CardBody bg={background}
@@ -113,6 +115,7 @@ const DisplayCommissions = () => {
                 <ClosableBox children={
                   <Box textAlign={"left"}>
                 <Text color={accent}>Supplier: <Text as="span" color={text}>{commission.supplier}</Text></Text>
+                <Text color={accent}>Supplier Final Payment Date: <Text as="span" color={text}>{commission.finalPaymentDate}</Text></Text>
                 <Text color={accent}>Booking Travel Date: <Text as="span" color={text}>{commission.bookingTravelDate}</Text></Text>
                 <Text color={accent}>Confirmation Number: <Text as="span" color={text}>{commission.confirmationNumber}</Text></Text>
                 <Text color={accent}>Rate: <Text as="span" color={text}>{commission.rate}%</Text></Text>
