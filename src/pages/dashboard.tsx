@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Heading } from '@chakra-ui/react';
-import DataDisplay from '../components/generalUtils/DataDisplay';
+import CommissionRateAmountDataDisplay from '../components/generalUtils/CommissionRateAmountDataDisplay';
+import LocalStorageDisplay from '../components/DashboardUtils/ExportableDataTables';
 
 
 const Dashboard: React.FC = () => {
@@ -9,7 +10,10 @@ const Dashboard: React.FC = () => {
       <Heading as="h1" size="xl" mb={4}>
         Overview
       </Heading>
-      <DataDisplay />
+      <CommissionRateAmountDataDisplay />
+      <Box mt={4}>
+      <LocalStorageDisplay />
+      </Box>
      
     </Box>
   );
