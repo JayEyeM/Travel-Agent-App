@@ -7,7 +7,7 @@ import NavBar from './components/generalUtils/navBar';
 import Dashboard from './pages/dashboard';
 import About from './pages/about';
 import PagesMenu from './components/generalUtils/PagesMenu';
-import ProjectManagement from './pages/projectManagement';
+import AiAssistance from './pages/AiAssistance';
 import Footer from './components/generalUtils/footer';
 import ClientManagement from './pages/ClientManagment';
 import Signin from './pages/signin';
@@ -34,8 +34,8 @@ function App() {
         return 'clientManagement';
         case '/resources':
         return 'resources';
-      case '/projectManagement':
-        return 'projectManagement';
+      case '/aiAssistance':
+        return 'aiAssistance';
       
       default:
         return '';
@@ -63,7 +63,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/clientManagement" element={<ClientManagement />} />
               <Route path="/resources" element={<Resources />} />
-              <Route path="/projectManagement" element={<ProjectManagement />} />
+              <Route path="/aiAssistance" element={<AiAssistance />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signout" element={<Signout />} />
               <Route path="/signup" element={<Signup />} />

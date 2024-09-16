@@ -46,7 +46,7 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
             <MenuLink to="/resources" texts="Resources" isActive={currentPage === 'resources'} />
             
 
-            <MenuLink to="/projectManagement" texts="Project Management" isActive={currentPage === 'projectManagement'} />
+            <MenuLink to="/aiAssistance" texts="AI Assistant" isActive={currentPage === 'aiAssistance'} />
             
             
             
