@@ -9,10 +9,10 @@ const LearnMore: React.FC = () => {
     return (
         <Box textAlign="center" py={10} px={6}>
             <Heading as="h1" size="xl" mb={4}>
-                Learn More
+                Learn Globeeta
             </Heading>
             <Text fontSize="lg">    
-                Welcome to the Learn More page of your application. 
+            Globeeta is the one stop shop for independent travel agents to manage their clients, bookings, commissions, and more!
             </Text>
 
             <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
