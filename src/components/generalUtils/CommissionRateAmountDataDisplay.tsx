@@ -44,9 +44,10 @@ const CommissionRateAmountDataDisplay: React.FC = () => {
 
   return (
     <Box boxShadow={'0px 0px 5px 2px gray'} p={2} borderRadius={'lg'}>
-          <Heading as="h1" size="lg" mb={4}>
+          <Heading color={accent} as="h1" size="lg" mb={4}>
             Commission Rate Amount Summary
           </Heading>
+          <Text color={text} fontSize={'lg'} >Commission Rate Amount Summary of all existing commissions.</Text>
           <StatGroup mt={4} gap={2}>
             <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
               <StatLabel>Invoiced</StatLabel>

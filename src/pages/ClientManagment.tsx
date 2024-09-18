@@ -19,9 +19,9 @@ const ClientManagement: React.FC = () => {
         Add new clients and keep track of them below. Click on a client in the Client List to view more 
         details and use handy tools, such as the Trip Planner and Commission Calculator.
       </Text>
-      <ClosableBox title="New Client Form" buttonText="Add New" icon={<AddIcon />} children={<NewClientForm />} onOpen={() => {}} onClose={() => {}} />
+      <ClosableBox boxShadow={false} title="New Client Form" buttonText="Add New" icon={<AddIcon />} children={<NewClientForm />} onOpen={() => {}} onClose={() => {}} />
 
-      <ClosableBox title="Client List" buttonText="Client List " icon={<Avatar bg={primary} color={secondary} variant={'roundedSquare'} outline={"1px solid"} outlineColor={secondary} size="xs" />} children={<ViewClients />} onOpen={() => {}} onClose={() => {}} />
+      <ClosableBox boxShadow={false} title="Client List" buttonText="Client List " icon={<Avatar bg={primary} color={secondary} variant={'roundedSquare'} outline={"1px solid"} outlineColor={secondary} size="xs" />} children={<ViewClients />} onOpen={() => {}} onClose={() => {}} />
     </Box>
   );
 };

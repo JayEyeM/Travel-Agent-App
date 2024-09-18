@@ -5,14 +5,15 @@ import { CloseIcon, AddIcon } from '@chakra-ui/icons';
 
 interface ClosableBoxProps {
     title: string;
-    buttonText: string;
+    buttonText?: string;
     icon?: React.ReactNode;
     children: React.ReactNode;
     onClose: () => void;
     onOpen: () => void;
+    boxShadow?: boolean;
 }
 
-const ClosableBox: React.FC<ClosableBoxProps> = ({ title, buttonText, icon, children, onClose, onOpen }) => {
+const ClosableBox: React.FC<ClosableBoxProps> = ({ title, buttonText, icon, children, onClose, onOpen, boxShadow = true }) => {
     const { primary, background, secondary, accent, text } = useBrandColors();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -28,7 +29,7 @@ const ClosableBox: React.FC<ClosableBoxProps> = ({ title, buttonText, icon, chil
     return (
         <Box
             bg={background}
-            boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px;"}
+            boxShadow={boxShadow ? "rgba(0, 0, 0, 0.35) 0px 5px 15px;" : "none"}
             borderRadius="lg"
             p={4}
             mt={4}

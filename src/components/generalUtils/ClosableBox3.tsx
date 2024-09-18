@@ -12,10 +12,20 @@ interface ClosableBox3Props {
     onClose: () => void;
     onOpen: () => void;
     checkboxes?: React.ReactNode;
-
+    width?: string;
+    outlineDisplay?: boolean;
 }
 
-const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, children, onClose, onOpen, checkboxes }) => {
+const ClosableBox3: React.FC<ClosableBox3Props> = ({ 
+    title, 
+    buttonText, 
+    icon, children, 
+    onClose, 
+    onOpen, 
+    checkboxes, 
+    width, 
+    outlineDisplay = true
+ }) => {
     const { primary, background, secondary, accent, text } = useBrandColors();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -42,8 +52,8 @@ const ClosableBox3: React.FC<ClosableBox3Props> = ({ title, buttonText, icon, ch
             position="relative"
             minW={'200px'}
             maxW={'100%'}
-            w={'auto'}
-            outline={'1px solid'}
+            w={width || 'auto'}
+            outline={outlineDisplay ? '1px solid' : '0px'}
             outlineColor={secondary}
             ml={{ base: 'auto', md: 0 }}
             mr={{ base: 'auto', md: 0 }}

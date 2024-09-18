@@ -1,5 +1,3 @@
-// useBookingsData.tsx
-
 import { useCallback } from 'react';
 import { bookingFormData } from '../generalUtils/interfaces';
 
@@ -42,7 +40,18 @@ const useBookingsData = () => {
     return client ? client.bookings || [] : [];
   }, []);
 
-  return { saveBooking, getBookingsByClientId };
+  // Function to get all bookings
+  const getAllBookings = useCallback(() => {
+    // Get the current list of clients from local storage
+    const clients = JSON.parse(localStorage.getItem('ClientList') || '[]');
+    
+    // Aggregate all bookings from all clients
+    const allBookings: bookingFormData[] = clients.flatMap((client: any) => client.bookings || []);
+    
+    return allBookings;
+  }, []);
+
+  return { saveBooking, getBookingsByClientId, getAllBookings };
 };
 
 export default useBookingsData;

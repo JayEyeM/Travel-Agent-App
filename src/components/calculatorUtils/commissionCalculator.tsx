@@ -1,4 +1,5 @@
-import { Box, Text, Heading, useColorModeValue } from '@chakra-ui/react'
+import { Box, Text, Heading, useColorModeValue, List, ListItem, ListIcon } from '@chakra-ui/react'
+import { InfoIcon } from '@chakra-ui/icons';
 import { useState, useEffect } from 'react';
 import CommisionForm from './commissionForm'
 import { useBrandColors } from '../generalUtils/theme'
@@ -6,6 +7,7 @@ import DisplayCommissions from './displayCommissions';
 import useCommissionsData from './useCommissionsDataHook';
 import CommissionRateAmountDataDisplay from '../generalUtils/CommissionRateAmountDataDisplay';
 import ClosableBox from '../generalUtils/ClosableBox';
+
 
 const CommisionCalculator = () => {
     const { primary, background, accent, secondary, text } = useBrandColors()
@@ -21,10 +23,27 @@ const CommisionCalculator = () => {
       <Heading as="h1" size="xl" mb={4}>
        Commission Management
       </Heading>
-      <Text fontSize="lg">
-        Add new clients and keep track of them below. Click on a client in the Client List to view more 
-        details and use handy tools, such as the Trip Planner and Commission Calculator.
-      </Text>
+      <ClosableBox
+      boxShadow= {false}
+      icon={<InfoIcon h={5} w={5} />}
+      title='How to use the Commission Calculator'
+      children={
+        <List spacing={3} styleType="disc" pl={4} textAlign={'left'}>
+                <ListItem>
+                    Choose a client name, a booking, and confirmation number/supplier.
+                </ListItem>
+                <ListItem>
+                    Then enter the commission rate percentage and commission amount to calculate the amount of your commission rate.
+                </ListItem>
+                <ListItem>
+                    Mark the commission as invoiced and/or paid, followed by the payment date. Submit the details to view/edit the Commission Card 
+                    in the "View Commissions" section.
+                </ListItem>
+            </List>
+      }
+      onClose={() => console.log('Close button clicked')}
+      onOpen={() => console.log('Open button clicked')}
+      />
       
 
       <ClosableBox buttonText='Calculate Commission' 
@@ -32,14 +51,16 @@ const CommisionCalculator = () => {
       children={<CommisionForm />}
       onClose={() => console.log('Close button clicked')}
       onOpen={() => console.log('Open button clicked')}
+      boxShadow= {false}
        /> 
       
       
       <ClosableBox buttonText='View Commissions' 
-      title="Commissions" 
+      title="Commission Cards" 
       children={<DisplayCommissions />}
       onClose={() => console.log('Close button clicked')}
       onOpen={() => console.log('Open button clicked')}
+      boxShadow= {false}
        /> 
       
       <Box
