@@ -141,6 +141,7 @@ const ViewClients: React.FC = () => {
                                 onClose={() => console.log('Close button clicked')}
                                 onOpen={() => console.log('Open button clicked')}
                                 buttonText={` View More Details `}
+                                boxShadow={false}
                             >
                                 
                                 <SimpleGrid mt={4} 
@@ -248,8 +249,6 @@ const ViewClients: React.FC = () => {
                                 w={"100%"}
 
                             >
-                                
-                                
 
                                
                             </Box>
