@@ -9,7 +9,7 @@ const Homepage: React.FC = () => {
   return (
     <Box textAlign="center" py={10} px={6}>
       <Heading as="h1" size="xl" mb={4}>
-      Welcome to Your Ultimate Commission Tracker
+      Welcome to the Ultimate Productivity App for Independent Travel Agents!
       </Heading>
       <Text fontSize="lg">
         Effortlessly manage your commissions, track bookings, and stay organized—all in one place.
