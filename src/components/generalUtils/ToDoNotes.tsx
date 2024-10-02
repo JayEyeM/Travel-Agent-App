@@ -42,7 +42,7 @@ const ToDoNotes: React.FC = () => {
     if (noteText.trim() === '') return;
 
     const newNote: Note = {
-      id: `${Date.now()}`,
+      id: dayjs().format('YYYYMMDDHHmmss'),
       text: noteText.trim(),
     };
 
