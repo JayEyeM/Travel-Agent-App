@@ -104,14 +104,19 @@ const handleSubmit = (e: React.FormEvent) => {
   const storedData = JSON.parse(localStorage.getItem('CommissionFormData') || '[]');
 
   // Set the commissionId as the length of the stored data array plus one
-  const updatedFormData = {
+  const maxCommissionId = storedData.length > 0 // Check if there are any stored data with commissionId
+  ? Math.max(...storedData.map((data: any) => data.commissionId)) // Find the maximum commissionId
+  : 0;// If there are no stored data, set commissionId to 0
+
+const updatedFormData = {
     ...formData,
-    commissionId: storedData.length + 1, // Set unique commission ID
+    commissionId: maxCommissionId + 1, // Increment the maximum commissionId by 1. this will avoid duplicate commissionIds
     bookingTravelDate: selectedBookingTravelDate ?? dayjs().format('YYYY-MM-DD'),
     finalPaymentDate: selectedBookingTravelDate 
       ? bookings.find((b: any) => b.travelDate === selectedBookingTravelDate)?.supplierFinalPaymentDate ?? '' 
       : ''
-  };
+};
+
 
   // Debugging: Check form data before saving
   console.log('Form Data Submitted:', updatedFormData);
