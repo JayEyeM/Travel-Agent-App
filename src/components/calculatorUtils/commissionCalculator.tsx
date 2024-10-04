@@ -1,4 +1,4 @@
-import { Box, Text, Heading, useColorModeValue, List, ListItem, ListIcon } from '@chakra-ui/react'
+import { Box, Text, Heading, useColorModeValue, List, ListItem} from '@chakra-ui/react'
 import { InfoIcon } from '@chakra-ui/icons';
 import { useState, useEffect } from 'react';
 import CommisionForm from './commissionForm'
