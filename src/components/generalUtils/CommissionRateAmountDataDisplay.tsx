@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Heading, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup,
- useColorMode
- } from '@chakra-ui/react';
+import { Box, Text, Heading, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup, useColorMode, ResponsiveValue } from '@chakra-ui/react';
 import { useBrandColors } from './theme';
 import useCommissionsData from '../calculatorUtils/useCommissionsDataHook';
 
-const CommissionRateAmountDataDisplay: React.FC = () => {
+interface CommissionRateAmountDataDisplayProps {
+  width?: ResponsiveValue<string>; // This allows both strings and responsive objects
+  marginLeft?: ResponsiveValue<string>;
+  marginRight?: ResponsiveValue<string>;
+  marginTop?: ResponsiveValue<string>;
+  marginBottom?: ResponsiveValue<string>;
+}
+
+const CommissionRateAmountDataDisplay: React.FC<CommissionRateAmountDataDisplayProps> = ({
+  width = '100%',
+  marginLeft = 'auto',
+  marginRight = 'auto',
+  marginTop = '0',
+  marginBottom = '0',
+}) => {
   const { primary, background, accent, secondary, text } = useBrandColors();
   const { commissions } = useCommissionsData();
   
@@ -16,7 +28,7 @@ const CommissionRateAmountDataDisplay: React.FC = () => {
   const [totalInvoicedCommissions, setTotalInvoicedCommissions] = useState(0);
   const [invoicedPercentage, setInvoicedPercentage] = useState(0);
   const [totalCommissionRateAmount, setTotalCommissionRateAmount] = useState(0);
-  
+
   useEffect(() => {
     const totalPaid = commissions.reduce((sum, commission) => commission.paid ? sum + commission.commissionRateAmount : sum, 0);
     const totalUnpaid = commissions.reduce((sum, commission) => !commission.paid ? sum + commission.commissionRateAmount : sum, 0);
@@ -43,51 +55,59 @@ const CommissionRateAmountDataDisplay: React.FC = () => {
   };
 
   return (
-    <Box boxShadow={'0px 0px 5px 2px gray'} p={2} borderRadius={'lg'}>
-          <Heading color={accent} as="h1" size="lg" mb={4}>
-            Commission Rate Amount Summary
-          </Heading>
-          <Text color={text} fontSize={'lg'} >Commission Rate Amount Summary of all existing commissions.</Text>
-          <StatGroup mt={4} gap={2}>
-            <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
-              <StatLabel>Invoiced</StatLabel>
-              <StatNumber color={colorMode === 'light' ? 'yellow.700' : 'yellow.300'}>
-                ${safeToFixed(totalInvoicedCommissions)}
-              </StatNumber>
-              <StatHelpText>{safeToFixed(invoicedPercentage)}%</StatHelpText>
-            </Stat>
-            <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
-              <StatLabel>Paid</StatLabel>
-              <StatNumber color={colorMode === 'light' ? 'green.500' : 'green.300'}>
-                ${safeToFixed(totalPaidCommissions)}
-              </StatNumber>
-              <StatHelpText>
-                <StatArrow color={colorMode === 'light' ? 'green.500' : 'green.300'} type='increase' />
-                {safeToFixed(paidPercentage)}%
-              </StatHelpText>
-            </Stat>
-            <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
-              <StatLabel>Unpaid</StatLabel>
-              <StatNumber color={colorMode === 'light' ? 'red.500' : 'red.300'}>
-                ${safeToFixed(totalUnpaidCommissions)}
-              </StatNumber>
-              <StatHelpText>
-                <StatArrow color={colorMode === 'light' ? 'red.500' : 'red.300'} type='decrease' />
-                {safeToFixed(unpaidPercentage)}%
-              </StatHelpText>
-            </Stat>
-          </StatGroup>
-          <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} textAlign={{ base: 'center', md: 'right' }}>
-            {/* <Stat>
-              <StatLabel>Collected Commission Rate Amount Fees</StatLabel>
-              <StatNumber color={colorMode === 'light' ? 'green.500' : 'green.300'}>$0.00</StatNumber>
-              <StatHelpText>Feb 12 - Feb 28</StatHelpText>
-            </Stat> */}
-            <Text mt={4} fontSize="lg" color={accent}>
-              Total Commission Rate Amount: <Text as="b" fontSize={"xl"} color={secondary}>${safeToFixed(totalCommissionRateAmount)}</Text>
-            </Text>
-          </Box>
-       
+    <Box
+      w={width}
+      ml={marginLeft}
+      mr={marginRight}
+      mt={marginTop}
+      mb={marginBottom}
+      boxShadow={'0px 0px 5px 2px gray'}
+      p={2}
+      borderRadius={'lg'}
+    >
+      <Heading color={accent} as="h1" size="lg" mb={4}>
+        Commission Rate Amount Summary
+      </Heading>
+      <Text color={text} fontSize={'lg'}>
+        Commission Rate Amount Summary of all existing commissions.
+      </Text>
+      <StatGroup mt={4} gap={2}>
+        <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
+          <StatLabel>Invoiced</StatLabel>
+          <StatNumber color={colorMode === 'light' ? 'yellow.700' : 'yellow.300'}>
+            ${safeToFixed(totalInvoicedCommissions)}
+          </StatNumber>
+          <StatHelpText>{safeToFixed(invoicedPercentage)}%</StatHelpText>
+        </Stat>
+        <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
+          <StatLabel>Paid</StatLabel>
+          <StatNumber color={colorMode === 'light' ? 'green.500' : 'green.300'}>
+            ${safeToFixed(totalPaidCommissions)}
+          </StatNumber>
+          <StatHelpText>
+            <StatArrow color={colorMode === 'light' ? 'green.500' : 'green.300'} type="increase" />
+            {safeToFixed(paidPercentage)}%
+          </StatHelpText>
+        </Stat>
+        <Stat boxShadow={'inset 0px 0px 5px 2px gray'} borderRadius={'lg'} p={2}>
+          <StatLabel>Unpaid</StatLabel>
+          <StatNumber color={colorMode === 'light' ? 'red.500' : 'red.300'}>
+            ${safeToFixed(totalUnpaidCommissions)}
+          </StatNumber>
+          <StatHelpText>
+            <StatArrow color={colorMode === 'light' ? 'red.500' : 'red.300'} type="decrease" />
+            {safeToFixed(unpaidPercentage)}%
+          </StatHelpText>
+        </Stat>
+      </StatGroup>
+      <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} textAlign={{ base: 'center', md: 'right' }}>
+        <Text mt={4} fontSize="lg" color={accent}>
+          Total Commission Rate Amount:{' '}
+          <Text as="b" fontSize="xl" color={secondary}>
+            ${safeToFixed(totalCommissionRateAmount)}
+          </Text>
+        </Text>
+      </Box>
     </Box>
   );
 };

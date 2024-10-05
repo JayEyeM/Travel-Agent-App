@@ -23,6 +23,7 @@ const CommisionCalculator = () => {
       <Heading as="h1" size="xl" mb={4}>
        Commission Management
       </Heading>
+      <Box mt={10} w={'100%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
       <ClosableBox
       boxShadow= {false}
       icon={<InfoIcon h={5} w={5} />}
@@ -62,6 +63,8 @@ const CommisionCalculator = () => {
       onOpen={() => console.log('Open button clicked')}
       boxShadow= {false}
        /> 
+
+      </Box>
       
       <Box
         p={4}
