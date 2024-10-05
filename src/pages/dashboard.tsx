@@ -11,11 +11,11 @@ const Dashboard: React.FC = () => {
       <Heading as="h1" size="xl" mb={4}>
         Overview
       </Heading>
-      <CommissionRateAmountDataDisplay />
+      <CommissionRateAmountDataDisplay width={{ base: '100%', md: '80%' }} />
       <UpcomingBookingsDisplay />
-      <Box mt={4}>
+      
       <LocalStorageDisplay />
-      </Box>
+      
      
     </Box>
   );

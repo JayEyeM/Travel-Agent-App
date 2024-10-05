@@ -56,7 +56,7 @@ const UpcomingBookingsDisplay: React.FC = () => {
   }, [getAllBookings]);
 
   return (
-    <Box p={4} borderWidth={1} borderRadius="lg" boxShadow={'0px 0px 5px 2px gray'} mt={10}>
+    <Box p={4} w={{ base: '100%', md: '80%' }} ml={'auto'} mr={'auto'} borderWidth={1} borderRadius="lg" boxShadow={'0px 0px 5px 2px gray'} mt={10}>
       <Heading color={accent} size={"lg"} mb={4} fontWeight="bold">Upcoming Bookings</Heading>
       <Text fontSize="lg" mb={4}>Within the next 14 days</Text>
       {bookings.length > 0 ? (

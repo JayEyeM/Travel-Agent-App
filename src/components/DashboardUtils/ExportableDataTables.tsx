@@ -104,7 +104,7 @@ const LocalStorageDisplay: React.FC = () => {
   };
 
   const renderTable = (title: string, data: any) => (
-    <Box my={4} p={4} borderWidth={2} borderRadius="lg" borderColor={primary} boxShadow="0px 0px 5px 1px gray">
+    <Box my={4} w={{ base: '100%', md: '80%' }} ml={'auto'} mr={'auto'} p={4} borderWidth={2} borderRadius="lg" borderColor={primary} boxShadow="0px 0px 5px 1px gray">
       <Heading size="md" mb={2} color={accent}>
         View Your {title}
       </Heading>
@@ -172,7 +172,7 @@ const LocalStorageDisplay: React.FC = () => {
   );
 
   return (
-    <Box p={5} bg={background} boxShadow="0px 0px 5px 1px gray" borderRadius="lg" mt={10}>
+    <Box p={5} w={{ base: '100%', md: '80%' }} ml={'auto'} mr={'auto'} bg={background} boxShadow="0px 0px 5px 1px gray" borderRadius="lg" mt={10}>
       <Heading size="lg" mb={6} color={accent}>
         View/Export Data Tables
       </Heading>

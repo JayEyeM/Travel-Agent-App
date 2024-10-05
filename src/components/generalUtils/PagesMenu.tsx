@@ -18,6 +18,7 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
           p={2}
           borderRadius="lg"
           boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px;"
+          minW={{ base: '90%', md: '200px' }}
           w={{ base: '90%', md: '100%' }}
           maxW={{ base: '100%', md: '200px' }}
           h={'auto'}
