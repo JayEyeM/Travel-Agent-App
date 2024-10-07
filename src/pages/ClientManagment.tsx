@@ -7,6 +7,7 @@ import { AddIcon, CloseIcon, ViewIcon, ViewOffIcon, InfoIcon } from '@chakra-ui/
 import ViewClients from '../components/ClientManagmentUtils/ViewClients';
 import useClientData from '../components/ClientManagmentUtils/UseClientDataHook';
 import { useBrandColors } from '../components/generalUtils/theme';
+import LoadMockData from '../components/generalUtils/loadMockData';
 
 const ClientManagement: React.FC = () => {
   const { primary, background, secondary, accent, text } = useBrandColors();
@@ -19,6 +20,7 @@ const ClientManagement: React.FC = () => {
         Add new clients and keep track of them below. Click on a client in the Client List to view more 
         details and use handy tools, such as the Trip Planner and Commission Calculator.
       </Text>
+      <LoadMockData />
       <ClosableBox
       boxShadow= {false}
       icon={<InfoIcon h={5} w={5} />}
