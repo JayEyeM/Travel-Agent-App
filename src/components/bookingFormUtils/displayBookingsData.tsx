@@ -95,10 +95,11 @@ const ClientBookings: React.FC<ClientBookingsProps> = ({ clientId }) => {
                 borderRadius={"lg"}
                 mt={4}
                 mb={4}
+                w={"100%"}
               >
                 <Box
                   display={"flex"}
-                  flexDirection={{ base: 'column', md: 'row' }}
+                  flexDirection={{ base: 'column', md: 'column' }}
                   bg={background}
                   p={2}
                   mt={4}

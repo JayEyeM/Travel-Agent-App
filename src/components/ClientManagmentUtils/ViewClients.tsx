@@ -116,7 +116,7 @@ const ViewClients: React.FC = () => {
                         position="relative"
                         minW={'200px'}
                         maxW={'100%'}
-                        w={'auto'}
+                        w={'100%'}
                         ml={{ base: 'auto', md: 0 }}
                         mr={{ base: 'auto', md: 0 }}
                         display={'flex'}
@@ -132,6 +132,7 @@ const ViewClients: React.FC = () => {
                             flexDirection={{ base: 'column', md: 'column' }}
                             justifyContent={{ base: 'center', md: 'left' }}
                             alignItems={{ base: 'center', md: 'flex-start' }}
+                            
                         >
                             <BookingForm clientId={client.id} />
                             <ClientBookings clientId={client.id} />

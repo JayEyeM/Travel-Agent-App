@@ -12,11 +12,6 @@ import ClosableBox from '../generalUtils/ClosableBox';
 const CommisionCalculator = () => {
     const { primary, background, accent, secondary, text } = useBrandColors()
     
-    
-    
-    
-    
-
   return (
     <Box textAlign={'center'} py={10} px={0} ml={'auto'} mr={'auto'} w={'90%'} borderRadius="lg" bg={background}>
       
