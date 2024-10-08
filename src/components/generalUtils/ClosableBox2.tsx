@@ -8,11 +8,12 @@ interface ClosableBox2Props {
     buttonText: string;
     icon?: React.ReactNode;
     children: React.ReactNode;
+    width?: string;
     onClose: () => void;
     onOpen: () => void;
 }
 
-const ClosableBox2: React.FC<ClosableBox2Props> = ({ title, buttonText, icon, children, onClose, onOpen }) => {
+const ClosableBox2: React.FC<ClosableBox2Props> = ({ title, buttonText, icon, children, onClose, onOpen, width }) => {
     const { primary, background, secondary, accent, text } = useBrandColors();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -37,7 +38,7 @@ const ClosableBox2: React.FC<ClosableBox2Props> = ({ title, buttonText, icon, ch
             position="relative"
             minW={'200px'}
             maxW={'100%'}
-            w={'auto'}
+            w={width}
 
             ml={{ base: 'auto', md: 0 }}
             mr={{ base: 'auto', md: 0 }}

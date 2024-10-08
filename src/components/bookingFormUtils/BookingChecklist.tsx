@@ -85,7 +85,7 @@ const BookingChecklist: React.FC<BookingChecklistProps> = ({ clientId, bookingId
 
   return (
     <ClosableBox title="Checklists" buttonText="View Checklists" onOpen={() => {}} onClose={() => {}}>
-      <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+      <Box display="flex" flexDirection="column" alignItems="center" mt={4} overflowY={"scroll"} maxHeight={"70vh"} p={2}>
         <Heading color={accent} as="h2" size="md" mb={4}>
           Files Checklist
         </Heading>
