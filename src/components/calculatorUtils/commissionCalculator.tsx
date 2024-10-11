@@ -18,6 +18,9 @@ const CommisionCalculator = () => {
       <Heading as="h1" size="xl" mb={4}>
        Commission Management
       </Heading>
+      <Text fontSize="lg"> 
+        Calculate and keep track of your commissions below!
+      </Text>
       <Box mt={10} w={'100%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
       <ClosableBox
       boxShadow= {false}
