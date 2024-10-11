@@ -18,7 +18,7 @@ const ClientManagement: React.FC = () => {
       </Heading>
       <Text fontSize="lg">
         Add new clients and keep track of them below. Click on a client in the Client List to view more 
-        details and use handy tools, such as the Trip Planner and Commission Calculator.
+        details and add bookings.
       </Text>
       <LoadMockData />
       <ClosableBox
