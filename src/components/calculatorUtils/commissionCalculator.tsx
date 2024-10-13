@@ -1,16 +1,16 @@
-import { Box, Text, Heading, useColorModeValue, List, ListItem} from '@chakra-ui/react'
+import { Box, Text, Heading, List, ListItem} from '@chakra-ui/react'
 import { InfoIcon } from '@chakra-ui/icons';
-import { useState, useEffect } from 'react';
+
 import CommisionForm from './commissionForm'
 import { useBrandColors } from '../generalUtils/theme'
 import DisplayCommissions from './displayCommissions';
-import useCommissionsData from './useCommissionsDataHook';
+
 import CommissionRateAmountDataDisplay from '../generalUtils/CommissionRateAmountDataDisplay';
 import ClosableBox from '../generalUtils/ClosableBox';
 
 
 const CommisionCalculator = () => {
-    const { primary, background, accent, secondary, text } = useBrandColors()
+    const { background } = useBrandColors();
     
   return (
     <Box textAlign={'center'} py={10} px={0} ml={'auto'} mr={'auto'} w={'90%'} borderRadius="lg" bg={background}>

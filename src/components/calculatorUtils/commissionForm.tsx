@@ -22,7 +22,7 @@ interface CommissionFormData {
 }
 
 const CommissionForm = () => {
-  const { primary, background, secondary, accent, text } = useBrandColors();
+  const {  background, secondary, accent, text } = useBrandColors();
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   const [selectedBookingTravelDate, setSelectedBookingTravelDate] = useState<string | null>(null);
   const [selectedConfirmationNumber, setSelectedConfirmationNumber] = useState<string | null>(null);

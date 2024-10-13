@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import { useBrandColors } from '../generalUtils/theme';
-import { CloseIcon, AddIcon } from '@chakra-ui/icons';
+import { CloseIcon } from '@chakra-ui/icons';
 
 interface ClosableBoxProps {
     title: string;
@@ -14,7 +14,7 @@ interface ClosableBoxProps {
 }
 
 const ClosableBox: React.FC<ClosableBoxProps> = ({ title, buttonText, icon, children, onClose, onOpen, boxShadow = true }) => {
-    const { primary, background, secondary, accent, text } = useBrandColors();
+    const { primary, background, secondary, accent } = useBrandColors();
     const [isVisible, setIsVisible] = useState(false);
 
     const handleToggle = () => {
