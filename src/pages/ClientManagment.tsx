@@ -3,14 +3,14 @@ import React from 'react';
 import { Box, Heading, Text, Avatar, List, ListItem } from '@chakra-ui/react';
 import ClosableBox from '../components/generalUtils/ClosableBox';
 import NewClientForm from '../components/ClientManagmentUtils/NewClientForm';
-import { AddIcon, CloseIcon, ViewIcon, ViewOffIcon, InfoIcon } from '@chakra-ui/icons';
+import { AddIcon,  InfoIcon } from '@chakra-ui/icons';
 import ViewClients from '../components/ClientManagmentUtils/ViewClients';
-import useClientData from '../components/ClientManagmentUtils/UseClientDataHook';
+
 import { useBrandColors } from '../components/generalUtils/theme';
 import LoadMockData from '../components/generalUtils/loadMockData';
 
 const ClientManagement: React.FC = () => {
-  const { primary, background, secondary, accent, text } = useBrandColors();
+  const { primary,secondary } = useBrandColors();
   return (
     <Box textAlign="center" py={10} px={6}>
       <Heading as="h1" size="xl" mb={4}>

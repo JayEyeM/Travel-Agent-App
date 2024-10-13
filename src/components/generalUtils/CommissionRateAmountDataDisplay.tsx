@@ -18,7 +18,7 @@ const CommissionRateAmountDataDisplay: React.FC<CommissionRateAmountDataDisplayP
   marginTop = '0',
   marginBottom = '0',
 }) => {
-  const { primary, background, accent, secondary, text } = useBrandColors();
+  const {  accent, secondary, text } = useBrandColors();
   const { commissions } = useCommissionsData();
   
   const [totalPaidCommissions, setTotalPaidCommissions] = useState(0);

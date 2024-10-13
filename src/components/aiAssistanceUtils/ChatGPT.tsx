@@ -15,7 +15,7 @@ const ChatGPT: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedClient, setSelectedClient] = useState('');
 
-  const { background, primary, text, secondary, accent } = useBrandColors();
+  const { background, text, secondary, accent } = useBrandColors();
 
   const clients = ['Client A', 'Client B', 'Client C']; // Example list of clients
 
@@ -146,6 +146,7 @@ const ChatGPT: React.FC = () => {
         bg={background}
         color={text}
         outlineColor={secondary}
+        title='Select Client'
           id="client-select"
           aria-labelledby="client-select-label"
           onChange={handleClientChange} 
