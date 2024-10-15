@@ -16,6 +16,7 @@ import Signup from './pages/signup';
 import LearnMore from './pages/learnMore';
 import Resources from './pages/Resources';
 import ToDoNotes from './components/generalUtils/ToDoNotes';
+import Policies from './pages/Policies';
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -69,6 +70,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/learnMore" element={<LearnMore />} />
               <Route path="/about" element={<About />} />
+              <Route path="/policies" element={<Policies />} />
             </Routes>
         </Box>
 
