@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Divider, AbsoluteCenter, Text, FormControl, FormLabel, Input, Textarea,
-     Button, SimpleGrid, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import {
+    Box,
+    Divider,
+    AbsoluteCenter,
+    Text,
+    FormControl,
+    FormLabel,
+    Input,
+    Textarea,
+    Button,
+    SimpleGrid,
+    InputGroup,
+    InputLeftElement
+} from '@chakra-ui/react';
 import { PhoneIcon } from '@chakra-ui/icons';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
@@ -11,17 +23,17 @@ import useClientData from './UseClientDataHook';
 const generateUniqueId = () => {
     const clientList = localStorage.getItem('ClientList');
     if (clientList === null || clientList === '') {
-      return 1; 
+        return 1;
     } else {
-      const clients = JSON.parse(clientList);
-      if (clients.length === 0) {
-        return 1; 
-      } else {
-        const highestId = Math.max(...clients.map((client: newClientFormData) => client.id));
-        return highestId + 1;
-      }
+        const clients = JSON.parse(clientList);
+        if (clients.length === 0) {
+            return 1;
+        } else {
+            const highestId = Math.max(...clients.map((client: newClientFormData) => client.id));
+            return highestId + 1;
+        }
     }
-  }
+}
 
 const NewClientForm: React.FC = () => {
     const { primary, background, secondary } = useBrandColors();
@@ -43,7 +55,7 @@ const NewClientForm: React.FC = () => {
         paymentDate: '',
         finalPaymentDate: '',
         dateCreated: dayjs().format('YYYY-MM-DD'),
-        bookings: [], 
+        bookings: [],
     });
 
     const { updateClientData } = useClientData();
@@ -60,42 +72,60 @@ const NewClientForm: React.FC = () => {
     }
 
     // Handle form submission
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
+
         // Retrieve existing clients from local storage, or initialize as an empty array if not present
         const existingClients = JSON.parse(localStorage.getItem('ClientList') || '[]');
-    
+
         // Check if existingClients is an array
         const updatedClients = Array.isArray(existingClients) ? [...existingClients, formData] : [formData];
-    
+
         // Save the updated list to local storage
         localStorage.setItem('ClientList', JSON.stringify(updatedClients));
-    
-        // Process or validate formData here
+
         console.log('Form Data Submitted:', formData);
+        
+        // POST request to the backend
+        try {
+            const response = await fetch('http://localhost:4000/clients', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-        updateClientData(updatedClients);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
 
-        // Clear form data
-        setFormData({
-            id: generateUniqueId(),
-            clientName: '',
-            clientEmail: '',
-            clientPhone: '',
-            clientPostalCode: '',
-            clientStreetAddress: '',
-            clientCity: '',
-            clientProvince: '',
-            clientCountry: '',
-            notes: '',
-            invoiced: false,
-            paid: false,
-            paymentDate: '',
-            finalPaymentDate: '',
-            dateCreated: dayjs().format('YYYY-MM-DD'),
-            bookings: [], 
-        });
+            const result = await response.json();
+            console.log('Server response:', result);
+            updateClientData(updatedClients);
+
+            // Clear form data
+            setFormData({
+                id: generateUniqueId(),
+                clientName: '',
+                clientEmail: '',
+                clientPhone: '',
+                clientPostalCode: '',
+                clientStreetAddress: '',
+                clientCity: '',
+                clientProvince: '',
+                clientCountry: '',
+                notes: '',
+                invoiced: false,
+                paid: false,
+                paymentDate: '',
+                finalPaymentDate: '',
+                dateCreated: dayjs().format('YYYY-MM-DD'),
+                bookings: [],
+            });
+        } catch (error) {
+            console.error('Error submitting form data:', error);
+        }
     };
 
     return (
@@ -135,12 +165,12 @@ const NewClientForm: React.FC = () => {
                             <InputLeftElement pointerEvents='none'>
                                 <PhoneIcon color={secondary} />
                             </InputLeftElement>
-                            <Input 
-                            type='tel'
-                            id="clientPhone"
-                            value={formData.clientPhone}
-                            onChange={handleChange}
-                            placeholder='1-234-567-890' />
+                            <Input
+                                type='tel'
+                                id="clientPhone"
+                                value={formData.clientPhone}
+                                onChange={handleChange}
+                                placeholder='1-234-567-890' />
                         </InputGroup>
                     </FormControl>
 
@@ -212,7 +242,7 @@ const NewClientForm: React.FC = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
-                   
+
                     <FormControl id="paymentDate">
                         <FormLabel>Payment Date</FormLabel>
                         <Input
@@ -222,13 +252,12 @@ const NewClientForm: React.FC = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
-
                 </SimpleGrid>
 
                 <Box mt={{ base: 8, md: 10 }} position={"relative"} >
                     <Divider />
-                    <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }} 
-                    mt={{ base: 4, md: 0 }} >
+                    <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }}
+                        mt={{ base: 4, md: 0 }} >
                         <Text color={secondary} fontSize={{ base: 'sm', md: 'md' }}>
                             The fields below for Client Creation Date and ID are automatically generated.
                         </Text>
@@ -257,7 +286,6 @@ const NewClientForm: React.FC = () => {
                             onChange={handleChange}
                         />
                     </FormControl>
-
                 </Box>
                 <Button
                     mt={4}
