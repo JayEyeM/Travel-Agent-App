@@ -1,35 +1,93 @@
-import React from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Textarea, Checkbox } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from '@chakra-ui/react';
 import { newClientFormData } from '../generalUtils/interfaces';
 
 interface EditClientFormProps {
     client: newClientFormData;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    onSubmit: (e: React.FormEvent) => void;
     onCancel: () => void;
+    onUpdateClient: (updatedClient: newClientFormData) => void;
 }
 
-const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSubmit, onCancel }) => {
+const EditClientForm: React.FC<EditClientFormProps> = ({ client, onCancel, onUpdateClient }) => {
+    const [updatedClientData, setUpdatedClientData] = useState(client);
+    const toast = useToast();
+
+   // Handle form input changes
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value, type } = e.target;
+
+    
+    const fieldValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    setUpdatedClientData(prevState => ({
+        ...prevState,
+        [id]: fieldValue,
+    }));
+};
+
+
+    // Handle form submission for updating client
+    const handleUpdate = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`http://localhost:4000/clients/${updatedClientData.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedClientData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update client');
+            }
+
+            const result = await response.json();
+            console.log('Client updated:', result);
+
+           
+            onUpdateClient(result);
+
+            
+            toast({
+                title: 'Client updated successfully.',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+        } catch (error) {
+            console.error('Error updating client:', error);
+            toast({
+                title: 'Error updating client.',
+                description: 'Please try again.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
     return (
         <Box mt={4}>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleUpdate}>
                 <FormControl id="clientName">
                     <FormLabel>Client Name</FormLabel>
                     <Input
                         type="text"
                         id="clientName"
-                        value={client.clientName}
-                        onChange={onChange}
+                        value={updatedClientData.clientName}
+                        onChange={handleChange}
                     />
                 </FormControl>
-                
+
                 <FormControl id="clientEmail">
                     <FormLabel>Client Email</FormLabel>
                     <Input
                         type="email"
                         id="clientEmail"
-                        value={client.clientEmail}
-                        onChange={onChange}
+                        value={updatedClientData.clientEmail}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
@@ -38,8 +96,8 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                     <Input
                         type="tel"
                         id="clientPhone"
-                        value={client.clientPhone}
-                        onChange={onChange}
+                        value={updatedClientData.clientPhone}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
@@ -48,8 +106,8 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                     <Input
                         type="text"
                         id="clientPostalCode"
-                        value={client.clientPostalCode}
-                        onChange={onChange}
+                        value={updatedClientData.clientPostalCode}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
@@ -58,8 +116,8 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                     <Input
                         type="text"
                         id="clientStreetAddress"
-                        value={client.clientStreetAddress}
-                        onChange={onChange}
+                        value={updatedClientData.clientStreetAddress}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
@@ -68,8 +126,8 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                     <Input
                         type="text"
                         id="clientCity"
-                        value={client.clientCity}
-                        onChange={onChange}
+                        value={updatedClientData.clientCity}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
@@ -78,8 +136,8 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                     <Input
                         type="text"
                         id="clientProvince"
-                        value={client.clientProvince}
-                        onChange={onChange}
+                        value={updatedClientData.clientProvince}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
@@ -88,40 +146,40 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onChange, onSub
                     <Input
                         type="text"
                         id="clientCountry"
-                        value={client.clientCountry}
-                        onChange={onChange}
+                        value={updatedClientData.clientCountry}
+                        onChange={handleChange}
                     />
                 </FormControl>
 
-                
                 <FormControl id="notes">
                     <FormLabel>Notes</FormLabel>
                     <Textarea
                         id="notes"
-                        value={client.notes}
-                        onChange={onChange}
+                        value={updatedClientData.notes}
+                        onChange={handleChange}
                     />
                 </FormControl>
-                
-                <FormControl id="finalPaymentDate">
-                    <FormLabel>Final Payment Date</FormLabel>
-                    <Input
-                        type="date"
-                        id="finalPaymentDate"
-                        value={client.finalPaymentDate}
-                        onChange={onChange}
-                    />
-                </FormControl>
-                
+
                 <FormControl id="paymentDate">
                     <FormLabel>Payment Date</FormLabel>
                     <Input
                         type="date"
                         id="paymentDate"
-                        value={client.paymentDate}
-                        onChange={onChange}
+                        value={updatedClientData.paymentDate}
+                        onChange={handleChange}
                     />
                 </FormControl>
+
+                <FormControl id="finalPaymentDate">
+                    <FormLabel>Final Payment Date</FormLabel>
+                    <Input
+                        type="date"
+                        id="finalPaymentDate"
+                        value={updatedClientData.finalPaymentDate}
+                        onChange={handleChange}
+                    />
+                </FormControl>
+
                 <Button mt={4} colorScheme="teal" type="submit">
                     Save Changes
                 </Button>
