@@ -5,25 +5,30 @@ import { newClientFormData } from '../generalUtils/interfaces';
 const useClientData = () => {
     const [clientData, setClientData] = useState<newClientFormData[]>([]);
 
-    // Function to update client data
-    const updateClientData = (updatedClients?: newClientFormData[]) => {
-        if (updatedClients) {
-            setClientData(updatedClients);
-        } else {
-            const storedData = localStorage.getItem('ClientList');
-            if (storedData) {
-                setClientData(JSON.parse(storedData));
-            }
+    // Fetch client data from backend
+    const fetchClientsFromBackend = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/clients');
+            if (!response.ok) throw new Error('Failed to fetch clients from backend');
+            
+            const data = await response.json();
+            setClientData(data); // Update state with backend data
+        } catch (error) {
+            console.error('Error fetching clients:', error);
         }
     };
 
     // Load client data on initial render
     useEffect(() => {
-        updateClientData();
-    }, [clientData]);
+        fetchClientsFromBackend(); // Fetch from backend on initial load
+    }, []);
+
+    
+    const updateClientData = (updatedClients: newClientFormData[]) => {
+        setClientData(updatedClients);
+    };
 
     return { clientData, updateClientData };
 };
 
 export default useClientData;
-
