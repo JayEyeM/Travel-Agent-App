@@ -8,7 +8,7 @@ const useClientData = () => {
     // Fetch client data from backend
     const fetchClientsFromBackend = async () => {
         try {
-            const response = await fetch('http://localhost:4000/clients');
+            const response = await fetch('http://localhost:8000/clients');
             if (!response.ok) throw new Error('Failed to fetch clients from backend');
             
             const data = await response.json();

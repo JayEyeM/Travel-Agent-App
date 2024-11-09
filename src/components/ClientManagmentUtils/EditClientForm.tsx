@@ -31,7 +31,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:4000/clients/${updatedClientData.id}`, {
+            const response = await fetch(`http://localhost:8000/clients/${updatedClientData.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
