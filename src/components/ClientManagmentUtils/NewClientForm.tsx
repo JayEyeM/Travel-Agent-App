@@ -88,7 +88,7 @@ const NewClientForm: React.FC = () => {
         
         // POST request to the backend
         try {
-            const response = await fetch('http://localhost:4000/clients', {
+            const response = await fetch('http://localhost:8000/clients', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
