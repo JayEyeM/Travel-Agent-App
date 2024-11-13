@@ -30,34 +30,71 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
   const { saveBooking } = useBookingsData();
 
   // Function to handle adding a new booking
-  const handleAddBooking = () => {
+  const handleAddBooking = async () => {
     const newBooking = { ...formData, bookingId: new Date().toISOString() };
-    saveBooking(clientId, newBooking);
 
+    // Save booking to backend (POST request)
+    try {
+      const response = await fetch('http://localhost:8000/bookings', {  
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newBooking),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        saveBooking(clientId, newBooking);  // Optionally save it locally
+
+        toast({
+          title: 'Booking added to client.',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        });
+
+        // Reset form data
+        setFormData({
+          id: clientId,
+          travelDate: '',
+          clientFinalPaymentDate: '',
+          supplierFinalPaymentDate: '',
+          bookingDate: '',
+          invoicedDate: '',
+          confirmationNumbers: [{ confirmationNumber: '', supplier: '' }],
+          namesDateOfBirths: [{ name: '', dateOfBirth: '' }],
+          mailingAddress: '',
+          phoneNumbers: [''],
+          emailAddresses: [''],
+          significantDates: [''],
+          bookingId: '',
+        });
+      } else {
+        throw new Error('Failed to add booking');
+      }
+    } catch (error: unknown) {
+  // Type assertion to treat 'error' as an Error object
+  if (error instanceof Error) {
     toast({
-      title: 'Booking added to client.',
-      status: 'success',
+      title: 'Error adding booking.',
+      description: error.message,  // Now TypeScript knows 'error' has a 'message' property
+      status: 'error',
       duration: 2000,
       isClosable: true,
     });
-
-    // Reset form data
-    setFormData({
-      id: clientId,
-      travelDate: '',
-      clientFinalPaymentDate: '',
-      supplierFinalPaymentDate: '',
-      bookingDate: '',
-      invoicedDate: '',
-      confirmationNumbers: [{ confirmationNumber: '', supplier: '' }],
-      namesDateOfBirths: [{ name: '', dateOfBirth: '' }],
-      mailingAddress: '',
-      phoneNumbers: [''],
-      emailAddresses: [''],
-      significantDates: [''],
-      bookingId: '',
+  } else {
+    toast({
+      title: 'Error adding booking.',
+      description: 'An unknown error occurred.',
+      status: 'error',
+      duration: 2000,
+      isClosable: true,
     });
-  };
+  }
+};
+  }
 
   // Handle changes in form fields
   const handleArrayChange = (
@@ -74,7 +111,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ clientId }) => {
     }
     setFormData({ ...formData, [field]: updatedArray });
   };
-  
 
   const handleAddField = (field: keyof bookingFormData, defaultValue: any) => {
     const updatedArray = [...(formData[field] as any), defaultValue];
