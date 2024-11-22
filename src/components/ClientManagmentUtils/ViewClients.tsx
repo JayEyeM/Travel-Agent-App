@@ -82,6 +82,12 @@ const ViewClients: React.FC = () => {
         updateClientData(updatedClients);
     };
 
+    const handleUpdateClient = (updatedClient: newClientFormData) => {
+        const updatedClients = clientData.map(client =>
+            client.id === updatedClient.id ? updatedClient : client
+        );
+    }
+
     const clientsToDisplay = searchTerm ? filteredClients : clientData;
     const reversedClientsToDisplay = [...clientsToDisplay].reverse();
 
@@ -234,6 +240,7 @@ const ViewClients: React.FC = () => {
                                     onChange={handleChange}
                                     onSubmit={handleSubmitEdit}
                                     onCancel={handleCancelEdit}
+                                    onUpdateClient={handleUpdateClient}
                                 />
                             )}
                             </ClosableBox>

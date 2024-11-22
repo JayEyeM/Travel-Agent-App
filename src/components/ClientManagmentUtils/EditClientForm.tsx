@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from '@chakra-ui/react';
 import { newClientFormData } from '../generalUtils/interfaces';
 
@@ -6,6 +6,9 @@ interface EditClientFormProps {
     client: newClientFormData;
     onCancel: () => void;
     onUpdateClient: (updatedClient: newClientFormData) => void;
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onSubmit: (e: FormEvent) => void;
+
 }
 
 const EditClientForm: React.FC<EditClientFormProps> = ({ client, onCancel, onUpdateClient }) => {
