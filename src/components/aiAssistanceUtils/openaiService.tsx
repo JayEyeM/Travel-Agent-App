@@ -5,6 +5,12 @@ const OPENAI_API_KEY = import.meta.env.REACT_APP_OPENAI_API_KEY || "";
 
 const apiUrl = "https://api.openai.com/v1/completions";
 
+/**
+ * 1. API key
+ * 2. You will need to pass in the user's data as part of the prompt for it to understand
+ * 3. For history, you will need to maange the messages response and send it back to chatgpt
+ */
+
 export const getGptResponse = async (message: string) => {
     try {
       const response = await axios.post(apiUrl, {
