@@ -17,6 +17,7 @@ import { PhoneIcon } from '@chakra-ui/icons';
 import { useBrandColors } from '../generalUtils/theme';
 import dayjs from 'dayjs';
 import { newClientFormData } from '../generalUtils/interfaces';
+import { postData } from '../generalUtils/APIs';
 import useClientData from './UseClientDataHook';
 
 // Generate unique ID
@@ -62,14 +63,18 @@ const NewClientForm: React.FC = () => {
 
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-        const { id, value, type } = target;
-        const checked = 'checked' in target ? (target as HTMLInputElement).checked : undefined;
-        setFormData({
-            ...formData,
-            [id]: type === 'checkbox' ? checked : value
-        });
-    }
+        const target = e.target;
+        const { id, value } = target;
+    
+        setFormData((prevState) => ({
+            ...prevState,
+            [id]: target instanceof HTMLInputElement && target.type === 'checkbox' 
+                ? target.checked 
+                : value,
+        }));
+    };
+    
+    
 
     // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
@@ -85,26 +90,16 @@ const NewClientForm: React.FC = () => {
         localStorage.setItem('ClientList', JSON.stringify(updatedClients));
 
         console.log('Form Data Submitted:', formData);
-        
-        // POST request to the backend
+
+        // Use the postClient function from api.ts to send the data
         try {
-            const response = await fetch('http://localhost:8000/clients', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const result = await response.json();
+            const result = await postData<newClientFormData>('clients', formData);
             console.log('Server response:', result);
+
+            // Update client data in the app
             updateClientData(updatedClients);
 
-            // Clear form data
+            // Clear form data after submission
             setFormData({
                 id: generateUniqueId(),
                 clientName: '',
@@ -258,46 +253,23 @@ const NewClientForm: React.FC = () => {
                     <Divider />
                     <AbsoluteCenter bg={background} px='4' w={{ base: '100%', md: 'auto' }}
                         mt={{ base: 4, md: 0 }} >
-                        <Text color={secondary} fontSize={{ base: 'sm', md: 'md' }}>
+                        <Text color={secondary} fontSize={{ base: 'sm', md: 'md' }} >
                             The fields below for Client Creation Date and ID are automatically generated.
                         </Text>
                     </AbsoluteCenter>
                 </Box>
 
-                <Box mt={{ base: 12, md: 0 }} mb={4} p={4} display={"flex"} flexDirection={{ base: 'column', md: 'row' }} gap={4} >
-                    <FormControl id="dateCreated">
-                        <FormLabel>Date Created</FormLabel>
-                        <Input
-                            isReadOnly
-                            type="date"
-                            id="dateCreated"
-                            value={formData.dateCreated}
-                            onChange={handleChange}
-                        />
-                    </FormControl>
-
-                    <FormControl id="id">
-                        <FormLabel>ID</FormLabel>
-                        <Input
-                            isReadOnly
-                            type="number"
-                            id="id"
-                            value={formData.id}
-                            onChange={handleChange}
-                        />
-                    </FormControl>
+                <Box mt={{ base: 4, md: 10 }} display="flex" justifyContent="flex-end">
+                    <Button
+                        type="submit"
+                        colorScheme="blue"
+                    >
+                        Add Client
+                    </Button>
                 </Box>
-                <Button
-                    mt={4}
-                    bg={primary}
-                    color={secondary}
-                    type="submit"
-                >
-                    Submit
-                </Button>
             </form>
         </Box>
-    )
-}
+    );
+};
 
 export default NewClientForm;
