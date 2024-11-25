@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { newClientFormData } from '../generalUtils/interfaces'; // Assuming the correct interface path
-import { getData, postData, updateData } from '../generalUtils/APIs'; // Importing from the updated APIs.ts
+import { newClientFormData } from '../generalUtils/interfaces'; 
+import { getData, postData, updateData } from '../generalUtils/APIs'; 
 
 // UseClientDataHook.ts
 const useClientData = () => {
@@ -40,16 +40,20 @@ const useClientData = () => {
   // Function to update an existing client
   const updateClient = async (clientId: string, updatedClientData: newClientFormData) => {
     try {
-      const updatedClient = await updateData<newClientFormData>(`clients/${clientId}`, updatedClientData); // Using the generic updateData function
+      const updatedClient = await updateData<newClientFormData>(
+        `clients/${Number(clientId)}`, // Convert to number
+        updatedClientData
+      );
       setClientData((prevClients) =>
         prevClients.map((client) =>
           client.id === Number(clientId) ? updatedClient : client 
         )
-      ); // Update the clientData state with the updated client
+      );
     } catch (error) {
       console.error('Error updating client:', error);
     }
   };
+  
 
   return { clientData, updateClientData, addClient, updateClient };
 };
