@@ -42,17 +42,17 @@ export const API = {
     }
   },
 
-  // PUT: Update existing data on the server
-  put: async <T>(endpoint: string, data: unknown): Promise<T> => {
+  // PATCH: Update existing data on the server
+  patch: async <T>(endpoint: string, data: unknown): Promise<T> => {
     try {
       const response = await fetch(`${BASE_URL}/${endpoint}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
       return handleResponse<T>(response);
     } catch (error) {
-      console.error(`PUT ${endpoint} failed:`, error);
+      console.error(`PATCH ${endpoint} failed:`, error);
       throw error;
     }
   },
@@ -87,7 +87,7 @@ export const getData = async <T>(endpoint: string): Promise<T> => {
 };
 
 export const updateData = async <T>(endpoint: string, data: unknown): Promise<T> => {
-  return API.put<T>(endpoint, data);
+  return API.patch<T>(endpoint, data);
 };
 
 export const deleteData = async (endpoint: string): Promise<void> => {
