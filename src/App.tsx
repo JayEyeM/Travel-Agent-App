@@ -10,6 +10,7 @@ import PagesMenu from './components/generalUtils/PagesMenu';
 import AiAssistance from './pages/AiAssistance';
 import Footer from './components/generalUtils/footer';
 import ClientManagement from './pages/ClientManagment';
+import BookingManagement from './pages/BookingManagement';
 import Signin from './pages/signin';
 import Signout from './pages/signout';
 import Signup from './pages/signup';
@@ -33,7 +34,9 @@ function App() {
         return 'dashboard';
       case '/clientManagement':
         return 'clientManagement';
-        case '/resources':
+      case '/bookingManagement':
+        return 'bookingManagement';
+      case '/resources':
         return 'resources';
       case '/aiAssistance':
         return 'aiAssistance';
@@ -63,6 +66,7 @@ function App() {
               <Route path="/todoNotes" element={<ToDoNotes />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/clientManagement" element={<ClientManagement />} />
+              <Route path="/bookingManagement" element={<BookingManagement />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/aiAssistance" element={<AiAssistance />} />
               <Route path="/signin" element={<Signin />} />
