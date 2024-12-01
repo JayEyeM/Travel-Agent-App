@@ -10,11 +10,11 @@ import {
     SimpleGrid,
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import useBookingData from './UseBookingDataHook';
 import { useBrandColors } from '../generalUtils/theme';
 import ClosableBox3 from '../generalUtils/ClosableBox3';
-import { newClientFormData, bookingFormData } from '../generalUtils/interfaces';
-import { deleteBooking, updateBooking } from '../api/bookingAPI';  // Hypothetical API calls
+import { bookingFormData, newClientFormData } from '../generalUtils/interfaces';
+import useBookingData from './UseBookingDataHook';
+import EditBookingForm from './EditBookingForm';
 
 interface ViewBookingsProps {
     clientId?: number;
@@ -22,33 +22,28 @@ interface ViewBookingsProps {
 
 const ViewBookings: React.FC<ViewBookingsProps> = ({ clientId }) => {
     const { background, secondary } = useBrandColors();
-    const { bookingFormDataArray: bookingData, updateBookingData, fetchBookings } = useBookingData();  // Assume this fetches bookings from the backend
+    const { bookingData, updateBookingData, deleteBooking, addBooking } = useBookingData();
 
-    // Fetch the client with the specific ID
-    const client = bookingData.find((c) => c.id === clientId);
+    const client = bookingData.find((c) => c.id === clientId) as newClientFormData;
+    const bookings = client?.bookings || [];
     const [editingBooking, setEditingBooking] = useState<bookingFormData | null>(null);
 
-    // Fetch the bookings from the backend (if needed)
     useEffect(() => {
         if (clientId) {
-            fetchBookings(clientId); // Fetch bookings for the client on component mount
+            // Optional: Fetch additional bookings if required
         }
-    }, [clientId, fetchBookings]);
+    }, [clientId]);
 
     const handleDeleteClick = async (bookingId: string) => {
         if (window.confirm(`Are you sure you want to delete this booking?`)) {
+            await deleteBooking(bookingId);
             if (client) {
-                // Make API call to delete booking
-                await deleteBooking(bookingId);
-
-                // Update state to reflect the deletion (without using localStorage)
-                const updatedBookings = client.bookings.filter((b) => b.bookingId !== bookingId);
-                const updatedClientBooking = { ...client, bookings: updatedBookings };
-                const updatedBookingList = bookingData.map((c: newClientFormData) =>
-                    c.id === client.id ? updatedClientBooking : c
+                const updatedBookings = bookings.filter((b: bookingFormData) => b.bookingId !== bookingId);
+                updateBookingData(
+                    bookingData.map((c) =>
+                        c.id === client.id ? { ...c, bookings: updatedBookings } : c
+                    )
                 );
-
-                updateBookingData(updatedBookingList); // Update the state after deletion
             }
         }
     };
@@ -62,94 +57,66 @@ const ViewBookings: React.FC<ViewBookingsProps> = ({ clientId }) => {
     };
 
     const handleSubmitEdit = async (updatedBooking: bookingFormData) => {
+        await addBooking(updatedBooking);
         if (client) {
-            // Make API call to update the booking
-            await updateBooking(updatedBooking);
-
-            // Update state after successful update
-            const updatedBookings = client.bookings.map((b) =>
+            const updatedBookings = bookings.map((b: bookingFormData) =>
                 b.bookingId === updatedBooking.bookingId ? updatedBooking : b
             );
-            const updatedClientBooking = { ...client, bookings: updatedBookings };
-            const updatedBookingList = bookingData.map((c: newClientFormData) =>
-                c.id === client.id ? updatedClientBooking : c
+            updateBookingData(
+                bookingData.map((c) =>
+                    c.id === client.id ? { ...c, bookings: updatedBookings } : c
+                )
             );
-
-            updateBookingData(updatedBookingList); // Update the state after edit
-            setEditingBooking(null); // Close the edit form
+            setEditingBooking(null);
         }
     };
 
-    if (!client || !client.bookings.length) {
+    if (!bookings.length) {
         return <Text>No bookings found for this client.</Text>;
     }
 
     return (
         <Box>
             <Heading size="lg" mb={4}>
-                Bookings for {client.clientName}
+                Bookings for {client?.clientName || 'Unknown Client'}
             </Heading>
-            {client.bookings.map((b: bookingFormData) => (
+            {bookings.map((b: bookingFormData) => (
                 <ClosableBox3
                     key={b.bookingId}
                     title={`Booking on ${b.travelDate}`}
                     buttonText={`Booking ID: ${b.bookingId} | Date: ${b.travelDate}`}
-                    onClose={() => console.log('Close button clicked')}
-                    onOpen={() => console.log('Open button clicked')}
+                    onClose={() => {}}
+                    onOpen={() => {}}
                 >
-                    <Card
-                        bg={background}
-                        boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px;"
-                        borderRadius="lg"
-                        p={4}
-                        mt={4}
-                        position="relative"
-                        w="100%"
-                    >
+                    <Card bg={background} borderRadius="lg" p={4} mt={4}>
                         <CardHeader>
                             <Heading size="md">Booking Details</Heading>
                         </CardHeader>
                         <CardBody>
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                                 <Text>
-                                    <Text as="span" color={secondary}>
-                                        Booking ID:
-                                    </Text>{' '}
-                                    {b.bookingId}
+                                    <Text as="span" color={secondary}>Booking ID:</Text> {b.bookingId}
                                 </Text>
                                 <Text>
-                                    <Text as="span" color={secondary}>
-                                        Date:
-                                    </Text>{' '}
-                                    {b.travelDate}
+                                    <Text as="span" color={secondary}>Date:</Text> {b.travelDate}
                                 </Text>
                                 <Text>
-                                    <Text as="span" color={secondary}>
-                                        Notes:
-                                    </Text>{' '}
-                                    {b.notes || 'No notes available'}
+                                    <Text as="span" color={secondary}>Notes:</Text> {b.notes || 'No notes available'}
                                 </Text>
-                                <Text>
-                                    <Text as="span" color={secondary}>
-                                        Amount:
-                                    </Text>{' '}
-                                    {b.amount || 'N/A'}
-                                </Text>
+                                {b.amount && (
+                                    <Text>
+                                        <Text as="span" color={secondary}>Amount:</Text> ${b.amount}
+                                    </Text>
+                                )}
                             </SimpleGrid>
-                            <Button
-                                mt={4}
-                                colorScheme="blue"
-                                leftIcon={<EditIcon />}
-                                onClick={() => handleEditClick(b)}
-                            >
+                            <Button leftIcon={<EditIcon />} onClick={() => handleEditClick(b)} mt={4}>
                                 Edit Booking
                             </Button>
                             <Button
-                                mt={4}
-                                ml={2}
-                                colorScheme="red"
                                 leftIcon={<DeleteIcon />}
+                                colorScheme="red"
                                 onClick={() => handleDeleteClick(b.bookingId)}
+                                mt={4}
                             >
                                 Delete Booking
                             </Button>
