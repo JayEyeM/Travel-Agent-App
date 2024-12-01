@@ -13,7 +13,18 @@ export interface bookingFormData {
   emailAddresses: string[];
   significantDates: string[];
   bookingId: string;
+  amount: number;
+  notes: string;
+  invoiced: boolean;
+  paid: boolean;
+  paymentDate: string;
+  dateCreated: string;
+
+  // Add this index signature to allow string indexing
+  [key: string]: any;
 }
+
+
 
 
 // NewClientFormData interface

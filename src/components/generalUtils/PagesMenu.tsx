@@ -42,6 +42,7 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
             
             <MenuLink to="/dashboard" texts="Dashboard" isActive={currentPage === 'dashboard'} />
             <MenuLink to="/clientManagement" texts="Client Management" isActive={currentPage === 'clientManagement'} />
+            <MenuLink to="/bookingManagement" texts="Booking Management" isActive={currentPage === 'bookingManagement'} />
             <MenuLink to="/calculator" texts="Commission Calculator" isActive={currentPage === 'calculator'} />
             <MenuLink to="/todoNotes" texts="To Do List" isActive={currentPage === 'todoNotes'} />
             <MenuLink to="/resources" texts="Resources" isActive={currentPage === 'resources'} />
