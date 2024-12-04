@@ -24,8 +24,8 @@ const ViewBookings: React.FC<ViewBookingsProps> = ({ clientId }) => {
     const { background, secondary } = useBrandColors();
     const { bookingData, updateBookingData, deleteBooking, addBooking } = useBookingData();
 
-    const client = bookingData.find((c) => c.id === clientId) as newClientFormData;
-    const bookings = client?.bookings || [];
+    // Filter bookings for the given clientId
+    const clientBookings = bookingData.filter((b) => b.clientId === clientId); // Ensure clientId is used correctly
     const [editingBooking, setEditingBooking] = useState<bookingFormData | null>(null);
 
     useEffect(() => {
@@ -37,14 +37,10 @@ const ViewBookings: React.FC<ViewBookingsProps> = ({ clientId }) => {
     const handleDeleteClick = async (bookingId: string) => {
         if (window.confirm(`Are you sure you want to delete this booking?`)) {
             await deleteBooking(bookingId);
-            if (client) {
-                const updatedBookings = bookings.filter((b: bookingFormData) => b.bookingId !== bookingId);
-                updateBookingData(
-                    bookingData.map((c) =>
-                        c.id === client.id ? { ...c, bookings: updatedBookings } : c
-                    )
-                );
-            }
+            const updatedBookings = clientBookings.filter(
+                (b: bookingFormData) => b.bookingId !== bookingId
+            );
+            updateBookingData(updatedBookings);
         }
     };
 
@@ -58,29 +54,23 @@ const ViewBookings: React.FC<ViewBookingsProps> = ({ clientId }) => {
 
     const handleSubmitEdit = async (updatedBooking: bookingFormData) => {
         await addBooking(updatedBooking);
-        if (client) {
-            const updatedBookings = bookings.map((b: bookingFormData) =>
-                b.bookingId === updatedBooking.bookingId ? updatedBooking : b
-            );
-            updateBookingData(
-                bookingData.map((c) =>
-                    c.id === client.id ? { ...c, bookings: updatedBookings } : c
-                )
-            );
-            setEditingBooking(null);
-        }
+        const updatedBookings = clientBookings.map((b: bookingFormData) =>
+            b.bookingId === updatedBooking.bookingId ? updatedBooking : b
+        );
+        updateBookingData(updatedBookings);
+        setEditingBooking(null);
     };
 
-    if (!bookings.length) {
+    if (!clientBookings.length) {
         return <Text>No bookings found for this client.</Text>;
     }
 
     return (
         <Box>
             <Heading size="lg" mb={4}>
-                Bookings for {client?.clientName || 'Unknown Client'}
+                Bookings for Client ID: {clientId || 'Unknown Client'}
             </Heading>
-            {bookings.map((b: bookingFormData) => (
+            {clientBookings.map((b: bookingFormData) => (
                 <ClosableBox3
                     key={b.bookingId}
                     title={`Booking on ${b.travelDate}`}
@@ -95,21 +85,37 @@ const ViewBookings: React.FC<ViewBookingsProps> = ({ clientId }) => {
                         <CardBody>
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                                 <Text>
-                                    <Text as="span" color={secondary}>Booking ID:</Text> {b.bookingId}
+                                    <Text as="span" color={secondary}>
+                                        Booking ID:
+                                    </Text>{' '}
+                                    {b.bookingId}
                                 </Text>
                                 <Text>
-                                    <Text as="span" color={secondary}>Date:</Text> {b.travelDate}
+                                    <Text as="span" color={secondary}>
+                                        Date:
+                                    </Text>{' '}
+                                    {b.travelDate}
                                 </Text>
                                 <Text>
-                                    <Text as="span" color={secondary}>Notes:</Text> {b.notes || 'No notes available'}
+                                    <Text as="span" color={secondary}>
+                                        Notes:
+                                    </Text>{' '}
+                                    {b.notes || 'No notes available'}
                                 </Text>
                                 {b.amount && (
                                     <Text>
-                                        <Text as="span" color={secondary}>Amount:</Text> ${b.amount}
+                                        <Text as="span" color={secondary}>
+                                            Amount:
+                                        </Text>{' '}
+                                        ${b.amount}
                                     </Text>
                                 )}
                             </SimpleGrid>
-                            <Button leftIcon={<EditIcon />} onClick={() => handleEditClick(b)} mt={4}>
+                            <Button
+                                leftIcon={<EditIcon />}
+                                onClick={() => handleEditClick(b)}
+                                mt={4}
+                            >
                                 Edit Booking
                             </Button>
                             <Button
