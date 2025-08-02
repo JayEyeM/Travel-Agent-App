@@ -1,41 +1,128 @@
-// src/pages/signup.tsx
-import React from 'react';
-import { Box, Heading, Text, Tooltip, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Heading,
+  Text,
+  VStack,
+  useToast,
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
 import { useBrandColors } from '../components/generalUtils/theme';
-import { Link } from 'react-router-dom';
 
-const Signup: React.FC = () => {
-  const { primary, background, accent, secondary, text } = useBrandColors()
+const Signup = () => {
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const toast = useToast();
+  const navigate = useNavigate();
+  const { primary, background, accent, secondary, text } = useBrandColors();
+
+  const handleSignup = async () => {
+    if (!displayName || !email || !password || !confirmPassword) {
+      toast({
+        title: 'All fields are required.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast({
+        title: 'Passwords do not match.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          displayName,
+        },
+        emailRedirectTo: `${window.location.origin}/signin`,
+      },
+    });
+
+    setLoading(false);
+
+    if (error) {
+      toast({
+        title: 'Signup failed.',
+        description: error.message,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: 'Check your email to confirm your account.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate('/signin');
+    }
+  };
+
   return (
-    <Box textAlign="center" py={10} px={6}>
-      <Heading as="h1" size="xl" mb={4}>
-      Welcome to the Travel Agent App that helps you track your commissions and more!
+    <Box maxW="400px" mx="auto" mt={10} p={6} borderRadius="lg" bg={background} boxShadow="lg">
+      <Heading mb={6} textAlign="center" color={primary}>
+        Create an Account
       </Heading>
-      <Text fontSize="lg">
-        Fill out the form below and click "Create My Account" to get started.
-      </Text>
+      <VStack spacing={4}>
+        <FormControl isRequired>
+          <FormLabel color={text}>Display Name</FormLabel>
+          <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+        </FormControl>
 
-      <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
-        <Tooltip label="Create My Account" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
-          <Button w={'175px'} ml={'auto'} mr={'auto'} mt={0} color={secondary} bg={primary} size="lg">
-            Create My Account
-          </Button>
-        </Tooltip>
+        <FormControl isRequired>
+          <FormLabel color={text}>Email</FormLabel>
+          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </FormControl>
 
-        <Text fontSize="lg" mt={10} color={text}>
-          Already have an account? Just click below to sign in.
-        </Text> 
+        <FormControl isRequired>
+          <FormLabel color={text}>Password</FormLabel>
+          <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </FormControl>
 
-        <Tooltip label="Sign In" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
-          <Button as={Link} to="/signin" w={'175px'} ml={'auto'} mr={'auto'} mt={8} color={secondary} bg={primary} size="lg">
-            Sign In
-          </Button>
-        </Tooltip>
+        <FormControl isRequired>
+          <FormLabel color={text}>Confirm Password</FormLabel>
+          <Input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </FormControl>
 
-      </Box>
-      
+        <Button
+          isLoading={loading}
+          onClick={handleSignup}
+          colorScheme="orange"
+          bg={accent}
+          color={background}
+          width="full"
+          mt={4}
+        >
+          Sign Up
+        </Button>
+      </VStack>
     </Box>
-    
   );
 };
 

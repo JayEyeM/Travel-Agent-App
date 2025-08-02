@@ -1,5 +1,10 @@
+// File path: TravelAgentApp/src/App.tsx
+
 import { Box } from '@chakra-ui/react';
+import React, { useContext } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import ProtectedRoute from './components/generalUtils/ProtectedRoute';
+import { AuthContext } from './components/context/AuthContext';
 import Homepage from './pages/homepage';
 import CommisionCalculator from './components/calculatorUtils/commissionCalculator';
 import { useBrandColors } from './components/generalUtils/theme';
@@ -22,6 +27,7 @@ import Policies from './pages/Policies';
 function App() {
   const { primary, background } = useBrandColors();
   const location = useLocation();
+  const { isLoggedIn } = useContext(AuthContext);
 
   const getCurrentPage = () => {
     switch (location.pathname) {
@@ -56,26 +62,32 @@ function App() {
       display="flex"
       flexDirection={{ base: 'column', md: 'row' }}
       >
-        <PagesMenu currentPage={getCurrentPage()} />
+        { isLoggedIn && <PagesMenu currentPage={getCurrentPage()} /> }
           <Box h="auto" w="100%" 
           
           >
             <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/calculator" element={<CommisionCalculator />} />
-              <Route path="/todoNotes" element={<ToDoNotes />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/clientManagement" element={<ClientManagement />} />
-              <Route path="/bookingManagement" element={<BookingManagement />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/aiAssistance" element={<AiAssistance />} />
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/signout" element={<Signout />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/learnMore" element={<LearnMore />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/policies" element={<Policies />} />
-            </Routes>
+  {/* Public Routes */}
+  <Route path="/" element={<Homepage />} />
+  <Route path="/signin" element={<Signin />} />
+  <Route path="/signup" element={<Signup />} />
+  <Route path="/signout" element={<Signout />} />
+  <Route path="/learnMore" element={<LearnMore />} />
+  <Route path="/about" element={<About />} />
+  <Route path="/policies" element={<Policies />} />
+
+  {/* Protected Routes Group */}
+  <Route element={<ProtectedRoute />}>
+    <Route path="/calculator" element={<CommisionCalculator />} />
+    <Route path="/todoNotes" element={<ToDoNotes />} />
+    <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/clientManagement" element={<ClientManagement />} />
+    <Route path="/bookingManagement" element={<BookingManagement />} />
+    <Route path="/resources" element={<Resources />} />
+    <Route path="/aiAssistance" element={<AiAssistance />} />
+  </Route>
+</Routes>
+
         </Box>
 
       </Box>
