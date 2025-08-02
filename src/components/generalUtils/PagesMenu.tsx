@@ -1,8 +1,12 @@
-import React from 'react';
+// File path: TravelAgentApp/src/components/generalUtils/PagesMenu.tsx
+
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Text, Button, SimpleGrid } from '@chakra-ui/react';
+import { Box, Text, Button, SimpleGrid, useColorMode, Center } from '@chakra-ui/react';
 import { useBrandColors } from '../generalUtils/theme';
 import MenuLink from '../generalUtils/MenuLinks';
+import { supabase } from '../../lib/supabaseClient';
+import theme from './theme';
 
 interface PagesMenuProps {
     currentPage: string;
@@ -10,6 +14,28 @@ interface PagesMenuProps {
 
 const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
     const { primary, secondary, accent, background, text } = useBrandColors();
+  const [displayName, setDisplayName] = useState<string | null>(null);
+
+  const { colorMode } = useColorMode();
+const accentHex = colorMode === 'dark'
+  ? theme.colors.brand.Accent.dark
+  : theme.colors.brand.Accent.light;
+const textHex = colorMode === 'dark'
+  ? theme.colors.brand.Background.dark
+  : theme.colors.brand.Background.light;
+
+  useEffect(() => {
+  const getUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const name = user.user_metadata?.displayName || user.user_metadata?.full_name || user.email;
+      setDisplayName(name);
+    }
+  };
+
+  getUser();
+}, []);
+
 
     return (
         <Box
@@ -28,11 +54,20 @@ const PagesMenu: React.FC<PagesMenuProps> = ({ currentPage }) => {
           ml={{ base: 'auto', md: 0 }}
           mr={{ base: 'auto', md: 0 }}
         >
-          <Text color={text} fontSize="lg" fontWeight="bold" mb={4} display={{ base: 'none', md: 'block' }}>
-            Menu
-          </Text>
+          
+          {displayName && (
+            <Box mb={4} p={2}  textAlign={"left"} w="100%" display={{ base: 'block', md: 'block' }}
+            borderBottom={`2px solid ${accentHex}`}
+            >
+            <Text color={text}  borderRadius={5} fontSize="xl" fontWeight="bold" p={1} mb={1} display={{ base: 'block', md: 'block' }}>
+               {displayName}
+            </Text>
+            </Box>
+          )}
+          
+
           <SimpleGrid
-            columns={{ base: 2, md: 1 }}
+            columns={{ base: 1, md: 1 }}
             spacing={{ base: 2, md: 4 }}
             w={'100%'}
             h={'auto'}

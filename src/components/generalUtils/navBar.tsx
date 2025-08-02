@@ -1,4 +1,4 @@
-// navBar.tsx
+// File path: TravelAgentApp/src/components/generalUtils/navBar.tsx
 
 import { Box, Button, useColorMode, useTheme, useColorModeValue, Heading, useBreakpointValue } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
@@ -31,12 +31,12 @@ function NavBar() {
       const NavbarDesktop = () => {
         return (
           <Box bg={background} m={'auto'} h="auto" w={'100%'} p={4}
-        display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+        display={'flex'} flexDir={{ base: 'column', md: 'row' }}  justifyContent={'space-between'} alignItems={'center'}>
 
             <Logo width='auto' height='75' />
             <Heading as={'h1'} fontSize={'6xl'} fontFamily={['Raleway Heavy', 'sans-serif']}   color={accent}>Globeeta</Heading>
 
-            <Box display={'flex'} alignItems={'center'}>
+            <Box display={'flex'} flexDir={{ base: 'column', md: 'row' }}  alignItems={'center'}>
             
                 <Button onClick={toggleColorMode} 
                 m={2} 
@@ -64,8 +64,8 @@ function NavBar() {
 
             <Logo width='auto' height='75' />
 
-            <Box display={'flex'} gap={2} alignItems={'center'}>
-            <Heading as={'h1'} fontSize={'6xl'} fontFamily={['Raleway Heavy', 'sans-serif']}   color={accent}>Globeeta</Heading>
+            <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'center'}>
+            <Heading as={'h1'} fontSize={'2.5rem'} fontFamily={['Raleway Heavy', 'sans-serif']}   color={accent}>Globeeta</Heading>
 
             <Box display={'flex'} alignItems={'center'}>
             

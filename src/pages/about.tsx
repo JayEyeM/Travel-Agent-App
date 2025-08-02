@@ -16,13 +16,13 @@ const About: React.FC = () => {
       </Text>
       <Text fontSize="lg" mt={2}>
         
-      Globeeta Helps You Streamline Your Clients' Journeys, and Elevate Your Business.
+      Globeeta Helps You Streamline Your Clients' Journey, and Elevate Your Business.
       </Text>
 
       <Box>
         <Text fontSize="lg" mt={10} color={text}>
           Globeeta is created to help independent travel agents stay organized, efficient, and productive. 
-          Our team includes experts with experience in the travel industry, who believe that travel should be simple, 
+          Globeeta believes that travel should be simple, 
           efficient, and fun. 
         </Text>
       </Box>
