@@ -23,6 +23,7 @@ import LearnMore from './pages/learnMore';
 import Resources from './pages/Resources';
 import ToDoNotes from './components/generalUtils/ToDoNotes';
 import Policies from './pages/Policies';
+import AuthCallback from './pages/AuthCallback';
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -72,6 +73,8 @@ function App() {
   <Route path="/signin" element={<Signin />} />
   <Route path="/signup" element={<Signup />} />
   <Route path="/signout" element={<Signout />} />
+  <Route path="/auth/callback" element={<AuthCallback />} />
+
   <Route path="/learnMore" element={<LearnMore />} />
   <Route path="/about" element={<About />} />
   <Route path="/policies" element={<Policies />} />
