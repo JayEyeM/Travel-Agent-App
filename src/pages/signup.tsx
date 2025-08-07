@@ -55,7 +55,7 @@ const Signup = () => {
         data: {
           displayName,
         },
-        emailRedirectTo: `${window.location.origin}/signin`,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
