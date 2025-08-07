@@ -1,6 +1,7 @@
-// APIs.ts
+// File path: TravelAgentApp/src/components/generalUtils/APIs.ts
 
-const BASE_URL = 'http://localhost:8000'; // Replace with your actual backend URL
+export const BASE_URL = import.meta.env.VITE_BASE_API_URL || 'http://localhost:8000';// Replace with your actual backend URL
+ 
 
 // Utility function to handle API responses
 const handleResponse = async <T>(response: Response): Promise<T> => {

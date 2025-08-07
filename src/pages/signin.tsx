@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useBrandColors } from '../components/generalUtils/theme';
 import { supabase } from '../lib/supabaseClient';
 import { AuthContext } from '../components/context/AuthContext';
+import { BASE_URL } from '../components/generalUtils/APIs'; // Import BASE_URL from APIs
 
 const Signin: React.FC = () => {
   const { primary, background, accent, secondary, text } = useBrandColors();
@@ -49,7 +50,7 @@ const Signin: React.FC = () => {
     // Send token to backend to set the session cookie
     const token = data.session.access_token;
 
-    const res = await fetch('http://localhost:8000/auth/login', {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

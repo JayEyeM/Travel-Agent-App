@@ -1,5 +1,6 @@
 // src/context/AuthContext.tsx
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { BASE_URL } from '../generalUtils/APIs';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -16,7 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // On mount, check session validity from backend
-    fetch('http://localhost:8000/auth/session', {
+    fetch(`${BASE_URL}/auth/session`, {
       credentials: 'include', // send cookie
     })
       .then(res => {
