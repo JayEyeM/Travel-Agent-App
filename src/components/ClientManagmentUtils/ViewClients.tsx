@@ -9,7 +9,7 @@ import SearchClients from './SearchClients';
 import { newClientFormData } from '../generalUtils/interfaces';
 import EditClientForm from './EditClientForm';
 import CheckboxComponent from '../generalUtils/Checkboxes';
-import BookingForm from './BookingForm';
+// import BookingForm from './BookingForm';
 import ClientBookings from '../bookingFormUtils/displayBookingsData';
 
 const ViewClients: React.FC = () => {
@@ -140,7 +140,7 @@ const ViewClients: React.FC = () => {
                             alignItems={{ base: 'center', md: 'flex-start' }}
                             
                         >
-                            <BookingForm clientId={client.id} />
+                            {/* <BookingForm clientId={client.id} /> */}
                             <ClientBookings clientId={client.id} />
 
                             <ClosableBox
@@ -234,7 +234,7 @@ const ViewClients: React.FC = () => {
                             </Box>
                                 </SimpleGrid>
                                 
-                                {editingClient && editingClient.id === client.id && (
+                                {/* {editingClient && editingClient.id === client.id && (
                                 <EditClientForm
                                     client={editingClient}
                                     onChange={handleChange}
@@ -242,7 +242,7 @@ const ViewClients: React.FC = () => {
                                     onCancel={handleCancelEdit}
                                     onUpdateClient={handleUpdateClient}
                                 />
-                            )}
+                            )} */}
                             </ClosableBox>
                             
                         </CardBody>

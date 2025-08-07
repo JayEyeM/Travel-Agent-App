@@ -4,6 +4,7 @@ import { Box, Heading, Text, Tooltip, Button, Spinner } from '@chakra-ui/react';
 import { useBrandColors } from '../components/generalUtils/theme';
 import { AuthContext } from '../components/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { BASE_URL } from '../components/generalUtils/APIs';
 
 const Signout: React.FC = () => {
   const { primary, secondary, text } = useBrandColors();
@@ -15,7 +16,7 @@ const Signout: React.FC = () => {
     // Call backend logout endpoint to clear session cookie
     const logout = async () => {
       try {
-        const res = await fetch('http://localhost:8000/auth/logout', {
+        const res = await fetch(`${BASE_URL}/auth/login`, {
           method: 'POST',
           credentials: 'include', // important to send cookies
         });
