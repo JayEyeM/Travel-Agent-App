@@ -1,8 +1,8 @@
-// File path: TravelAgentApp/src/pages/AuthCallback.tsx
+// File: TravelAgentApp/src/pages/AuthCallback.tsx
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient'; 
+import { supabase } from '../lib/supabaseClient';
 import { Spinner, Center, Text } from '@chakra-ui/react';
 
 const AuthCallback = () => {
@@ -11,33 +11,47 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Get the URL hash (everything after #)
         const hash = window.location.hash.substring(1);
-        const params = new URLSearchParams(hash);
+        const paramsFromHash = new URLSearchParams(hash);
+        const access_token = paramsFromHash.get('access_token');
+        const refresh_token = paramsFromHash.get('refresh_token');
 
-        const access_token = params.get('access_token');
-        const refresh_token = params.get('refresh_token');
+        if (access_token && refresh_token) {
+          const { error } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
 
-        if (!access_token || !refresh_token) {
-          console.error('No tokens found in URL hash');
-          navigate('/signin'); // fallback redirect
+          if (error) throw error;
+
+          navigate('/dashboard');
           return;
         }
 
-        // Set the session with Supabase client
-        const { error } = await supabase.auth.setSession({
-          access_token,
-          refresh_token,
-        });
+        const query = new URLSearchParams(window.location.search);
+        const type = query.get('type');
+        const token = query.get('token');
+        const email = query.get('email'); // 👈 added this
 
-        if (error) {
-          console.error('Error setting session:', error.message);
+        if (type === 'signup' && token && email) {
+          const { error } = await supabase.auth.verifyOtp({
+            type: 'signup',
+            token,
+            email, // 👈 required by Supabase now
+          });
+
+          if (error) {
+            console.error('Error verifying email:', error.message);
+            navigate('/signin');
+            return;
+          }
+
           navigate('/signin');
           return;
         }
 
-        // Success - redirect to dashboard or wherever you want
-        navigate('/dashboard');
+        console.error('No valid auth data found.');
+        navigate('/signin');
       } catch (err) {
         console.error('Unexpected error:', err);
         navigate('/signin');
@@ -50,7 +64,7 @@ const AuthCallback = () => {
   return (
     <Center height="100vh" flexDirection="column">
       <Spinner size="xl" />
-      <Text mt={4}>Completing sign in...</Text>
+      <Text mt={4}>Processing authentication...</Text>
     </Center>
   );
 };
