@@ -11,24 +11,36 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
+        // Get the URL hash (everything after #)
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
 
-        if (!code) {
-          console.error('No code found in URL');
+        const access_token = params.get('access_token');
+        const refresh_token = params.get('refresh_token');
+
+        if (!access_token || !refresh_token) {
+          console.error('No tokens found in URL hash');
+          navigate('/signin'); // fallback redirect
           return;
         }
 
-        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+        // Set the session with Supabase client
+        const { error } = await supabase.auth.setSession({
+          access_token,
+          refresh_token,
+        });
 
         if (error) {
-          console.error('Error exchanging code:', error.message);
-        } else {
-          console.log('Session exchanged:', data);
-          navigate('/dashboard'); // redirect after successful login
+          console.error('Error setting session:', error.message);
+          navigate('/signin');
+          return;
         }
+
+        // Success - redirect to dashboard or wherever you want
+        navigate('/dashboard');
       } catch (err) {
         console.error('Unexpected error:', err);
+        navigate('/signin');
       }
     };
 
@@ -44,4 +56,3 @@ const AuthCallback = () => {
 };
 
 export default AuthCallback;
-
