@@ -1,41 +1,97 @@
 // src/pages/Homepage.tsx
-import React from 'react';
-import { Box, Heading, Text, Tooltip, Button } from '@chakra-ui/react';
-import { useBrandColors } from '../components/generalUtils/theme';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Box, Heading, Text, Tooltip, Button } from "@chakra-ui/react";
+import { useBrandColors } from "../components/generalUtils/theme";
+import { Link } from "react-router-dom";
+import TempCommissionCalc from "./TempCommissionCalc";
 
 const Homepage: React.FC = () => {
-  const { primary, background, accent, secondary, text } = useBrandColors()
+  const { primary, background, accent, secondary, text } = useBrandColors();
   return (
-    <Box textAlign="center" py={10} px={6}>
-      <Heading as="h1" size="xl" mb={4}>
-      Welcome to the Ultimate Productivity App for Independent Travel Agents!
-      </Heading>
-      <Text fontSize="lg">
-        Effortlessly manage your commissions, track bookings, and stay organized—all in one place.
-      </Text>
+    <>
+      <Box textAlign="center" py={10} px={6}>
+        <Heading as="h1" size="xl" mb={4}>
+          Welcome to the Ultimate Productivity App for Independent Travel
+          Agents!
+        </Heading>
+        <Text fontSize="lg">
+          Effortlessly manage your commissions, track bookings, and stay
+          organized—all in one place.
+        </Text>
 
-      <Box mt={10} w={'80%'} ml={'auto'} mr={'auto'} display={'flex'} flexDirection={'column'}>
-        <Tooltip label="Get Started" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
-          <Button as={Link} to="/signup" w={'175px'} ml={'auto'} mr={'auto'} mt={0} color={secondary} bg={primary} size="lg">
-            Get Started
-          </Button>
-        </Tooltip>
+        <Box
+          mt={10}
+          w={"80%"}
+          ml={"auto"}
+          mr={"auto"}
+          display={"flex"}
+          flexDirection={"column"}
+        >
+          <Tooltip
+            label="Get Started"
+            placement="top"
+            hasArrow
+            fontSize={"md"}
+            bg={secondary}
+            color={primary}
+            outline="2px solid"
+            outlineColor={primary}
+          >
+            <Button
+              as={Link}
+              to="/signup"
+              w={"175px"}
+              ml={"auto"}
+              mr={"auto"}
+              mt={0}
+              color={secondary}
+              bg={primary}
+              size="lg"
+            >
+              Get Started
+            </Button>
+          </Tooltip>
 
-        <Text fontSize="lg" mt={10} color={text}>
-          Still want to know more? Just click below to read more details and view screenshots.
-        </Text> 
+          <Text fontSize="lg" mt={10} color={text}>
+            Still want to know more? Just click below to read more details and
+            view screenshots.
+          </Text>
 
-        <Tooltip label="Learn More" placement="top" hasArrow fontSize={'md'} bg={secondary} color={primary} outline="2px solid" outlineColor={primary} >
-          <Button w={'175px'} ml={'auto'} mr={'auto'} mt={8} color={secondary} bg={primary} size="lg">
-            Learn More
-          </Button>
-        </Tooltip>
-
+          <Tooltip
+            label="Learn More"
+            placement="top"
+            hasArrow
+            fontSize={"md"}
+            bg={secondary}
+            color={primary}
+            outline="2px solid"
+            outlineColor={primary}
+          >
+            <Button
+              w={"175px"}
+              ml={"auto"}
+              mr={"auto"}
+              mt={8}
+              color={secondary}
+              bg={primary}
+              size="lg"
+            >
+              Learn More
+            </Button>
+          </Tooltip>
+        </Box>
       </Box>
-      
-    </Box>
-    
+      <Box
+        mt={10}
+        w={"100%"}
+        ml={"auto"}
+        mr={"auto"}
+        display={"flex"}
+        flexDirection={"column"}
+      >
+        <TempCommissionCalc />
+      </Box>
+    </>
   );
 };
 
