@@ -1,29 +1,30 @@
 // File path: TravelAgentApp/src/App.tsx
 
-import { Box } from '@chakra-ui/react';
-import React, { useContext } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import ProtectedRoute from './components/generalUtils/ProtectedRoute';
-import { AuthContext } from './components/context/AuthContext';
-import Homepage from './pages/homepage';
-import CommisionCalculator from './components/calculatorUtils/commissionCalculator';
-import { useBrandColors } from './components/generalUtils/theme';
-import NavBar from './components/generalUtils/navBar';
-import Dashboard from './pages/dashboard';
-import About from './pages/about';
-import PagesMenu from './components/generalUtils/PagesMenu';
-import AiAssistance from './pages/AiAssistance';
-import Footer from './components/generalUtils/footer';
-import ClientManagement from './pages/ClientManagment';
-import BookingManagement from './pages/BookingManagement';
-import Signin from './pages/signin';
-import Signout from './pages/signout';
-import Signup from './pages/signup';
-import LearnMore from './pages/learnMore';
-import Resources from './pages/Resources';
-import ToDoNotes from './components/generalUtils/ToDoNotes';
-import Policies from './pages/Policies';
-import AuthCallback from './pages/AuthCallback';
+import { Box } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import ProtectedRoute from "./components/generalUtils/ProtectedRoute";
+import { AuthContext } from "./components/context/AuthContext";
+import Homepage from "./pages/homepage";
+import CommisionCalculator from "./components/calculatorUtils/commissionCalculator";
+import { useBrandColors } from "./components/generalUtils/theme";
+import NavBar from "./components/generalUtils/navBar";
+import Dashboard from "./pages/dashboard";
+import About from "./pages/about";
+import PagesMenu from "./components/generalUtils/PagesMenu";
+import AiAssistance from "./pages/AiAssistance";
+import Footer from "./components/generalUtils/footer";
+import ClientManagement from "./pages/ClientManagment";
+import BookingManagement from "./pages/BookingManagement";
+import Signin from "./pages/signin";
+import Signout from "./pages/signout";
+import Signup from "./pages/signup";
+import LearnMore from "./pages/learnMore";
+import Resources from "./pages/Resources";
+import ToDoNotes from "./components/generalUtils/ToDoNotes";
+import Policies from "./pages/Policies";
+import AuthCallback from "./pages/AuthCallback";
+import ClientDetailsPage from "./components/ClientManagmentUtils/ClientDetailsPage";
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -31,68 +32,75 @@ function App() {
   const { isLoggedIn } = useContext(AuthContext);
 
   const getCurrentPage = () => {
-    switch (location.pathname) {
-      
-      case '/calculator':
-        return 'calculator';
-      case '/todoNotes':
-        return 'todoNotes';
-      case '/dashboard':
-        return 'dashboard';
-      case '/clientManagement':
-        return 'clientManagement';
-      case '/bookingManagement':
-        return 'bookingManagement';
-      case '/resources':
-        return 'resources';
-      case '/aiAssistance':
-        return 'aiAssistance';
-      
+    const path = location.pathname;
+
+    if (path.startsWith("/clients")) return "clientManagement";
+
+    switch (path) {
+      case "/calculator":
+        return "calculator";
+      case "/todoNotes":
+        return "todoNotes";
+      case "/dashboard":
+        return "dashboard";
+      case "/clientManagement":
+        return "clientManagement";
+      case "/bookingManagement":
+        return "bookingManagement";
+      case "/resources":
+        return "resources";
+      case "/aiAssistance":
+        return "aiAssistance";
       default:
-        return '';
+        return "";
     }
   };
 
   return (
     <Box bg={background} h="auto" w="100vw" p={{ base: 4, md: 8, lg: 12 }}>
-
       <NavBar />
-      <Box h="auto" minH={'90vh'} w="100%" p={{ base: 4, md: 8, lg: 12 }} 
-      outline={'2px solid'} outlineColor={primary}
-      borderRadius={'lg'}
-      display="flex"
-      flexDirection={{ base: 'column', md: 'row' }}
+      <Box
+        h="auto"
+        minH={"90vh"}
+        w="100%"
+        p={{ base: 4, md: 8, lg: 12 }}
+        outline={"2px solid"}
+        outlineColor={primary}
+        borderRadius={"lg"}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
       >
-        { isLoggedIn && <PagesMenu currentPage={getCurrentPage()} /> }
-          <Box h="auto" w="100%" 
-          
-          >
-            <Routes>
-  {/* Public Routes */}
-  <Route path="/" element={<Homepage />} />
-  <Route path="/signin" element={<Signin />} />
-  <Route path="/signup" element={<Signup />} />
-  <Route path="/signout" element={<Signout />} />
-  <Route path="/auth/callback" element={<AuthCallback />} />
+        {isLoggedIn && <PagesMenu currentPage={getCurrentPage()} />}
+        <Box h="auto" w="100%">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Homepage />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signout" element={<Signout />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
 
-  <Route path="/learnMore" element={<LearnMore />} />
-  <Route path="/about" element={<About />} />
-  <Route path="/policies" element={<Policies />} />
+            <Route path="/learnMore" element={<LearnMore />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/policies" element={<Policies />} />
 
-  {/* Protected Routes Group */}
-  <Route element={<ProtectedRoute />}>
-    <Route path="/calculator" element={<CommisionCalculator />} />
-    <Route path="/todoNotes" element={<ToDoNotes />} />
-    <Route path="/dashboard" element={<Dashboard />} />
-    <Route path="/clientManagement" element={<ClientManagement />} />
-    <Route path="/bookingManagement" element={<BookingManagement />} />
-    <Route path="/resources" element={<Resources />} />
-    <Route path="/aiAssistance" element={<AiAssistance />} />
-  </Route>
-</Routes>
+            {/* Protected Routes Group */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/calculator" element={<CommisionCalculator />} />
+              <Route path="/todoNotes" element={<ToDoNotes />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/clientManagement" element={<ClientManagement />} />
+              <Route path="/clients/:id" element={<ClientDetailsPage />} />
 
+              <Route
+                path="/bookingManagement"
+                element={<BookingManagement />}
+              />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/aiAssistance" element={<AiAssistance />} />
+            </Route>
+          </Routes>
         </Box>
-
       </Box>
       <Footer />
     </Box>

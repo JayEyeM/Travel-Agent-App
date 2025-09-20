@@ -1,59 +1,95 @@
-import { useState, useEffect } from 'react';
-import { newClientFormData } from '../generalUtils/interfaces'; 
-import { getData, postData, updateData } from '../generalUtils/APIs'; 
+// File: UseClientDataHook.tsx
+import { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import { getData, postData, updateData } from "../generalUtils/APIs";
 
-// UseClientDataHook.ts
+// Backend Client type
+export interface Client {
+  id: number;
+  userId: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  clientPostalCode: string;
+  clientStreetAddress: string;
+  clientCity: string;
+  clientProvince: string;
+  clientCountry: string;
+  notes?: string;
+  paymentDate?: number;
+  finalPaymentDate?: number;
+  dateCreated: number; // Unix timestamp
+}
+
+// Frontend-friendly Client for display
+export interface ClientDisplay extends Omit<Client, "dateCreated"> {
+  dateCreated: string; // formatted 'YYYY-MM-DD'
+}
+
 const useClientData = () => {
-  const [clientData, setClientData] = useState<newClientFormData[]>([]);
+  const [clientData, setClientData] = useState<ClientDisplay[]>([]);
 
-  // Fetch client data from backend using the API helper
+  // Fetch client data from backend
   const fetchClientsFromBackend = async () => {
     try {
-      const data = await getData<newClientFormData[]>('clients'); // Using the generic getData function
-      console.log('Data from backend:', data); // Log the data to see what it looks like
-      setClientData(data); // Update state with backend data
+      const data = await getData<Client[]>("clients"); // raw backend data
+      console.log("Data from backend:", data);
+
+      const formattedData: ClientDisplay[] = data.map((client) => ({
+        ...client,
+        dateCreated: dayjs.unix(client.dateCreated).format("YYYY-MM-DD"),
+      }));
+
+      setClientData(formattedData);
     } catch (error) {
-      console.error('Error fetching clients:', error);
+      console.error("Error fetching clients:", error);
     }
   };
 
-  // Load client data on initial render
   useEffect(() => {
-    fetchClientsFromBackend(); // Fetch from backend on initial load
+    fetchClientsFromBackend();
   }, []);
 
-  // Update client data (e.g., after adding or updating a client)
-  const updateClientData = (updatedClients: newClientFormData[]) => {
+  // Replace full client data (used after add/update)
+  const updateClientData = (updatedClients: ClientDisplay[]) => {
     setClientData(updatedClients);
   };
 
-  // Function to add a new client
-  const addClient = async (clientData: newClientFormData) => {
+  // Add new client
+  const addClient = async (client: Omit<Client, "id">) => {
     try {
-      const addedClient = await postData<newClientFormData>('clients', clientData); // Using the generic postData function
-      setClientData((prevClients) => [...prevClients, addedClient]); // Update the clientData state with the new client
+      const newClient = await postData<Client>("clients", client);
+      const formattedClient: ClientDisplay = {
+        ...newClient,
+        dateCreated: dayjs.unix(newClient.dateCreated).format("YYYY-MM-DD"),
+      };
+      setClientData((prev) => [...prev, formattedClient]);
     } catch (error) {
-      console.error('Error adding client:', error);
+      console.error("Error adding client:", error);
     }
   };
 
-  // Function to update an existing client
-  const updateClient = async (clientId: string, updatedClientData: newClientFormData) => {
+  // Update existing client
+  const updateClient = async (
+    clientId: number,
+    updatedClient: Partial<Client>
+  ) => {
     try {
-      const updatedClient = await updateData<newClientFormData>(
-        `clients/${Number(clientId)}`, // Convert to number
-        updatedClientData
+      const updated = await updateData<Client>(
+        `clients/${clientId}`,
+        updatedClient
       );
-      setClientData((prevClients) =>
-        prevClients.map((client) =>
-          client.id === Number(clientId) ? updatedClient : client 
-        )
+      const formatted: ClientDisplay = {
+        ...updated,
+        dateCreated: dayjs.unix(updated.dateCreated).format("YYYY-MM-DD"),
+      };
+      setClientData((prev) =>
+        prev.map((c) => (c.id === clientId ? formatted : c))
       );
     } catch (error) {
-      console.error('Error updating client:', error);
+      console.error("Error updating client:", error);
     }
   };
-  
 
   return { clientData, updateClientData, addClient, updateClient };
 };
