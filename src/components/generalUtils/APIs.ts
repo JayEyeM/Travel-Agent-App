@@ -1,7 +1,6 @@
 // File path: TravelAgentApp/src/components/generalUtils/APIs.ts
 
-export const BASE_URL = import.meta.env.VITE_BASE_API_URL || 'http://localhost:8000';// Replace with your actual backend URL
- 
+export const BASE_URL = import.meta.env.VITE_BASE_API_URL || 'http://localhost:8000';
 
 // Utility function to handle API responses
 const handleResponse = async <T>(response: Response): Promise<T> => {
@@ -20,6 +19,7 @@ export const API = {
       const response = await fetch(`${BASE_URL}/${endpoint}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // <-- include cookies
       });
       return handleResponse<T>(response);
     } catch (error) {
@@ -35,6 +35,7 @@ export const API = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        credentials: 'include', // <-- include cookies
       });
       return handleResponse<T>(response);
     } catch (error) {
@@ -50,6 +51,7 @@ export const API = {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        credentials: 'include', // <-- include cookies
       });
       return handleResponse<T>(response);
     } catch (error) {
@@ -64,6 +66,7 @@ export const API = {
       const response = await fetch(`${BASE_URL}/${endpoint}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // <-- include cookies
       });
       if (!response.ok) {
         const errorText = await response.text();
@@ -76,9 +79,7 @@ export const API = {
   },
 };
 
-// You can now call any of these generic methods for any endpoint and type.
-
-// Example usage for client data
+// Wrapper functions
 export const postData = async <T>(endpoint: string, data: unknown): Promise<T> => {
   return API.post<T>(endpoint, data);
 };
