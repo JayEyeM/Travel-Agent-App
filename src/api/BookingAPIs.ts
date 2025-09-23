@@ -1,7 +1,7 @@
 // src/api/BookingAPIs.ts
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
 
-// ─── Types (mirroring backend) ───────────────────────────────
+// ─── Types (unchanged) ───────────────────────────────
 export type UnixTimestamp = number;
 
 export interface Booking {
@@ -74,24 +74,72 @@ export interface BookingWithRelations extends Booking {
   phoneNumbers: PhoneNumber[];
 }
 
+// ─── Helpers ──────────────────────────────────────────
+
+// Convert API snake_case response to camelCase
+function mapBookingApiResponse(b: any): BookingWithRelations {
+  return {
+    id: b.id,
+    clientId: b.clientId ?? b.client_id, // handle both
+    travelDate: b.travelDate, 
+    clientFinalPaymentDate: b.clientFinalPaymentDate, 
+    supplierFinalPaymentDate: b.supplierFinalPaymentDate, 
+    bookingDate: b.bookingDate, 
+    invoicedDate: b.invoicedDate, 
+    referenceCode: b.referenceCode ?? b.reference_code, // handle both
+    amount: b.amount,
+    notes: b.notes,
+    invoiced: b.invoiced,
+    paid: b.paid,
+    paymentDate: b.paymentDate, // <-- optional
+    dateCreated: b.dateCreated, 
+    confirmations: (b.confirmations || []).map((c: any) => ({
+      id: c.id,
+      bookingId: c.bookingId || c.booking_id, // handle both
+      confirmationNumber: c.confirmationNumber || c.confirmation_number,
+      supplier: c.supplier,
+    })),
+    personDetails: (b.personDetails || []).map((p: any) => ({
+      id: p.id,
+      bookingId: p.bookingId || p.booking_id,
+      name: p.name,
+      dateOfBirth: p.dateOfBirth || p.date_of_birth,
+    })),
+    significantDates: (b.significantDates || []).map((d: any) => ({
+      id: d.id,
+      bookingId: d.bookingId || d.booking_id,
+      date: d.date,
+    })),
+    emailAddresses: (b.emailAddresses || []).map((e: any) => ({
+      id: e.id,
+      bookingId: e.bookingId || e.booking_id,
+      email: e.email,
+    })),
+    phoneNumbers: (b.phoneNumbers || []).map((p: any) => ({
+      id: p.id,
+      bookingId: p.bookingId || p.booking_id,
+      phone: p.phone,
+    })),
+  };
+}
+
+
 // ─── API Calls ──────────────────────────────────────────────
 
 // GET all bookings
 export async function getBookings(): Promise<BookingWithRelations[]> {
-  const res = await fetch(`${BASE_URL}/bookings`, {
-    credentials: "include",
-  });
+  const res = await fetch(`${BASE_URL}/bookings`, { credentials: "include" });
   if (!res.ok) throw new Error("Failed to fetch bookings");
-  return res.json();
+  const data = await res.json();
+  return data.map(mapBookingApiResponse);
 }
 
 // GET booking by ID
 export async function getBookingById(id: number): Promise<BookingWithRelations> {
-  const res = await fetch(`${BASE_URL}/bookings/${id}`, {
-    credentials: "include",
-  });
+  const res = await fetch(`${BASE_URL}/bookings/${id}`, { credentials: "include" });
   if (!res.ok) throw new Error(`Failed to fetch booking ${id}`);
-  return res.json();
+  const data = await res.json();
+  return mapBookingApiResponse(data);
 }
 
 // POST create booking
@@ -106,7 +154,8 @@ export async function createBooking(bookingInput: BookingInput): Promise<Booking
     const err = await res.json();
     throw new Error(err?.error || "Failed to create booking");
   }
-  return res.json();
+  const data = await res.json();
+  return mapBookingApiResponse(data);
 }
 
 // PATCH update booking
@@ -124,7 +173,8 @@ export async function updateBooking(
     const err = await res.json();
     throw new Error(err?.error || `Failed to update booking ${id}`);
   }
-  return res.json();
+  const data = await res.json();
+  return mapBookingApiResponse(data);
 }
 
 // DELETE booking

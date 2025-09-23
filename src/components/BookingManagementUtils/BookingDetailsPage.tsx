@@ -21,7 +21,8 @@ import {
 } from "@chakra-ui/react";
 import { BookingWithRelations } from "../../api/BookingAPIs";
 import { useBookingAPIs } from "../../hooks/useBookingAPIs";
-import EditBookingModal from "./EditBookingModal";
+import { useClientAPIs } from "../../hooks/useClientAPIs";
+// import EditBookingModal from "./EditBookingModal";
 
 const BookingDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +30,8 @@ const BookingDetailsPage = () => {
   const navigate = useNavigate();
 
   const { fetchBookingById, deleteBooking, loading, error } = useBookingAPIs();
+  const { clients, fetchClients } = useClientAPIs();
+
   const [booking, setBooking] = useState<BookingWithRelations | null>(null);
 
   // Edit modal controls
@@ -42,6 +45,7 @@ const BookingDetailsPage = () => {
   } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement | null>(null);
 
+  // Load booking
   useEffect(() => {
     const loadBooking = async () => {
       const fetched = await fetchBookingById(bookingId);
@@ -50,6 +54,16 @@ const BookingDetailsPage = () => {
     loadBooking();
   }, [bookingId, fetchBookingById]);
 
+  // Load all clients once
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
+
+  // Lookup client name based on booking.clientId
+  const clientName = booking?.clientId
+    ? clients.find((c) => c.id === booking.clientId)?.clientName ?? "Client"
+    : "Client";
+
   const handleDelete = async () => {
     const success = await deleteBooking(bookingId);
     if (success) {
@@ -57,8 +71,15 @@ const BookingDetailsPage = () => {
     }
   };
 
-  const formatDate = (ts?: number) =>
-    ts ? new Date(ts).toLocaleDateString() : "N/A";
+  // Robust date formatting
+  function formatDate(ts: number | undefined | null): string {
+    if (!ts) return "N/A";
+    const d = new Date(ts);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
 
   if (loading) return <Spinner />;
   if (error) return <Text color="red.500">{error}</Text>;
@@ -68,7 +89,7 @@ const BookingDetailsPage = () => {
     <Box p={6}>
       {/* Header & Back Link */}
       <HStack justifyContent="space-between" mb={6}>
-        <Heading>Booking Details</Heading>
+        <Heading>Booking Details for {clientName}</Heading>
         <Button as={RouterLink} to="/bookingManagement" variant="outline">
           Back to Bookings
         </Button>
@@ -126,9 +147,6 @@ const BookingDetailsPage = () => {
               <strong>Invoiced Date:</strong> {formatDate(booking.invoicedDate)}
             </Text>
             <Text>
-              <strong>Payment Date:</strong> {formatDate(booking.paymentDate)}
-            </Text>
-            <Text>
               <strong>Date Created:</strong> {formatDate(booking.dateCreated)}
             </Text>
           </VStack>
@@ -153,7 +171,7 @@ const BookingDetailsPage = () => {
 
         <Divider />
 
-        {/* Relations */}
+        {/* Confirmations */}
         <Box>
           <Heading size="md" mb={2}>
             Confirmations
@@ -171,6 +189,7 @@ const BookingDetailsPage = () => {
 
         <Divider />
 
+        {/* Travelers */}
         <Box>
           <Heading size="md" mb={2}>
             Travelers
@@ -188,6 +207,7 @@ const BookingDetailsPage = () => {
 
         <Divider />
 
+        {/* Significant Dates */}
         <Box>
           <Heading size="md" mb={2}>
             Significant Dates
@@ -203,6 +223,7 @@ const BookingDetailsPage = () => {
 
         <Divider />
 
+        {/* Emails */}
         <Box>
           <Heading size="md" mb={2}>
             Emails
@@ -216,6 +237,7 @@ const BookingDetailsPage = () => {
 
         <Divider />
 
+        {/* Phone Numbers */}
         <Box>
           <Heading size="md" mb={2}>
             Phone Numbers
@@ -239,14 +261,14 @@ const BookingDetailsPage = () => {
       </HStack>
 
       {/* Edit Modal */}
-      {booking && (
+      {/* {booking && (
         <EditBookingModal
           isOpen={isOpen}
           onClose={onClose}
           booking={booking}
           setBooking={setBooking}
         />
-      )}
+      )} */}
 
       {/* Delete Confirmation */}
       <AlertDialog
