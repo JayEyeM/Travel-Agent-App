@@ -14,28 +14,17 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import AddBookingModal from "./AddBookingModal";
-import { EditBookingModal } from "./EditBookingModal";
 import { useBookingAPIs } from "../../hooks/useBookingAPIs";
 import { BookingWithRelations, BookingInput } from "../../api/BookingAPIs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 export default function BookingList() {
-  const {
-    bookings,
-    fetchBookings,
-    createBooking,
-    updateBooking,
-    deleteBooking,
-    loading,
-    error,
-  } = useBookingAPIs();
+  const { bookings, fetchBookings, createBooking, loading, error } =
+    useBookingAPIs();
 
   const [filteredBookings, setFilteredBookings] = useState<
     BookingWithRelations[]
   >([]);
-  const [selectedBooking, setSelectedBooking] =
-    useState<BookingWithRelations | null>(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -65,19 +54,6 @@ export default function BookingList() {
     const created = await createBooking(newBookingPayload);
     if (!created) alert("Failed to add booking");
     else setAddModalOpen(false);
-  };
-
-  // Delete booking handler
-  const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this booking?")) return;
-    const success = await deleteBooking(id);
-    if (!success) alert("Failed to delete booking");
-  };
-
-  // Edit booking handler
-  const handleEdit = (booking: BookingWithRelations) => {
-    setSelectedBooking(booking);
-    setEditModalOpen(true);
   };
 
   return (
@@ -118,44 +94,21 @@ export default function BookingList() {
               <Td>{b.referenceCode}</Td>
               <Td>{b.clientId}</Td>
               <Td>{new Date(b.travelDate).toLocaleDateString()}</Td>
-              <Td>{b.amount}</Td>
+              <Td>${b.amount.toFixed(2)}</Td>
               <Td>
-                <Button size="sm" mr={2} onClick={() => handleEdit(b)}>
-                  Edit
-                </Button>
                 <Button
+                  as={RouterLink}
+                  to={`/bookings/${b.id}`}
                   size="sm"
-                  mr={2}
                   colorScheme="blue"
-                  onClick={() => navigate(`/bookings/${b.id}`)}
                 >
                   View Details
-                </Button>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => handleDelete(b.id)}
-                >
-                  Delete
                 </Button>
               </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
-
-      {selectedBooking && (
-        <EditBookingModal
-          isOpen={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
-          booking={selectedBooking}
-          onSave={async (updates: BookingInput) => {
-            const updated = await updateBooking(selectedBooking.id, updates);
-            if (!updated) alert("Failed to update booking");
-            setEditModalOpen(false);
-          }}
-        />
-      )}
 
       <AddBookingModal
         isOpen={addModalOpen}

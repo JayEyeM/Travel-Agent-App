@@ -25,6 +25,7 @@ import ToDoNotes from "./components/generalUtils/ToDoNotes";
 import Policies from "./pages/Policies";
 import AuthCallback from "./pages/AuthCallback";
 import ClientDetailsPage from "./components/ClientManagmentUtils/ClientDetailsPage";
+import BookingDetailsPage from "./components/BookingManagementUtils/BookingDetailsPage";
 
 function App() {
   const { primary, background } = useBrandColors();
@@ -91,6 +92,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/clientManagement" element={<ClientManagement />} />
               <Route path="/clients/:id" element={<ClientDetailsPage />} />
+              <Route path="/bookings/:id" element={<BookingDetailsPage />} />
 
               <Route
                 path="/bookingManagement"

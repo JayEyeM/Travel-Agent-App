@@ -58,19 +58,19 @@ export default function AddBookingModal({
 
   // Repeatable sections
   const [emailAddresses, setEmailAddresses] = useState<EmailAddress[]>([
-    { id: Date.now(), bookingId: 0, email: "" },
+    { id: 0, bookingId: 0, email: "" },
   ]);
   const [phoneNumbers, setPhoneNumbers] = useState<PhoneNumber[]>([
-    { id: Date.now() + 1, bookingId: 0, phone: "" },
+    { id: 0, bookingId: 0, phone: "" },
   ]);
   const [confirmations, setConfirmations] = useState<Confirmation[]>([
-    { id: Date.now() + 2, bookingId: 0, confirmationNumber: "", supplier: "" },
+    { id: 0, bookingId: 0, confirmationNumber: "", supplier: "" },
   ]);
   const [personDetails, setPersonDetails] = useState<PersonDetail[]>([
-    { id: Date.now() + 3, bookingId: 0, name: "", dateOfBirth: Date.now() },
+    { id: 0, bookingId: 0, name: "", dateOfBirth: Date.now() },
   ]);
   const [significantDates, setSignificantDates] = useState<SignificantDate[]>([
-    { id: Date.now() + 4, bookingId: 0, date: Date.now() },
+    { id: 0, bookingId: 0, date: Date.now() },
   ]);
 
   useEffect(() => {
@@ -81,12 +81,17 @@ export default function AddBookingModal({
     if (isOpen) setReferenceCode(`BOOK${Math.floor(Math.random() * 100000)}`);
   }, [isOpen]);
 
+  // Helper to strip id and bookingId before sending to backend
+  const stripIds = <T extends { id?: number; bookingId?: number }>(arr: T[]) =>
+    arr.map(({ id, bookingId, ...rest }) => rest);
+
   const handleSubmit = () => {
     if (!selectedClientId) return alert("Please select a client");
 
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount)) return alert("Please enter a valid amount");
 
+    // Build payload
     const payload: BookingInput = {
       booking: {
         clientId: selectedClientId,
@@ -109,37 +114,23 @@ export default function AddBookingModal({
         referenceCode,
       },
       relatedData: {
-        emailAddresses: emailAddresses.map((e) => ({
-          ...e,
-          id: Date.now() + Math.random(),
-          bookingId: 0,
-        })),
-        phoneNumbers: phoneNumbers.map((p) => ({
-          ...p,
-          id: Date.now() + Math.random(),
-          bookingId: 0,
-        })),
-        confirmations: confirmations.map((c) => ({
-          ...c,
-          id: Date.now() + Math.random(),
-          bookingId: 0,
-        })),
+        emailAddresses: stripIds(emailAddresses),
+        phoneNumbers: stripIds(phoneNumbers),
+        confirmations: stripIds(confirmations),
         personDetails: personDetails.map((p) => ({
-          ...p,
-          id: Date.now() + Math.random(),
-          bookingId: 0,
+          ...stripIds([p])[0],
           dateOfBirth: p.dateOfBirth
             ? new Date(p.dateOfBirth).getTime()
             : Date.now(),
         })),
         significantDates: significantDates.map((d) => ({
-          ...d,
-          id: Date.now() + Math.random(),
-          bookingId: 0,
+          ...stripIds([d])[0],
           date: d.date ? new Date(d.date).getTime() : Date.now(),
         })),
       },
     };
+
+    console.log("Booking Payload:", JSON.stringify(payload, null, 2));
 
     onAdd(payload);
     onClose();
@@ -149,16 +140,14 @@ export default function AddBookingModal({
     setState: React.Dispatch<React.SetStateAction<T[]>>,
     emptyRow: T
   ) => {
-    setState((prev) => [
-      ...prev,
-      { ...emptyRow, id: Date.now() + Math.random() },
-    ]);
+    setState((prev) => [...prev, emptyRow]);
   };
-  const removeRow = <T extends { id: number }>(
+
+  const removeRow = <T,>(
     setState: React.Dispatch<React.SetStateAction<T[]>>,
-    id: number
+    index: number
   ) => {
-    setState((prev) => prev.filter((item) => item.id !== id));
+    setState((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -191,7 +180,7 @@ export default function AddBookingModal({
               <Input value={referenceCode} isReadOnly />
             </FormControl>
 
-            {/* Standard Dates */}
+            {/* Dates and Amounts */}
             <FormControl>
               <FormLabel>Travel Date</FormLabel>
               <Input
@@ -237,7 +226,6 @@ export default function AddBookingModal({
               />
             </FormControl>
 
-            {/* Amount */}
             <FormControl>
               <FormLabel>Amount ($)</FormLabel>
               <NumberInput
@@ -286,24 +274,22 @@ export default function AddBookingModal({
             {/* Emails */}
             <FormControl>
               <FormLabel>Email Addresses</FormLabel>
-              {emailAddresses.map((e) => (
-                <HStack key={e.id} mb={2}>
+              {emailAddresses.map((e, i) => (
+                <HStack key={i} mb={2}>
                   <Input
                     placeholder="Email"
                     value={e.email}
-                    onChange={(ev) =>
-                      setEmailAddresses((prev) =>
-                        prev.map((x) =>
-                          x.id === e.id ? { ...x, email: ev.target.value } : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newEmails = [...emailAddresses];
+                      newEmails[i].email = ev.target.value;
+                      setEmailAddresses(newEmails);
+                    }}
                   />
                   <IconButton
                     aria-label="Remove email"
                     icon={<DeleteIcon />}
                     size="sm"
-                    onClick={() => removeRow(setEmailAddresses, e.id)}
+                    onClick={() => removeRow(setEmailAddresses, i)}
                   />
                 </HStack>
               ))}
@@ -321,24 +307,22 @@ export default function AddBookingModal({
             {/* Phones */}
             <FormControl>
               <FormLabel>Phone Numbers</FormLabel>
-              {phoneNumbers.map((p) => (
-                <HStack key={p.id} mb={2}>
+              {phoneNumbers.map((p, i) => (
+                <HStack key={i} mb={2}>
                   <Input
                     placeholder="Phone"
                     value={p.phone}
-                    onChange={(ev) =>
-                      setPhoneNumbers((prev) =>
-                        prev.map((x) =>
-                          x.id === p.id ? { ...x, phone: ev.target.value } : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newPhones = [...phoneNumbers];
+                      newPhones[i].phone = ev.target.value;
+                      setPhoneNumbers(newPhones);
+                    }}
                   />
                   <IconButton
                     aria-label="Remove phone"
                     icon={<DeleteIcon />}
                     size="sm"
-                    onClick={() => removeRow(setPhoneNumbers, p.id)}
+                    onClick={() => removeRow(setPhoneNumbers, i)}
                   />
                 </HStack>
               ))}
@@ -356,39 +340,31 @@ export default function AddBookingModal({
             {/* Confirmations */}
             <FormControl>
               <FormLabel>Confirmations</FormLabel>
-              {confirmations.map((c) => (
-                <HStack key={c.id} mb={2}>
+              {confirmations.map((c, i) => (
+                <HStack key={i} mb={2}>
                   <Input
                     placeholder="Confirmation Number"
                     value={c.confirmationNumber}
-                    onChange={(ev) =>
-                      setConfirmations((prev) =>
-                        prev.map((x) =>
-                          x.id === c.id
-                            ? { ...x, confirmationNumber: ev.target.value }
-                            : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newConf = [...confirmations];
+                      newConf[i].confirmationNumber = ev.target.value;
+                      setConfirmations(newConf);
+                    }}
                   />
                   <Input
                     placeholder="Supplier"
                     value={c.supplier}
-                    onChange={(ev) =>
-                      setConfirmations((prev) =>
-                        prev.map((x) =>
-                          x.id === c.id
-                            ? { ...x, supplier: ev.target.value }
-                            : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newConf = [...confirmations];
+                      newConf[i].supplier = ev.target.value;
+                      setConfirmations(newConf);
+                    }}
                   />
                   <IconButton
                     aria-label="Remove confirmation"
                     icon={<DeleteIcon />}
                     size="sm"
-                    onClick={() => removeRow(setConfirmations, c.id)}
+                    onClick={() => removeRow(setConfirmations, i)}
                   />
                 </HStack>
               ))}
@@ -411,42 +387,33 @@ export default function AddBookingModal({
             {/* Person Details */}
             <FormControl>
               <FormLabel>Person Details</FormLabel>
-              {personDetails.map((p) => (
-                <HStack key={p.id} mb={2}>
+              {personDetails.map((p, i) => (
+                <HStack key={i} mb={2}>
                   <Input
                     placeholder="Name"
                     value={p.name}
-                    onChange={(ev) =>
-                      setPersonDetails((prev) =>
-                        prev.map((x) =>
-                          x.id === p.id ? { ...x, name: ev.target.value } : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newPersons = [...personDetails];
+                      newPersons[i].name = ev.target.value;
+                      setPersonDetails(newPersons);
+                    }}
                   />
                   <Input
                     type="date"
                     value={new Date(p.dateOfBirth).toISOString().slice(0, 10)}
-                    onChange={(ev) =>
-                      setPersonDetails((prev) =>
-                        prev.map((x) =>
-                          x.id === p.id
-                            ? {
-                                ...x,
-                                dateOfBirth: new Date(
-                                  ev.target.value
-                                ).getTime(),
-                              }
-                            : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newPersons = [...personDetails];
+                      newPersons[i].dateOfBirth = new Date(
+                        ev.target.value
+                      ).getTime();
+                      setPersonDetails(newPersons);
+                    }}
                   />
                   <IconButton
                     aria-label="Remove person"
                     icon={<DeleteIcon />}
                     size="sm"
-                    onClick={() => removeRow(setPersonDetails, p.id)}
+                    onClick={() => removeRow(setPersonDetails, i)}
                   />
                 </HStack>
               ))}
@@ -469,29 +436,22 @@ export default function AddBookingModal({
             {/* Significant Dates */}
             <FormControl>
               <FormLabel>Significant Dates</FormLabel>
-              {significantDates.map((d) => (
-                <HStack key={d.id} mb={2}>
+              {significantDates.map((d, i) => (
+                <HStack key={i} mb={2}>
                   <Input
                     type="date"
                     value={new Date(d.date).toISOString().slice(0, 10)}
-                    onChange={(ev) =>
-                      setSignificantDates((prev) =>
-                        prev.map((x) =>
-                          x.id === d.id
-                            ? {
-                                ...x,
-                                date: new Date(ev.target.value).getTime(),
-                              }
-                            : x
-                        )
-                      )
-                    }
+                    onChange={(ev) => {
+                      const newDates = [...significantDates];
+                      newDates[i].date = new Date(ev.target.value).getTime();
+                      setSignificantDates(newDates);
+                    }}
                   />
                   <IconButton
                     aria-label="Remove date"
                     icon={<DeleteIcon />}
                     size="sm"
-                    onClick={() => removeRow(setSignificantDates, d.id)}
+                    onClick={() => removeRow(setSignificantDates, i)}
                   />
                 </HStack>
               ))}
