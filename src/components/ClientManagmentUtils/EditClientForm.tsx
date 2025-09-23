@@ -1,22 +1,36 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from '@chakra-ui/react';
-import { newClientFormData } from '../generalUtils/interfaces';
-import useClientData from './UseClientDataHook';
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
+import { newClientFormData } from "../generalUtils/interfaces";
+import useClientData from "./UseClientDataHook";
 
 interface EditClientFormProps {
   client: newClientFormData; // Current client data to be edited
   onCancel: () => void; // Callback to close the form/modal after submission or cancellation
 }
 
-const EditClientForm: React.FC<EditClientFormProps> = ({ client, onCancel }) => {
+const EditClientForm: React.FC<EditClientFormProps> = ({
+  client,
+  onCancel,
+}) => {
   const [updatedClientData, setUpdatedClientData] = useState(client); // State to manage form inputs
   const { updateClient } = useClientData(); // Access the hook
   const toast = useToast();
 
   // Handle form input changes
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { id, value, type } = e.target;
-    const fieldValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+    const fieldValue =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
     setUpdatedClientData((prevState) => ({
       ...prevState,
@@ -28,26 +42,40 @@ const EditClientForm: React.FC<EditClientFormProps> = ({ client, onCancel }) => 
   const handleUpdate = async (e: FormEvent) => {
     e.preventDefault();
 
+    // Convert paymentDate to number if it exists and is a string
+    const sanitizedData = {
+      ...updatedClientData,
+      paymentDate: updatedClientData.paymentDate
+        ? new Date(updatedClientData.paymentDate).getTime()
+        : undefined,
+      finalPaymentDate: updatedClientData.finalPaymentDate
+        ? new Date(updatedClientData.finalPaymentDate).getTime()
+        : undefined,
+      dateCreated: updatedClientData.dateCreated
+        ? new Date(updatedClientData.dateCreated).getTime()
+        : undefined,
+    };
+
     try {
-      await updateClient(client.id.toString(), updatedClientData); // Update the client using the hook
+      await updateClient(client.id, sanitizedData); // Update the client using the hook
 
       // Success toast notification
       toast({
-        title: 'Client updated successfully.',
-        status: 'success',
+        title: "Client updated successfully.",
+        status: "success",
         duration: 3000,
         isClosable: true,
       });
 
       onCancel(); // Close the form/modal
     } catch (error) {
-      console.error('Error updating client:', error);
+      console.error("Error updating client:", error);
 
       // Error toast notification
       toast({
-        title: 'Error updating client.',
-        description: 'Please try again.',
-        status: 'error',
+        title: "Error updating client.",
+        description: "Please try again.",
+        status: "error",
         duration: 3000,
         isClosable: true,
       });
